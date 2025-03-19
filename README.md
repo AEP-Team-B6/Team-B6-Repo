@@ -1,6 +1,10 @@
 # Team-B6-Repo  
 This is the repository of **Team B6**  
 Module Application Development with Python  
+Akishan Arichchandran  
+Nils Strehle  
+Noah Rolli  
+Thiemo Frei  
 Fachhochschule Nordwestschweiz  
 Business Artificial Intelligence  
 
