@@ -7,6 +7,7 @@ Noah Rolli
 Thiemo Frei  
 Fachhochschule Nordwestschweiz  
 Business Artificial Intelligence  
+TEST IF GIT WORKS
 
 ## SCRUM Project Management:  
 https://github.com/orgs/AEP-Team-B6/projects/1  
