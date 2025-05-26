@@ -29,7 +29,3 @@ https://deepnote.com/workspace/DBUA-Team-C-c18e3c8f-25c5-4be0-bb77-bb8f6a66300d/
 5. Click **Create**  
 6. Click on the task title and add an iteration in **"Iteration"**  
 7. If the task is a subtask, then add a parent in **"Relationships"**  
-
-## Markdown format ✨
-![image](https://github.com/user-attachments/assets/7eb3af84-5c85-4b44-b3ef-2483faaf08df "Markdown Cheatsheet")
-Nö
