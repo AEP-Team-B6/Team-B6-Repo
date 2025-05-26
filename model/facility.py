@@ -1,4 +1,6 @@
  #Creating class Facility
+from __future__ import annotations
+
 class Facility:
     def __init__(self, facility_id: int, facility_name: str):
         self.__facility_id = facility_id

@@ -1,4 +1,6 @@
 #Creating class Room_Facility
+from __future__ import annotations
+
 class Room_Facility:
     def __init__(self, room: Room, facility: Facility):
         self.__room = room

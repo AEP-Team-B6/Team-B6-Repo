@@ -1,4 +1,6 @@
 #Creating class Guest
+from __future__ import annotations
+
 class Guest:
     def __init__(self, guest_id:int, first_name:str, last_name:str, email:str, address:Address, bookings:list[Booking]):
         self.__guest_id = guest_id

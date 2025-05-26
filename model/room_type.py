@@ -1,4 +1,6 @@
 #Creating class Room_Type
+from __future__ import annotations
+
 class Room_Type:
     def __init__(self, type_id:int, description:str, max_guests:int):
         self.__type_id = type_id

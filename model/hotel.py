@@ -1,4 +1,5 @@
 #Creating class Hotel
+from __future__ import annotations
 
 class Hotel:
     def __init__(self, hotel_id:int, name:str, stars:int, address:Address, rooms:Room):

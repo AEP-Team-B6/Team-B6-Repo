@@ -1,4 +1,6 @@
 #Creating class Invoice
+from __future__ import annotations
+
 class Invoice:
     def __init__(invoice_id:int, booking:Booking, issue_date:datetime, total_amount:float):
         self.__invoice_id = invoice_id
