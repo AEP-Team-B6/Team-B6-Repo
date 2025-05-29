@@ -5,4 +5,4 @@ import data_access
 
 class GuestManager:
     def __init__(self) -> None:
-        self.__guest_da = GuestDataAccess()
+        self.__guest_da = data_access.GuestDataAccess()

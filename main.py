@@ -14,10 +14,10 @@ import business_logic
 import ui
 import ui.input_helper as input_helper
 
-working_db = "./database/working_db.db"
+hotel_reservation_sample = "./database/hotel_reservation_sample.db"
 current_db = "./database/current_db.db"
 
-shutil.copyfile(working_db, current_db)
+shutil.copyfile(hotel_reservation_sample, current_db)
 
 os.environ["DB_FILE"] = current_db
 
@@ -46,7 +46,7 @@ room_type_manager = business_logic.RoomTypeManager()
 
 # Individuelle Testing -------------------
 
-while False:
+if True:
     print("test")
     # Testbereich (auf True sezten zum Testen)    
 
@@ -59,6 +59,6 @@ while False:
 
 
 # Funktionierender Code------------------------
-while True:
+if False:
     print("test")
     #Funktionierende Userstories (auf False sezten zum Testen)

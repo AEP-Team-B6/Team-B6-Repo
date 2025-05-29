@@ -5,4 +5,4 @@ import data_access
 
 class RoomFacilityManager:
     def __init__(self) -> None:
-        self.__roomfacility_da = RoomFacilityDataAccess()
+        self.__roomfacility_da = data_access.RoomFacilityDataAccess()
