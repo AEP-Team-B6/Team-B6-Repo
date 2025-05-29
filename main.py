@@ -13,10 +13,10 @@ import business_logic
 import ui
 import ui.input_helper as input_helper
 
-working_db = "./database/working_db.db"
+hotel_reservation_sample = "./database/hotel_reservation_sample.db"
 current_db = "./database/current_db.db"
 
-shutil.copyfile(working_db, current_db)
+shutil.copyfile(hotel_reservation_sample, current_db)
 
 os.environ["DB_FILE"] = current_db
 
@@ -28,7 +28,7 @@ pd.set_option("display.width", None)  # Auto-adjust display width
 pd.set_option("display.max_colwidth", None)  # Show full column content
 
 
-#Manager initialization (die die ihr nicht braucht auskommentieren)
+#Manager initialization
 address_manager = business_logic.AddressManager()
 booking_manager = business_logic.BookingManager()
 facility_manager = business_logic.FacilityManager()
@@ -43,7 +43,7 @@ room_type_manager = business_logic.RoomTypeManager()
 #TODO: Add more stuff
 
 
-# Individuelle Testing ------------------------
+# Individuelles Testing ------------------------
 
 if False:
     # Testbereich (auf True sezten zum Testen)    
@@ -55,7 +55,7 @@ if False:
 if True:
     #Funktionierende Userstories (auf False sezten zum Testen)
 
-    # USERSTORY 1.1 
+    # Userstory 1.1 
     city_name = None
     cancel = False
     while not city_name and not cancel:
@@ -70,13 +70,13 @@ if True:
         matching_hotels = hotel_manager.find_hotel_by_city(city_name)
         if matching_hotels:
             for hotel in matching_hotels:
-                print("following hotels matched your search:")
+                print("following hotels matched your search:") #TODO Ausgaben könnten später durch UI gemacht werden
                 print(hotel)            
         else:
             print("No hotels found")
     #---------------------------------------------------------------
 
-
+    #Userstory 1.6
     print("\nUser Story 1.6: Alle Hotels anzeigen (Name, Adresse, Sterne)\n")
 
     hotels = hotel_manager.read_all_hotels()
@@ -88,3 +88,4 @@ if True:
             print(f"{hotel.name} ({hotel.stars} Sterne)")
             print(f"Adresse: {hotel.address.street}, {hotel.address.zip_code} {hotel.address.city}")
             print("-" * 50)
+    #---------------------------------------------------------------

@@ -1,5 +1,4 @@
 import os
-
 import model
 import data_access
 
