@@ -31,14 +31,14 @@ pd.set_option("display.max_colwidth", None)  # Show full column content
 
 #Manager initialization (die die ihr nicht braucht auskommentieren)
 address_manager = business_logic.AddressManager()
-booking_manager = business_logic.BookingManager()
-facility_manager = business_logic.FacilityManager()
-guest_manager = business_logic.GuestManager()
+#booking_manager = business_logic.BookingManager()
+#facility_manager = business_logic.FacilityManager()
+#guest_manager = business_logic.GuestManager()
 hotel_manager = business_logic.HotelManager()
-invoice_manager = business_logic.InvoiceManager()
-room_facility_manager = business_logic.RoomFacilityManager()
-room_manager = business_logic.RoomManager()
-room_type_manager = business_logic.RoomTypeManager()
+#invoice_manager = business_logic.InvoiceManager()
+#room_facility_manager = business_logic.RoomFacilityManager()
+#room_manager = business_logic.RoomManager()
+#room_type_manager = business_logic.RoomTypeManager()
 
 
 #TODO: Add more stuff
@@ -46,7 +46,7 @@ room_type_manager = business_logic.RoomTypeManager()
 
 # Individuelle Testing -------------------
 
-if True:
+if False:
     print("test")
     # Testbereich (auf True sezten zum Testen)    
 
@@ -58,7 +58,19 @@ if True:
 
 
 
+
 # Funktionierender Code------------------------
-if False:
-    print("test")
-    #Funktionierende Userstories (auf False sezten zum Testen)
+if True:
+#Funktionierende Userstories (auf False sezten zum Testen)
+
+    print("\nUser Story 1.6: Alle Hotels anzeigen (Name, Adresse, Sterne)\n")
+
+    hotels = hotel_manager.read_all_hotels()
+
+    if not hotels:
+        print("Keine Hotels gefunden.")
+    else:
+        for hotel in hotels:
+            print(f"{hotel.name} ({hotel.stars} Sterne)")
+            print(f"Adresse: {hotel.address.street}, {hotel.address.zip_code} {hotel.address.city}")
+            print("-" * 50)
