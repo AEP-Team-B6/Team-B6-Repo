@@ -7,7 +7,13 @@ class Hotel:
         self.__name = name
         self.__stars = stars
         self.__address = address
-        self.__rooms = rooms
+        self.__rooms = rooms #TODO: Das sollte eine Liste sein denke ich
+
+    def __str__(self):
+        return f"{self.name} ({self.stars} Sterne)"
+
+    def __repr__(self):
+        return self.__str__()
 
     @property
     def hotel_id(self):
