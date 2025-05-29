@@ -5,4 +5,4 @@ import data_access
 
 class BookingManager:
     def __init__(self) -> None:
-        self.__booking_da = BookingDataAccess()
+        self.__booking_da = data_access.BookingDataAccess()
