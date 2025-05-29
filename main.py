@@ -75,3 +75,16 @@ if True:
         else:
             print("No hotels found")
     #---------------------------------------------------------------
+
+
+    print("\nUser Story 1.6: Alle Hotels anzeigen (Name, Adresse, Sterne)\n")
+
+    hotels = hotel_manager.read_all_hotels()
+
+    if not hotels:
+        print("Keine Hotels gefunden.")
+    else:
+        for hotel in hotels:
+            print(f"{hotel.name} ({hotel.stars} Sterne)")
+            print(f"Adresse: {hotel.address.street}, {hotel.address.zip_code} {hotel.address.city}")
+            print("-" * 50)
