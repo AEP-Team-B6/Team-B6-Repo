@@ -45,7 +45,7 @@ room_type_manager = business_logic.RoomTypeManager()
 
 # Individuelles Testing ------------------------
 
-if True:
+if False:
     print("test")
     # Testbereich (auf True sezten zum Testen)    
     
@@ -53,7 +53,7 @@ if True:
 
 # Funktionierender Code------------------------
 
-if False:
+if True:
     print("all working user stories will now be runned trough")
     #Funktionierende Userstories (auf False sezten zum Testen)
     #Userstory 1.1 
@@ -158,6 +158,8 @@ if False:
     #---------------------------------------------------------------
 
     #Userstory 1.6
+    #Ich möchte die folgenden Informationen pro Hotel sehen: Name, Adresse, Anzahl der Sterne.
+
     print("\nUser Story 1.6: Alle Hotels anzeigen (Name, Adresse, Sterne)\n")
 
     hotels = hotel_manager.read_all_hotels()
@@ -170,3 +172,20 @@ if False:
             print(f"Adresse: {hotel.address.street}, {hotel.address.zip_code} {hotel.address.city}")
             print("-" * 50)
     #---------------------------------------------------------------
+
+        # User Story 8
+    # Als Admin des Buchungssystems möchte ich alle Buchungen aller Hotels sehen können, um eine Übersicht zu erhalten.
+    print("\n Als Admin des Buchungssystems möchte ich alle Buchungen aller Hotels sehen können, um eine Übersicht zu erhalten.\n")
+    all_bookings = booking_manager.read_all_bookings()
+    
+    for booking in all_bookings:
+        is_cancelled_str = booking.is_cancelled
+        if is_cancelled_str == 0:
+            is_cancelled_str = "Nein"
+        else:
+            is_cancelled_str = "Ja"
+        print(f"Buchungsnummer: {booking.booking_id}, Gast_ID: {booking.guest}, Raum_ID: {booking.room}")
+        print(f"Aufenthalt von: {booking.check_in_date.strftime("%d.%m.%Y")} bis {booking.check_out_date.strftime("%d.%m.%Y")}")
+        print(f"Buchung storniert? {is_cancelled_str}, Totaler Preis: {booking.total_amount}")
+        print("-" * 50)
+    #---------------------------------------------------------------  
