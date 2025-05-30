@@ -11,9 +11,9 @@ class HotelDataAccess(BaseDataAccess):
  
     
     #User Story 1.1
-    def find_hotel_by_city(self, city: str) -> list[hotel]| None:
+    def find_hotel_by_city(self, city: str) -> list[Hotel]| None:
         if city is None:
-            raise ValueError("Please enter a City")
+            raise ValueError("Bitte geben sie die gewünschte Stadt ein")
 
         sql = """
         SELECT h.hotel_id, h.name, h.stars FROM Hotel h 
@@ -26,13 +26,36 @@ class HotelDataAccess(BaseDataAccess):
             l_hotels = []
             for row in result:
                 hotel_id, name, stars = row #tuple unpacking
-                hotel = model.Hotel(hotel_id=hotel_id, name=name, stars=stars, address=None, rooms=None)
+                hotel = Hotel(hotel_id=hotel_id, name=name, stars=stars, address=None, rooms=None)
                 l_hotels.append(hotel)
             return l_hotels
 
         else:
             return None
 
+
+    #User Story 1.2
+    def find_hotel_by_min_stars(self, min_stars: int) -> list[Hotel]:
+        if min_stars is None:
+            raise ValueError("Bitte geben sie die gewünschte Anzahl Sterne an")
+
+        sql = """
+        SELECT hotel_id, name, stars FROM Hotel  
+        where stars >= ?
+        """
+        params = tuple([min_stars])
+        result = self.fetchall(sql, params)
+        if result:        
+            l_hotels = []
+            for row in result:
+                hotel_id, name, stars = row #tuple unpacking
+                hotel = Hotel(hotel_id=hotel_id, name=name, stars=stars, address=None, rooms=None)
+                l_hotels.append(hotel)
+            return l_hotels
+
+        else:
+            return None
+    
 
     #User Story 1.6
     def get_all_hotels(self) -> list[Hotel]:

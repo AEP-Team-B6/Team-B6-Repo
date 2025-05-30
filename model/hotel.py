@@ -9,11 +9,11 @@ class Hotel:
         self.__address = address
         self.__rooms = rooms #TODO: Das sollte eine Liste sein denke ich
 
-    def __str__(self): #TODO möglicherweise muss hier noch etwas gemacht werden 
-        return f"{self.name} ({self.stars} Sterne)"
+    #def __str__(self): #TODO möglicherweise muss hier noch etwas gemacht werden 
+    #    return f"{self.name} ({self.stars} Sterne)"
 
-    def __repr__(self): #TODO möglicherweise muss hier noch etwas gemacht werden 
-        return self.__str__()
+    #def __repr__(self): #TODO möglicherweise muss hier noch etwas gemacht werden 
+    #    return self.__str__()
 
     @property
     def hotel_id(self):
