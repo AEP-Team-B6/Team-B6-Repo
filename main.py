@@ -111,6 +111,52 @@ if True:
             print("Leider wurden keine passenden Hotels gefunden")
     #---------------------------------------------------------------
 
+    #Userstory 1.3 
+    #Ich möchte alle Hotels in einer Stadt durchsuchen, die Zimmer haben, die meiner Gästezahl entsprechen (nur 1 Zimmer pro Buchung).
+    print("\nIch möchte alle Hotels in einer Stadt durchsuchen, die Zimmer haben, die meiner Gästezahl entsprechen (nur 1 Zimmer pro Buchung).\n")
+    city_and_guests = [None, None]
+    cancel = False
+    while not city_and_guests[0] and not cancel:
+        try:
+            city_and_guests[0] = input_helper.input_valid_string("Gewünschte Stadt: ")
+        except input_helper.EmptyInputError:
+            cancel = True
+        except ValueError as err:
+            print(err)
+    
+    amount_guests = None
+    cancel = False
+    while not city_and_guests[1] and not cancel:
+        try:
+            city_and_guests[1] = input_helper.input_valid_int("Gewünschte Anzahl Personen: ")
+        except input_helper.EmptyInputError:
+            cancel = True
+        except ValueError as err:
+            print(err)
+
+    prev_hotel_id = None
+    if city_and_guests[0] and city_and_guests[1] is not None:
+        result = hotel_manager.find_hotel_by_city_and_guests(city_and_guests)
+        if result is not None:
+            matching_hotels, matching_roomtypes, matching_rooms = result
+            print("Folgende Hotels passen zu Ihrer Suche:") #TODO Ausgaben könnten später durch UI gemacht werden
+            for hotel in matching_hotels:
+                if hotel.hotel_id != prev_hotel_id:
+                    prev_hotel_id = hotel.hotel_id
+                    if hotel.stars == 1:
+                        print(f"Hotel {hotel.name} mit {hotel.stars} Stern")
+                    else:
+                        print(f"Hotel {hotel.name} mit {hotel.stars} Sternen")
+
+                    for room in matching_rooms:
+                        if room.hotel.hotel_id == hotel.hotel_id:
+                            
+                            print(f"Raum Nr.: {room.room_number}  |  Raumtyp: {room.room_type.description}  |  max. Personen: {room.room_type.max_guests}")
+                    print("-" * 50)          
+        else:
+            print("Leider wurden keine passenden Hotels gefunden")
+    #---------------------------------------------------------------
+
     #Userstory 1.6
     print("\nUser Story 1.6: Alle Hotels anzeigen (Name, Adresse, Sterne)\n")
 

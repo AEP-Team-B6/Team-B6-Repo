@@ -1,5 +1,7 @@
 #Creating class Room
 from __future__ import annotations
+from model.room_type import Room_Type #TODO: irgendwie findet das Program die Verknüpfung nicht wenn nur "from model import Room_Type " ist, deswegen wird das init file so umgangen. Fragen bei Coaching
+from model.hotel import Hotel #TODO: irgendwie findet das Program die Verknüpfung nicht wenn nur "from model import Hotel" ist, deswegen wird das init file so umgangen. Fragen bei Coaching
 
 class Room:
     def __init__(self, room_id:int, room_number:int, price_per_night:float, room_type:Room_Type, hotel:Hotel):
