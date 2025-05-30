@@ -47,7 +47,7 @@ room_type_manager = business_logic.RoomTypeManager()
 
 if True:
     # Testbereich (auf True sezten zum Testen)    
-
+    
 
 
 # Funktionierender Code------------------------
@@ -103,4 +103,19 @@ if False:
             cursor.execute(query, (name, stars, address_id))
             self.conn.commit()
             return cursor.lastrowid
+    #---------------------------------------------------------------
+
+    #Userstory 3.2
+    class HotelDataAccess:
+        def __init__(self, db_connection):
+            self.conn = db_connection
+
+        def delete_hotel(self, hotel_id: int) -> bool:
+            query = "DELETE FROM Hotel WHERE hotel_id = ?"
+            cursor = self.conn.cursor()
+            cursor.execute(query, (hotel_id,))
+            self.conn.commit()
+
+            # Prüfen, ob ein Datensatz gelöscht wurde
+            return cursor.rowcount > 0
     #---------------------------------------------------------------
