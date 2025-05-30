@@ -45,7 +45,7 @@ room_type_manager = business_logic.RoomTypeManager()
 
 # Individuelles Testing ------------------------
 
-if False:
+if True:
     print("test")
     # Testbereich (auf True sezten zum Testen)    
     
@@ -53,7 +53,7 @@ if False:
 
 # Funktionierender Code------------------------
 
-if True:
+if False:
     print("all working user stories will now be runned trough")
     #Funktionierende Userstories (auf False sezten zum Testen)
     #Userstory 1.1 
@@ -123,35 +123,4 @@ if True:
             print(f"{hotel.name} ({hotel.stars} Sterne)")
             print(f"Adresse: {hotel.address.street}, {hotel.address.zip_code} {hotel.address.city}")
             print("-" * 50)
-    #---------------------------------------------------------------
-
-    #Userstory 3.1
-    class HotelDataAccess:
-        def __init__(self, db_connection):
-            self.conn = db_connection
-
-        def add_hotel(self, name: str, stars: int = None, address_id: int = None) -> int:
-            query = """
-            INSERT INTO Hotel (name, stars, address_id)
-            VALUES (?, ?, ?);
-            """
-            cursor = self.conn.cursor()
-            cursor.execute(query, (name, stars, address_id))
-            self.conn.commit()
-            return cursor.lastrowid
-    #---------------------------------------------------------------
-
-    #Userstory 3.2
-    class HotelDataAccess:
-        def __init__(self, db_connection):
-            self.conn = db_connection
-
-        def delete_hotel(self, hotel_id: int) -> bool:
-            query = "DELETE FROM Hotel WHERE hotel_id = ?"
-            cursor = self.conn.cursor()
-            cursor.execute(query, (hotel_id,))
-            self.conn.commit()
-
-            # Prüfen, ob ein Datensatz gelöscht wurde
-            return cursor.rowcount > 0
     #---------------------------------------------------------------
