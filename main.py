@@ -45,14 +45,13 @@ room_type_manager = business_logic.RoomTypeManager()
 
 # Individuelles Testing ------------------------
 
-if False:
+if True:
     # Testbereich (auf True sezten zum Testen)    
 
 
 
-
 # Funktionierender Code------------------------
-if True:
+if False:
     #Funktionierende Userstories (auf False sezten zum Testen)
 
     # Userstory 1.1 
@@ -88,4 +87,20 @@ if True:
             print(f"{hotel.name} ({hotel.stars} Sterne)")
             print(f"Adresse: {hotel.address.street}, {hotel.address.zip_code} {hotel.address.city}")
             print("-" * 50)
+    #---------------------------------------------------------------
+
+    #Userstory 3.1
+    class HotelDataAccess:
+        def __init__(self, db_connection):
+            self.conn = db_connection
+
+        def add_hotel(self, name: str, stars: int = None, address_id: int = None) -> int:
+            query = """
+            INSERT INTO Hotel (name, stars, address_id)
+            VALUES (?, ?, ?);
+            """
+            cursor = self.conn.cursor()
+            cursor.execute(query, (name, stars, address_id))
+            self.conn.commit()
+            return cursor.lastrowid
     #---------------------------------------------------------------
