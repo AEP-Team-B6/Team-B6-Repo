@@ -48,62 +48,7 @@ room_type_manager = business_logic.RoomTypeManager()
 if False:
     print("test")
     # Testbereich (auf True sezten zum Testen)    
-    #User Story 1.4
-    #Ich möchte alle Hotels in einer Stadt durchsuchen, die während meines Aufenthaltes ("von" (check_in_date) und "bis" (check_out_date)) 
-    # Zimmer zur Verfügung haben, damit ich nur relevante Ergebnisse sehe.
-    print("\nIch möchte alle Hotels in einer Stadt durchsuchen, die während meines Aufenthaltes (von (check_in_date) und bis (check_out_date)).")
-    print("Zimmer zur Verfügung haben, damit ich nur relevante Ergebnisse sehe.\n")
-    city_and_time = [None, None, None]
-    cancel = False
-    while not city_and_time[0] and not cancel: #TODO für diese Inputbnlöcke könnte eine Funktion mit Übergabeparametern definiert werden (weniger redunanter code)
-        try:
-            city_and_time[0] = input_helper.input_valid_string("Gewünschte Stadt: ")
-        except input_helper.EmptyInputError:
-            cancel = True
-        except ValueError as err:
-            print(err)
-    
-    cancel = False
-    while not city_and_time[1] and not cancel:
-        try:
-            input_str = input_helper.input_valid_string("Startdatum (TT.MM.JJJJ): ")
-            city_and_time[1] = datetime.strptime(input_str, "%d.%m.%Y").date()
-        except input_helper.EmptyInputError:
-            cancel = True
-        except ValueError:
-            print("Ungültiges Format. Bitte TT.MM.JJJJ eingeben.")
 
-    cancel = False
-    while not city_and_time[2] and not cancel:
-        try:
-            input_str = input_helper.input_valid_string("Enddatum (TT.MM.JJJJ): ")
-            city_and_time[2] = datetime.strptime(input_str, "%d.%m.%Y").date()
-        except input_helper.EmptyInputError:
-            cancel = True
-        except ValueError:
-            print("Ungültiges Format. Bitte TT.MM.JJJJ eingeben.")
-
-    prev_hotel_id = None
-    if city_and_time[0] and city_and_time[1] and city_and_time[2] is not None:
-        result = hotel_manager.find_hotel_by_city_and_time(city_and_time)
-        if result is not None:
-            matching_hotels, matching_roomtypes, matching_rooms = result
-            print("Folgende Hotels passen zu Ihrer Suche:") #TODO Ausgaben könnten später durch UI gemacht werden
-            for hotel in matching_hotels:
-                if hotel.hotel_id != prev_hotel_id:
-                    prev_hotel_id = hotel.hotel_id
-                    if hotel.stars == 1:
-                        print(f"Hotel {hotel.name} mit {hotel.stars} Stern")
-                    else:
-                        print(f"Hotel {hotel.name} mit {hotel.stars} Sternen")
-
-                    for room in matching_rooms:
-                        if room.hotel.hotel_id == hotel.hotel_id:
-                            
-                            print(f"Raum Nr.: {room.room_number}  |  Raumtyp: {room.room_type.description}  |  max. Personen: {room.room_type.max_guests}")
-                    print("-" * 50)          
-        else:
-            print("Leider wurden keine passenden Hotels gefunden")
 
 # Funktionierender Code------------------------
 
