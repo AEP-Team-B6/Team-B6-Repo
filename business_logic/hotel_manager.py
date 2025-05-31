@@ -22,6 +22,10 @@ class HotelManager:
     def find_hotel_by_city_and_guests(self, city_and_guests: list) -> list[list[Hotel], list[Room_Type], list[Room]]:
         return self.__hotel_da.find_hotel_by_city_and_guests(city_and_guests)
     
+    #User Story 1.4
+    def find_hotel_by_city_and_time(self, city_and_time: list) -> list[list[Hotel], list[Room_Type], list[Room]]:
+        return self.__hotel_da.find_hotel_by_city_and_time(city_and_time)
+    
     #User Story 1.6
     def read_all_hotels(self):
         return self.__hotel_da.get_all_hotels()
