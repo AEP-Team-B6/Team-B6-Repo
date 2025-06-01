@@ -4,6 +4,7 @@ import data_access
 from model import Hotel
 from model import Room
 from model import Room_Type
+from model import Address
 
 
 class HotelManager:
@@ -25,6 +26,10 @@ class HotelManager:
     #User Story 1.4
     def find_hotel_by_city_and_time(self, city_and_time: list) -> list[list[Hotel], list[Room_Type], list[Room]]:
         return self.__hotel_da.find_hotel_by_city_and_time(city_and_time)
+    
+    #User Story 1.5
+    def find_hotel_by_search_params(self, search_params: list) -> list[list[Hotel], list[Room], list[Address], list[Room_Type]]:
+        return self.__hotel_da.find_hotel_by_search_params(search_params)
     
     #User Story 1.6
     def read_all_hotels(self):

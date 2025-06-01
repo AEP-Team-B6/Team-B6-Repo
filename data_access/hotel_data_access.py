@@ -5,6 +5,7 @@ from data_access.address_data_access import AddressDataAccess
 from model import Hotel
 from model import Room
 from model import Room_Type
+from model import Address
 import sqlite3
 
 from datetime import date, datetime
@@ -150,6 +151,70 @@ class HotelDataAccess(BaseDataAccess):
         else:
             return None
     
+    #User Story 1.5
+    def find_hotel_by_search_params(self, search_params: list) -> list[Hotel]| None:
+
+        if search_params[3] is not None:
+            iso_start_date = date_to_db(search_params[3])
+            iso_end_date = date_to_db(search_params[4])
+        else:
+            iso_start_date = search_params[3]
+            iso_end_date = search_params[4]
+
+        doubled_params = []
+        for val in search_params[:3]:   # Alles bis (und nicht mit) Position 3 der Liste verdoppeln
+            doubled_params.extend([val, val])
+
+        sql = """
+        SELECT DISTINCT 
+            h.hotel_id, h.name, h.stars,
+            r.room_id, r.room_number, 
+            a.address_id, a.city,
+            rt.type_id, rt.description, rt.max_guests
+        FROM Hotel h
+        JOIN Address a ON h.address_id = a.address_id
+        JOIN Room r ON h.hotel_id = r.hotel_id
+        JOIN Room_Type rt ON r.type_id = rt.type_id
+        WHERE (? IS NULL OR a.city = ?)
+        AND   (? IS NULL OR h.stars >= ?)
+        AND   (? IS NULL OR rt.max_guests >= ?)
+        AND   (
+        (? IS NULL OR ? IS NULL)
+            OR r.room_id NOT IN (
+                SELECT b.room_id FROM Booking b
+                WHERE b.is_cancelled = 0
+                AND b.check_out_date > ?
+                AND b.check_in_date < ?
+            )
+        )
+        """
+        params = tuple([
+            doubled_params[0], doubled_params[1], 
+            doubled_params[2], doubled_params[3], 
+            doubled_params[4], doubled_params[5], 
+            iso_start_date, iso_end_date, 
+            iso_start_date, iso_end_date])
+        result = self.fetchall(sql, params)
+
+        if result:        
+            l_hotels = []
+            l_rooms = []
+            l_addresses = []
+            l_room_types = []
+            for row in result: #TODO Listcomprahension
+                hotel_id, name, stars, room_id, room_number, address_id, city, type_id, description, max_guests = row #tuple unpacking
+                address = Address(address_id=address_id, street=None, zip_code=None, city=city)
+                l_addresses.append(address)
+                hotel = Hotel(hotel_id=hotel_id, name=name, stars=stars, address=address, rooms=None)
+                l_hotels.append(hotel)
+                room_type = Room_Type(type_id=type_id, description=description, max_guests=max_guests)
+                l_room_types.append(room_type)
+                room = Room(room_id=room_id, room_number=room_number, price_per_night=None, room_type=room_type, hotel=hotel)
+                l_rooms.append(room)
+            return [l_hotels, l_rooms, l_addresses, l_room_types]
+        
+        else:
+            return None
 
     #User Story 1.6
     def get_all_hotels(self) -> list[Hotel]:

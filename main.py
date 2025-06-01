@@ -213,6 +213,88 @@ if True:
             print("Leider wurden keine passenden Hotels gefunden")
     #---------------------------------------------------------------
 
+    #User Story 1.5
+    #Ich möchte Wünsche kombinieren können, z.B. die verfügbaren Zimmer zusammen mit meiner Gästezahl und der mindest Anzahl Sterne.
+    print("\nIch möchte Wünsche kombinieren können, z.B. die verfügbaren Zimmer zusammen mit meiner Gästezahl und der mindest Anzahl Sterne.\n")
+    search_params = [None, None, None, None, None]
+    print("3 von 4 Suchparameter können bei Bedarf leer gelassen werden")
+
+    while search_params[0] is None and search_params[1] is None and search_params[2] is None and search_params[3] is None:
+
+        while search_params[0] is None:
+            try:
+                city = input_helper.input_valid_string("Gewünschte Stadt: ", allow_empty=True)
+                if city:
+                    search_params[0] = city
+                break
+            except Exception as e:
+                print(e)
+
+        while search_params[1] is None:
+            try:
+                search_params[1] = input_helper.input_valid_int("Mindestanzahl Sterne: ", allow_empty=True)
+                break
+            except Exception as e:
+                print(e)
+
+        while search_params[2] is None:
+            try:
+                search_params[2] = input_helper.input_valid_int("Gewünschte Anzahl Personen: ", allow_empty=True)
+                break
+            except Exception as e:
+                print(e)
+
+        while search_params[3] is None:
+            try:
+                start_date_str = input_helper.input_valid_string("Startdatum (TT.MM.JJJJ): ", allow_empty=True)
+                if start_date_str:
+                    search_params[3] = datetime.strptime(start_date_str, "%d.%m.%Y").date()
+                break
+            except Exception as e:
+                print(e)
+
+        if search_params[3] is not None:
+            while search_params[4] is None:
+                try:
+                    end_date_str = input_helper.input_valid_string("Enddatum (TT.MM.JJJJ): ", allow_empty=False)
+                    if end_date_str:
+                        search_params[4] = datetime.strptime(end_date_str, "%d.%m.%Y").date()
+                        if search_params[4] <= search_params[3]: #TODO möglicherweise könnte hier noch ein spezifischer error eingebaut werden, jedoch sollte das wahrscheinlich im UI sein
+                            print("Enddatum muss nach dem Startdatum liegen")
+                            search_params[4] = None
+                    if search_params[4] is not None:        
+                        break
+                except Exception as e:
+                    print(e)
+
+        if search_params[0] is None and search_params[1] is None and search_params[2] is None and search_params[3] is None and search_params[4] is None:
+            print("\nBitte geben Sie mindestens einen gültigen Suchparameter ein\n")
+
+
+    prev_hotel_id = None
+    result = hotel_manager.find_hotel_by_search_params(search_params)
+    if result is not None:
+        matching_hotels, matching_rooms, matching_addresses, matching_roomtypes = result
+        print()
+        print("-" * 50)
+        print("Folgende Hotels passen zu Ihrer Suche:\n") #TODO Ausgaben könnten später durch UI gemacht werden
+        for hotel in matching_hotels:
+            if hotel.hotel_id != prev_hotel_id:
+                prev_hotel_id = hotel.hotel_id
+                if hotel.stars == 1:
+                    print(f"Hotel {hotel.name} in {hotel.address.city} mit {hotel.stars} Stern")
+                else:
+                    print(f"Hotel {hotel.name} in {hotel.address.city} mit {hotel.stars} Sternen")
+
+                for room in matching_rooms:
+                    if room.hotel.hotel_id == hotel.hotel_id:
+                        
+                        print(f"Raum Nr.: {room.room_number}  |  Raumtyp: {room.room_type.description}  |  max. Personen: {room.room_type.max_guests}")
+                print("-" * 50)          
+    else:
+        print("Leider wurden keine passenden Hotels gefunden")
+    #---------------------------------------------------------------
+
     #Userstory 1.6
     #Ich möchte die folgenden Informationen pro Hotel sehen: Name, Adresse, Anzahl der Sterne.
 
