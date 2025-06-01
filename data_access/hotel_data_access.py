@@ -53,15 +53,17 @@ class HotelDataAccess(BaseDataAccess):
 
 
     #User Story 1.2
-    def find_hotel_by_min_stars(self, min_stars: int) -> list[Hotel]:
-        if min_stars is None:
-            raise ValueError("Bitte geben Sie die gewünschte Anzahl Sterne an")
+    def find_hotel_by_city_and_min_stars(self, city_and_min_stars: list) -> list[Hotel]:
+        if city_and_min_stars[0] is None and city_and_min_stars[1] is None:
+            raise ValueError("Bitte geben Sie die gewünschten Parameter an")
 
         sql = """
-        SELECT hotel_id, name, stars FROM Hotel  
-        where stars >= ?
+        SELECT h.hotel_id, h.name, h.stars FROM Hotel h
+        JOIN  Address a ON h.address_id = a.address_id
+        where a.city = ? 
+        AND h.stars >= ?
         """
-        params = tuple([min_stars])
+        params = tuple([city_and_min_stars[0], city_and_min_stars[1]])
         result = self.fetchall(sql, params)
         if result:        
             l_hotels = []

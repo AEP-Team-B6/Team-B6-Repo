@@ -64,7 +64,7 @@ if True:
         try:
             city_name = input_helper.input_valid_string("Gewünschte Stadt: ")
         except input_helper.EmptyInputError:
-            cancel = True
+            cancel = True #TODO wir müssen bestimmen ob bei leerer Eingabe die Aufforderung wiederholt oder abgebroben wird.
         except ValueError as err:
             print(err)
 
@@ -86,18 +86,27 @@ if True:
     #Ich möchte alle Hotels in einer Stadt nach der Anzahl der Sterne (z.B. mindestens 4 Sterne) durchsuchen. 
     #TODO Hier könnte noch eine Auswahl umgesetzt werden, ob man =, > oder < der angegeben Anzahl sternen suchen will. Momentan zeigt es einfach alle >= an.
     print("\nUser Story 1.2: Ich möchte alle Hotels in einer Stadt nach der Anzahl der Sterne (z.B. mindestens 4 Sterne) durchsuchen.\n")
-    min_stars = None
+    city_and_min_stars = [None, None]
     cancel = False
-    while not min_stars and not cancel:
+
+    while not city_and_min_stars[0] and not cancel:
         try:
-            min_stars = input_helper.input_valid_int("Mindestanzahl Sterne: ")
+            city_and_min_stars[0] = input_helper.input_valid_string("Gewünschte Stadt: ")
         except input_helper.EmptyInputError:
-            cancel = True
+            cancel = True #TODO wir müssen bestimmen ob bei leerer Eingabe die Aufforderung wiederholt oder abgebroben wird.
+        except ValueError as err:
+            print(err)
+
+    while not city_and_min_stars[1] and not cancel:
+        try:
+            city_and_min_stars[1] = input_helper.input_valid_int("Mindestanzahl Sterne: ", min_value=1, max_value=5)
+        except input_helper.EmptyInputError:
+            cancel = True #TODO wir müssen bestimmen ob bei leerer Eingabe die Aufforderung wiederholt oder abgebroben wird.
         except ValueError as err:
             print(err)
     
-    if min_stars is not None:
-        matching_hotels = hotel_manager.find_hotel_by_min_stars(min_stars)
+    if city_and_min_stars[0] is not None and city_and_min_stars[1] is not None:
+        matching_hotels = hotel_manager.find_hotel_by_city_and_min_stars(city_and_min_stars)
         if matching_hotels:
             print("Folgende Hotels passen zu Ihrer Suche:") #TODO Ausgaben könnten später durch UI gemacht werden
             for hotel in matching_hotels:
@@ -119,7 +128,7 @@ if True:
         try:
             city_and_guests[0] = input_helper.input_valid_string("Gewünschte Stadt: ")
         except input_helper.EmptyInputError:
-            cancel = True
+            cancel = True #TODO wir müssen bestimmen ob bei leerer Eingabe die Aufforderung wiederholt oder abgebroben wird.
         except ValueError as err:
             print(err)
     
@@ -128,7 +137,7 @@ if True:
         try:
             city_and_guests[1] = input_helper.input_valid_int("Gewünschte Anzahl Personen: ")
         except input_helper.EmptyInputError:
-            cancel = True
+            cancel = True #TODO wir müssen bestimmen ob bei leerer Eingabe die Aufforderung wiederholt oder abgebroben wird.
         except ValueError as err:
             print(err)
 
@@ -166,7 +175,7 @@ if True:
         try:
             city_and_time[0] = input_helper.input_valid_string("Gewünschte Stadt: ")
         except input_helper.EmptyInputError:
-            cancel = True
+            cancel = True #TODO wir müssen bestimmen ob bei leerer Eingabe die Aufforderung wiederholt oder abgebroben wird.
         except ValueError as err:
             print(err)
     
@@ -176,7 +185,7 @@ if True:
             input_str = input_helper.input_valid_string("Startdatum (TT.MM.JJJJ): ")
             city_and_time[1] = datetime.strptime(input_str, "%d.%m.%Y").date()
         except input_helper.EmptyInputError:
-            cancel = True
+            cancel = True #TODO wir müssen bestimmen ob bei leerer Eingabe die Aufforderung wiederholt oder abgebroben wird.
         except ValueError:
             print("Ungültiges Format. Bitte TT.MM.JJJJ eingeben.")
 
@@ -186,7 +195,7 @@ if True:
             input_str = input_helper.input_valid_string("Enddatum (TT.MM.JJJJ): ")
             city_and_time[2] = datetime.strptime(input_str, "%d.%m.%Y").date()
         except input_helper.EmptyInputError:
-            cancel = True
+            cancel = True #TODO wir müssen bestimmen ob bei leerer Eingabe die Aufforderung wiederholt oder abgebroben wird.
         except ValueError:
             print("Ungültiges Format. Bitte TT.MM.JJJJ eingeben.")
 
@@ -232,7 +241,7 @@ if True:
 
         while search_params[1] is None:
             try:
-                search_params[1] = input_helper.input_valid_int("Mindestanzahl Sterne: ", allow_empty=True)
+                search_params[1] = input_helper.input_valid_int("Mindestanzahl Sterne: ", min_value=1, max_value=5, allow_empty=True)
                 break
             except Exception as e:
                 print(e)

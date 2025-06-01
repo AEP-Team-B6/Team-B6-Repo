@@ -16,8 +16,8 @@ class HotelManager:
         return self.__hotel_da.find_hotel_by_city(city)
     
     #User Story 1.2
-    def find_hotel_by_min_stars(self, min_stars: int) -> list[Hotel]:
-        return self.__hotel_da.find_hotel_by_min_stars(min_stars)
+    def find_hotel_by_city_and_min_stars(self, city_and_min_stars: list) -> list[Hotel]:
+        return self.__hotel_da.find_hotel_by_city_and_min_stars(city_and_min_stars)
     
     #User Story 1.3
     def find_hotel_by_city_and_guests(self, city_and_guests: list) -> list[list[Hotel], list[Room_Type], list[Room]]:
