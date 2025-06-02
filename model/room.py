@@ -2,6 +2,7 @@
 from __future__ import annotations
 from model.room_type import Room_Type #TODO: irgendwie findet das Program die Verknüpfung nicht wenn nur "from model import Room_Type " ist, deswegen wird das init file so umgangen. Fragen bei Coaching
 from model.hotel import Hotel #TODO: irgendwie findet das Program die Verknüpfung nicht wenn nur "from model import Hotel" ist, deswegen wird das init file so umgangen. Fragen bei Coaching
+from model.facility import Facility
 
 class Room:
     def __init__(self, room_id:int, room_number:int, price_per_night:float, room_type:Room_Type, hotel:Hotel):
@@ -55,3 +56,7 @@ class Room:
         if not isinstance(new_hotel, Hotel):
             raise TypeError("hotel must be an instance of Hotel")
         self.__hotel = new_hotel
+
+    #Used in User Story 9
+    def add_facility(self, facility: Facility):
+        self.__room_facility.append(facility)

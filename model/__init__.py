@@ -6,3 +6,4 @@ from .booking import Booking
 from .guest import Guest
 from .address import Address
 from .invoice import Invoice
+from .facility import Facility

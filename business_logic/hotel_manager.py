@@ -34,3 +34,7 @@ class HotelManager:
     #User Story 1.6
     def read_all_hotels(self):
         return self.__hotel_da.get_all_hotels()
+    
+    #Used in User Story 9
+    def read_hotel_by_id(self, hotel_id:int):
+        return self.__hotel_da.get_hotel_by_id()

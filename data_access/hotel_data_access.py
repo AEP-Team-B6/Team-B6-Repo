@@ -232,3 +232,19 @@ class HotelDataAccess(BaseDataAccess):
             address = address_da.read_address_by_id(address_id)
             hotels.append(Hotel(hotel_id, name, stars, address, rooms=[]))  #TODO rooms später befüllen wird in US 1.6 nicht benötigt
         return hotels
+    
+
+    # Used in User Story 9
+    def get_hotel_by_id(self, hotel_id: int) -> Hotel:
+        sql = """
+        SELECT h.hotel_id, h.name, h.stars, a.address_id, a.street, a.zip_code, a.city
+        FROM Hotel h
+        JOIN Address a ON h.address_id = a.address_id
+        WHERE h.hotel_id = ?
+        """
+        result = self.fetchone(sql, (hotel_id,))
+        if result:
+            hotel_id, name, stars, address_id, street, zip_code, city = result
+            address = Address(address_id=address_id, street=street, zip_code=zip_code, city=city)
+            return Hotel(hotel_id=hotel_id, name=name, stars=stars, address=address, rooms=[])
+        return None

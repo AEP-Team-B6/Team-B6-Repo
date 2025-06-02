@@ -48,6 +48,7 @@ room_type_manager = business_logic.RoomTypeManager()
 if False:
     print("test")
     # Testbereich (auf True sezten zum Testen)    
+    
 
 
 # Funktionierender Code------------------------
@@ -333,6 +334,29 @@ if True:
             is_cancelled_str = "Ja"
         print(f"Buchungsnummer: {booking.booking_id}, Gast_ID: {booking.guest}, Raum_ID: {booking.room}")
         print(f"Aufenthalt von: {booking.check_in_date.strftime("%d.%m.%Y")} bis {booking.check_out_date.strftime("%d.%m.%Y")}")
-        print(f"Buchung storniert? {is_cancelled_str}, Totaler Preis: {booking.total_amount}")
+        print(f"Buchung storniert? {is_cancelled_str} / Totaler Preis: {booking.total_amount}")
+        print("-" * 50)
+    #---------------------------------------------------------------  
+
+    # User Story 9
+    # Als Admin möchte ich eine Liste der Zimmer mit ihrer Ausstattung sehen, damit ich sie besser bewerben kann.
+    print("\nAls Admin möchte ich eine Liste der Zimmer mit ihrer Ausstattung sehen, damit ich sie besser bewerben kann.\n")
+
+    room_details = room_manager.read_room_details()
+
+    for room in room_details:
+        print(f"Room ID: {room.room_id}")
+        print(f"Room Number: {room.room_number}")
+        print(f"Preis/Nacht: {room.price_per_night}")
+        print(f"Zimmertyp: {room.room_type.description} (max. {room.room_type.max_guests} Gäste)")
+        print(f"Hotel ID: {room.hotel.hotel_id}")
+
+        facilities = room.get_facility_names() if hasattr(room, "get_facility_names") else [f.facility_name for f in room._Room__room_facility]
+
+        if facilities:
+            print(f"Ausstattung: {', '.join(facilities)}")
+        else:
+            print("Ausstattung: Keine zusätzlich Ausstattung verfügbar")
+
         print("-" * 50)
     #---------------------------------------------------------------  
