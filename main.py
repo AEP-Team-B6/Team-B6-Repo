@@ -38,6 +38,7 @@ invoice_manager = business_logic.InvoiceManager()
 room_facility_manager = business_logic.RoomFacilityManager()
 room_manager = business_logic.RoomManager()
 room_type_manager = business_logic.RoomTypeManager()
+admin_data_manager = business_logic.AdminDataManager()
 
 
 #TODO: Add more stuff
@@ -47,7 +48,7 @@ room_type_manager = business_logic.RoomTypeManager()
 
 if False:
     print("test")
-    # Testbereich (auf True sezten zum Testen)    
+    # Testbereich (auf True sezten zum Testen)
     
 
 
@@ -359,4 +360,58 @@ if True:
             print("Ausstattung: Keine zusätzlich Ausstattung verfügbar")
 
         print("-" * 50)
+    #---------------------------------------------------------------  
+
+    # User Story 10    
+    # Als Admin möchte ich in der Lage sein, Stammdaten zu verwalten, z.B. Zimmertypen, Einrichtungen, 
+    # und Preise in Echtzeit zu aktualisieren, damit das Backend-System aktuelle Informationen hat.
+    print("\nUser Story 10: Als Admin möchte ich in der Lage sein, Stammdaten zu verwalten, z.B. Zimmertypen, Einrichtungen, und Preise in Echtzeit zu aktualisieren, damit das Backend-System aktuelle Informationen hat.")
+    admin = admin_data_manager
+
+    print("Admin-Stammdatenänderung gestartet (Abbruch jederzeit durch leere Eingabe)\n")
+
+    while True:
+        try:
+            # Choose correct table, this block will fetch an input for the table and will check if it is allowed to make changes
+            table = input_helper.input_valid_string("Welche Tabelle möchtest du ändern? (room, facility, guest, room_type): ", min_length=3)
+            table = table.lower()
+            if table not in admin.supported_tables:
+                raise ValueError(f"Ungültige Tabelle '{table}'. Erlaubt: {list(admin.supported_tables.keys())}")
+
+            # Now the corresponding ID will be requested from the admin
+            entry_id = input_helper.input_valid_int("Gib die ID des zu ändernden Eintrags ein: ", min_value=1)
+
+            # Here is the same logic used as in the table fetch, but only for the attribute
+            attribute = input_helper.input_valid_string(f"Welches Attribut von '{table}' möchtest du ändern? {admin.supported_tables[table]}: ")
+            attribute = attribute.lower()
+            if attribute not in admin.supported_tables[table]:
+                raise ValueError(f"Ungültiges Attribut '{attribute}' für Tabelle '{table}'.")
+
+            # The new value that should be set is asked from the admin. With conditions it is guaranteed, that there won't be any wrong types or negatives
+            if attribute in ["max_guests", "type_id"]:
+                new_value = input_helper.input_valid_int(f"Neuer Wert für {attribute} (Ganzzahl): ", min_value=0)
+            elif attribute == "price_per_night":
+                new_value = input_helper.input_valid_float(f"Neuer Preis (z.B. 199.99): ", min_value=0.0)
+            else:
+                new_value = input_helper.input_valid_string(f"Neuer Textwert für {attribute}: ", min_length=1, max_length=255)
+
+            # Validation to make sure that the admin wants to confirm the expected change
+            confirm = input_helper.input_y_n(f"Wirklich '{attribute}' von ID {entry_id} in '{table}' auf '{new_value}' setzen? (y/n): ")
+            if confirm:
+                admin.update(table, entry_id, attribute, new_value)
+                print("Update erfolgreich.\n")
+            else:
+                print("Änderung abgebrochen.\n")
+
+            # Break for the loop, if the admin chooses "y" he can change another attribute value
+            again = input_helper.input_y_n("Weitere Änderung durchführen? (y/n): ")
+            if not again:
+                print("Vorgang beendet.")
+                break
+
+        except input_helper.EmptyInputError:
+            print("Vorgang abgebrochen.")
+            break
+        except ValueError as err:
+            print(f"Fehler: {err}\n")
     #---------------------------------------------------------------  
