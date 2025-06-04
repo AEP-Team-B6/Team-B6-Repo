@@ -1,5 +1,10 @@
 #Creating class Guest
 from __future__ import annotations
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING: #WICHTIG: alle Imports in diesem IF schreiben, da so verhindert wird, dass wenn man in file A, file B importiert und in file B, file A importiert es eine Schlaufe gibt.
+    from address import Address
+    from booking import Booking
 
 class Guest:
     def __init__(self, guest_id:int, first_name:str, last_name:str, email:str, address:Address, bookings:list[Booking]):

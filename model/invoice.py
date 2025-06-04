@@ -1,5 +1,11 @@
 #Creating class Invoice
 from __future__ import annotations
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING: #WICHTIG: alle Imports in diesem IF schreiben, da so verhindert wird, dass wenn man in file A, file B importiert und in file B, file A importiert es eine Schlaufe gibt.
+    from datetime import datetime
+    from booking import Booking
+
 
 class Invoice:
     def __init__(invoice_id:int, booking:Booking, issue_date:datetime, total_amount:float):

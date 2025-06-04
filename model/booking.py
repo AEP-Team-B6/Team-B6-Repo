@@ -1,9 +1,13 @@
 from __future__ import annotations
 from datetime import datetime, date
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING: #WICHTIG: alle Imports in diesem IF schreiben, da so verhindert wird, dass wenn man in file A, file B importiert und in file B, file A importiert es eine Schlaufe gibt.
+    from guest import Guest
+    from room import Room
+
 
 #Creating class Booking
-
-
 class Booking:
     def __init__(self, booking_id:int, guest:Guest, room:Room,check_in_date:datetime, check_out_date:datetime, is_cancelled:bool, total_amount:float):
         self.__booking_id = booking_id

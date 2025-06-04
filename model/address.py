@@ -1,5 +1,9 @@
 #Creating class Address
 from __future__ import annotations
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING: #WICHTIG: alle Imports in diesem IF schreiben, da so verhindert wird, dass wenn man in file A, file B importiert und in file B, file A importiert es eine Schlaufe gibt.
+    pass #from klassenfile import Klasse
 
 class Address:
     def __init__(self, address_id: int, street: str, zip_code: int, city: str):
