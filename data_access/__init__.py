@@ -11,7 +11,8 @@ from .invoice_data_access import InvoiceDataAccess
 from .room_data_access import RoomDataAccess
 from .room_facility_data_access import RoomFacilityDataAccess
 from .room_type_data_access import RoomTypeDataAccess
-from .admin_data_access import AdminDataAccess
+from .review_data_access import ReviewDataAccess
+
 
 def date_to_db(d: date) -> str:
     return d.isoformat()

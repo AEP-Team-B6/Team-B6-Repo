@@ -12,6 +12,8 @@ import data_access
 import business_logic
 import ui
 import ui.input_helper as input_helper
+from model.hotel import Hotel
+from model.address import Address
 from model import Booking
 from model import Guest
 from model import Room
@@ -41,7 +43,6 @@ invoice_manager = business_logic.InvoiceManager()
 room_facility_manager = business_logic.RoomFacilityManager()
 room_manager = business_logic.RoomManager()
 room_type_manager = business_logic.RoomTypeManager()
-admin_data_manager = business_logic.AdminDataManager()
 
 
 #TODO: Add more stuff
@@ -53,6 +54,7 @@ if False:
     print("test")
     # Testbereich (auf True sezten zum Testen)
     
+ 
 
 
 # Funktionierender Code------------------------
@@ -369,8 +371,12 @@ if True:
     # Als Admin möchte ich in der Lage sein, Stammdaten zu verwalten, z.B. Zimmertypen, Einrichtungen, 
     # und Preise in Echtzeit zu aktualisieren, damit das Backend-System aktuelle Informationen hat.
     print("\nUser Story 10: Als Admin möchte ich in der Lage sein, Stammdaten zu verwalten, z.B. Zimmertypen, Einrichtungen, und Preise in Echtzeit zu aktualisieren, damit das Backend-System aktuelle Informationen hat.")
-    admin = admin_data_manager
-
+    supported_tables = {                               #Sets the changeable tables and attributes in a dict
+        "room_type": ["description", "max_guests"],
+        "facility": ["facility_name"],
+        "room": ["room_number", "type_id", "price_per_night"],
+        "guest": ["first_name", "last_name", "email"]
+        }
     print("Admin-Stammdatenänderung gestartet (Abbruch jederzeit durch leere Eingabe)\n")
 
     while True:
@@ -378,16 +384,16 @@ if True:
             # Choose correct table, this block will fetch an input for the table and will check if it is allowed to make changes
             table = input_helper.input_valid_string("Welche Tabelle möchtest du ändern? (room, facility, guest, room_type): ", min_length=3)
             table = table.lower()
-            if table not in admin.supported_tables:
-                raise ValueError(f"Ungültige Tabelle '{table}'. Erlaubt: {list(admin.supported_tables.keys())}")
+            if table not in supported_tables:
+                raise ValueError(f"Ungültige Tabelle '{table}'. Erlaubt: {list(supported_tables.keys())}")
 
             # Now the corresponding ID will be requested from the admin
-            entry_id = input_helper.input_valid_int("Gib die ID des zu ändernden Eintrags ein: ", min_value=1)
+            id = input_helper.input_valid_int("Gib die ID des zu ändernden Eintrags ein: ", min_value=1)
 
             # Here is the same logic used as in the table fetch, but only for the attribute
-            attribute = input_helper.input_valid_string(f"Welches Attribut von '{table}' möchtest du ändern? {admin.supported_tables[table]}: ")
+            attribute = input_helper.input_valid_string(f"Welches Attribut von '{table}' möchtest du ändern? {supported_tables[table]}: ")
             attribute = attribute.lower()
-            if attribute not in admin.supported_tables[table]:
+            if attribute not in supported_tables[table]:
                 raise ValueError(f"Ungültiges Attribut '{attribute}' für Tabelle '{table}'.")
 
             # The new value that should be set is asked from the admin. With conditions it is guaranteed, that there won't be any wrong types or negatives
@@ -399,9 +405,17 @@ if True:
                 new_value = input_helper.input_valid_string(f"Neuer Textwert für {attribute}: ", min_length=1, max_length=255)
 
             # Validation to make sure that the admin wants to confirm the expected change
-            confirm = input_helper.input_y_n(f"Wirklich '{attribute}' von ID {entry_id} in '{table}' auf '{new_value}' setzen? (y/n): ")
+            confirm = input_helper.input_y_n(f"Wirklich '{attribute}' von ID {id} in '{table}' auf '{new_value}' setzen? (y/n): ")
+            # Now we need to ensure that the for the change the corresponding method from the correct manager will be called
             if confirm:
-                admin.update(table, entry_id, attribute, new_value)
+                if table == "room_type":
+                    room_type_manager.update_room_type(id, attribute, new_value)
+                elif table == "facility":
+                    facility_manager.update_facility(id, new_value)
+                elif table == "room":
+                    room_manager.update_room(id, attribute, new_value)
+                elif table == "guest":
+                    guest_manager.update_guest(id, attribute, new_value)
                 print("Update erfolgreich.\n")
             else:
                 print("Änderung abgebrochen.\n")
@@ -418,6 +432,30 @@ if True:
         except ValueError as err:
             print(f"Fehler: {err}\n")
     #---------------------------------------------------------------  
+    # Uster Story 3.1 (Als Admin) Ich möchte neue Hotels zum System hinzufügen
+    print("Neues Hotel hinzufügen")
+    print("1. Adresse erfassen:")
+
+    street = input_helper.input_valid_string("Bitte gebe Strasse an:")
+    zip_code = input_helper.input_valid_int("Bitte gebe Postleitzahl an:", min_value=1000, max_value=9999)
+    city = input_helper.input_valid_string("Bitte gebe Stadt an:")
+
+    address = Address(address_id= None, street=street, zip_code=zip_code, city=city)
+    address_id = address_manager.create_address(address)
+    address.address_id = address_id
+
+    print(f"Adresse wurde erfolgreich hinzugefügt (ID: {address_id})")
+
+    print("2. Hotel erfassen")
+
+    hotel_name = input_helper.input_valid_string("Hotelname: ")
+    stars = input_helper.input_valid_int("Anzahl Sterne: ")
+
+    hotel = Hotel(hotel_id=None, name=hotel_name, stars=stars, address=address, rooms=None)
+    hotel_id = hotel_manager.add_hotel(hotel)
+
+    print(f"Hotel erfolgreich hinzugefügt (ID: {hotel_id})")
+    #--------------------------------------------------------------- 
 
     #User Story DB 2.1 
     # Als Gast möchte ich auf meine Buchungshistorie zuzugreifen ("lesen"), damit ich meine kommenden Reservierungen verwalten kann.
