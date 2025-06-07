@@ -248,3 +248,18 @@ class HotelDataAccess(BaseDataAccess):
             address = Address(address_id=address_id, street=street, zip_code=zip_code, city=city)
             return Hotel(hotel_id=hotel_id, name=name, stars=stars, address=address, rooms=[])
         return None
+    
+    #Userstory 3.1
+    def add_hotel(self, name:str, address_id:int, stars:int) -> int:
+        sql = """
+        INSERT INTO Hotel (name, address_id, stars)
+        VALUES (?, ?, ?)
+        """
+        params = (
+            name,
+            address_id,
+            stars,
+        )
+        hotel_id, _ = self.execute(sql, params)
+
+        return hotel_id

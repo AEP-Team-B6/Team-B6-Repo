@@ -12,6 +12,8 @@ import data_access
 import business_logic
 import ui
 import ui.input_helper as input_helper
+from model.hotel import Hotel
+from model.address import Address
 
 hotel_reservation_sample = "./database/hotel_reservation_sample.db"
 current_db = "./database/current_db.db"
@@ -49,6 +51,7 @@ if False:
     print("test")
     # Testbereich (auf True sezten zum Testen)
     
+ 
 
 
 # Funktionierender Code------------------------
@@ -426,5 +429,26 @@ if True:
         except ValueError as err:
             print(f"Fehler: {err}\n")
     #---------------------------------------------------------------  
-    #änderung test
-    
+    # Uster Story 3.1 (Als Admin) Ich möchte neue Hotels zum System hinzufügen
+    print("Neues Hotel hinzufügen")
+    print("1. Adresse erfassen:")
+
+    street = input_helper.input_valid_string("Bitte gebe Strasse an:")
+    zip_code = input_helper.input_valid_int("Bitte gebe Postleitzahl an:", min_value=1000, max_value=9999)
+    city = input_helper.input_valid_string("Bitte gebe Stadt an:")
+
+    address = Address(address_id= None, street=street, zip_code=zip_code, city=city)
+    address_id = address_manager.create_address(address)
+    address.address_id = address_id
+
+    print(f"Adresse wurde erfolgreich hinzugefügt (ID: {address_id})")
+
+    print("2. Hotel erfassen")
+
+    hotel_name = input_helper.input_valid_string("Hotelname: ")
+    stars = input_helper.input_valid_int("Anzahl Sterne: ")
+
+    hotel = Hotel(hotel_id=None, name=hotel_name, stars=stars, address=address, rooms=None)
+    hotel_id = hotel_manager.add_hotel(hotel)
+
+    print(f"Hotel erfolgreich hinzugefügt (ID: {hotel_id})")
