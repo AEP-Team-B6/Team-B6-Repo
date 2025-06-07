@@ -218,7 +218,7 @@ class HotelDataAccess(BaseDataAccess):
         else:
             return None
 
-    #User Story 1.6
+    #User Story 1.6 (Used in 4)
     def get_all_hotels(self) -> list[Hotel]:
         sql = """
         SELECT hotel_id, name, stars, address_id FROM Hotel
@@ -248,3 +248,4 @@ class HotelDataAccess(BaseDataAccess):
             address = Address(address_id=address_id, street=street, zip_code=zip_code, city=city)
             return Hotel(hotel_id=hotel_id, name=name, stars=stars, address=address, rooms=[])
         return None
+    

@@ -38,7 +38,7 @@ class RoomDataAccess(BaseDataAccess):
             for fid in facility_ids:
                 facility = facility_da.get_facility_by_id(fid)
                 if facility:
-                    room.add_facility(facility)  # Diese Methode solltest du im Room-Modell haben
+                    room.add_facility(facility)
 
             rooms.append(room)
 

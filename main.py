@@ -29,11 +29,11 @@ pd.set_option("display.max_colwidth", None)  # Show full column content
 
 
 #Manager initialization
-#address_manager = business_logic.AddressManager()
+address_manager = business_logic.AddressManager()
 booking_manager = business_logic.BookingManager()
 #facility_manager = business_logic.FacilityManager()
 #guest_manager = business_logic.GuestManager()
-#hotel_manager = business_logic.HotelManager()
+hotel_manager = business_logic.HotelManager()
 #invoice_manager = business_logic.InvoiceManager()
 #room_facility_manager = business_logic.RoomFacilityManager()
 #room_manager = business_logic.RoomManager()
@@ -54,8 +54,21 @@ if True:
     print("\n Als Gast möchte ich ein Zimmer in einem bestimmten Hotel buchen, um meinen Urlaub zu planen.\n")
 
     """
-    hotel = input("Bitte geben Sie das gewünschte Hotel an: ")
-    #TODO: Hotels anzeigen lassen (ID, Name und Ort) und dann Input der ID abfragen
+    hotel_choice = None
+    hotels = hotel_manager.read_all_hotels()
+    
+
+    while not hotel_choice:
+        for hotel in hotels:
+            print(f"Hotelnummer: {hotel.hotel_id}")
+            print(f"Hotelname: {hotel.name}")
+            print(f"Stadt: {hotel.address.city}")
+            print("-" * 50)
+        hotel_choice = input_helper.input_valid_int("Bitte geben Sie die gewünschte Hotelnummer an: ")    
+    
+    hotel_name_by_id = hotel_manager.read_hotel_by_id(hotel_id = hotel_choice)
+        
+    print(f"Ihr gewähltes Hotel ist {hotel_name_by_id.name}")
     guest_id = input("Bitte geben Sie Ihre Kundennummer an: ")
     room_id = input("Bitte geben Sie die gewünschte Zimmernummern an: ")
     #TODO: Abfrage der room_id ändern und nach room_type abfragen, anschliessend room_id erörtern im Vergleich von hotel_id und type_id
@@ -101,7 +114,21 @@ if True:
 
     """ 
     #TESTCODE
-    hotel = "Bellevue Palace"
+    hotel_choice = None
+    hotels = hotel_manager.read_all_hotels()
+    
+
+    while not hotel_choice:
+        for hotel in hotels:
+            print(f"Hotelnummer: {hotel.hotel_id}")
+            print(f"Hotelname: {hotel.name}")
+            print(f"Stadt: {hotel.address.city}")
+            print("-" * 50)
+        hotel_choice = input_helper.input_valid_int("Bitte geben Sie die gewünschte Hotelnummer an: ")    
+    
+    hotel_name_by_id = hotel_manager.read_hotel_by_id(hotel_id = hotel_choice)
+        
+    print(f"Ihr gewähltes Hotel ist {hotel_name_by_id.name}")
 
     guest_id = 3
     room_id = 4
@@ -122,6 +149,9 @@ if True:
         confirmation = confirmation.lower()
         if confirmation == "y":
             confirm_booking = True
+            cancel = True
+        else:
+            print("Buchungsvorgang wurde abgebrochen")
             cancel = True
 
     if confirm_booking == True:

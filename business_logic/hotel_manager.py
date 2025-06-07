@@ -37,4 +37,5 @@ class HotelManager:
     
     #Used in User Story 9
     def read_hotel_by_id(self, hotel_id:int):
-        return self.__hotel_da.get_hotel_by_id()
+        return self.__hotel_da.get_hotel_by_id(hotel_id)
+    
