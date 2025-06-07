@@ -29,15 +29,15 @@ pd.set_option("display.max_colwidth", None)  # Show full column content
 
 
 #Manager initialization
-address_manager = business_logic.AddressManager()
+#address_manager = business_logic.AddressManager()
 booking_manager = business_logic.BookingManager()
-facility_manager = business_logic.FacilityManager()
-guest_manager = business_logic.GuestManager()
-hotel_manager = business_logic.HotelManager()
-invoice_manager = business_logic.InvoiceManager()
-room_facility_manager = business_logic.RoomFacilityManager()
-room_manager = business_logic.RoomManager()
-room_type_manager = business_logic.RoomTypeManager()
+#facility_manager = business_logic.FacilityManager()
+#guest_manager = business_logic.GuestManager()
+#hotel_manager = business_logic.HotelManager()
+#invoice_manager = business_logic.InvoiceManager()
+#room_facility_manager = business_logic.RoomFacilityManager()
+#room_manager = business_logic.RoomManager()
+#room_type_manager = business_logic.RoomTypeManager()
 
 
 #TODO: Add more stuff
@@ -45,15 +45,111 @@ room_type_manager = business_logic.RoomTypeManager()
 
 # Individuelles Testing ------------------------
 
-if False:
+if True:
     print("test")
     # Testbereich (auf True sezten zum Testen)
     
+    # User Story 4
+    # Als Gast möchte ich ein Zimmer in einem bestimmten Hotel buchen, um meinen Urlaub zu planen.
+    print("\n Als Gast möchte ich ein Zimmer in einem bestimmten Hotel buchen, um meinen Urlaub zu planen.\n")
 
+    """
+    hotel = input("Bitte geben Sie das gewünschte Hotel an: ")
+    #TODO: Hotels anzeigen lassen (ID, Name und Ort) und dann Input der ID abfragen
+    guest_id = input("Bitte geben Sie Ihre Kundennummer an: ")
+    room_id = input("Bitte geben Sie die gewünschte Zimmernummern an: ")
+    #TODO: Abfrage der room_id ändern und nach room_type abfragen, anschliessend room_id erörtern im Vergleich von hotel_id und type_id
+    
+    # Mit folgenden while Loops wird sichergestellt, dass nur valide Datumseingabgen stattfinden.
+    check_in_date = None
+    check_out_date = None
+
+    cancel = False
+    while not check_in_date and not cancel:
+        try:
+            inp_check_in = input_helper.input_valid_string("Bitte geben Sie das gewünschte Startdatum ein (TT.MM.JJJJ): ")
+            check_in_date = datetime.strptime(input_str, "%d.%m.%Y").date()
+        except input_helper.EmptyInputError:
+            cancel = True #TODO wir müssen bestimmen ob bei leerer Eingabe die Aufforderung wiederholt oder abgebroben wird.
+        except ValueError:
+            print("Ungültiges Format. Bitte TT.MM.JJJJ eingeben.")
+
+    cancel = False
+    while not check_out_date and not cancel:
+        try:
+            inp_check_out = input_helper.input_valid_string("Bitte geben Sie das gewünschte Enddatum ein (TT.MM.JJJJ): ")
+            check_out_date = datetime.strptime(input_str, "%d.%m.%Y").date()
+        except input_helper.EmptyInputError:
+            cancel = True #TODO wir müssen bestimmen ob bei leerer Eingabe die Aufforderung wiederholt oder abgebroben wird.
+        except ValueError:
+            print("Ungültiges Format. Bitte TT.MM.JJJJ eingeben.")
+    #TODO es muss noch geprüft werden, ob der Raum zu dieser Zeit verfügbar ist.
+
+    is_cancelled = 0
+    total_amount = 999 #TEST PURPOSE
+    #TODO Preisberechnung erstellen im BL die von check_in und check_out die Nächte berechnet und dass dann mit dem price_per_night multipliziert.
+
+    while not cancel:
+        confirmation = input(f"Wollen Sie die Buchung im {hotel} von {check_in_date} bis {check_out_date} bestätigen? (y/n): ")
+        confirmation = confirmation.lower()
+        if confirmation == "y":
+            confirm_booking = True
+            cancel = True
+
+    if confirm_booking == True:
+        booking_manager.generate_booking(guest_id, room_id, check_in_date, check_out_date, is_cancelled, total_amount)
+
+    """ 
+    #TESTCODE
+    hotel = "Bellevue Palace"
+
+    guest_id = 3
+    room_id = 4
+
+    inp_check_in_date = "08.06.2025"
+    inp_check_out_date = "10.06.2025"
+    check_in_date = datetime.strptime(inp_check_in_date, "%d.%m.%Y").date()
+    check_out_date = datetime.strptime(inp_check_out_date, "%d.%m.%Y").date()
+  
+    is_cancelled = 0
+    total_amount = 999 #TEST PURPOSE
+
+    confirm_booking = False
+    cancel = False
+
+    while not cancel:
+        confirmation = input(f"Wollen Sie die Buchung im {hotel} von {check_in_date} bis {check_out_date} bestätigen? (y/n): ")
+        confirmation = confirmation.lower()
+        if confirmation == "y":
+            confirm_booking = True
+            cancel = True
+
+    if confirm_booking == True:
+        booking_manager.generate_booking(guest_id, room_id, check_in_date, check_out_date, is_cancelled, total_amount)
+    
+
+
+
+#COPIED CODE FOR TESTING PURPOSES OF US 4
+    # Als Admin des Buchungssystems möchte ich alle Buchungen aller Hotels sehen können, um eine Übersicht zu erhalten.
+    print("\n Als Admin des Buchungssystems möchte ich alle Buchungen aller Hotels sehen können, um eine Übersicht zu erhalten.\n")
+    all_bookings = booking_manager.read_all_bookings()
+    
+    for booking in all_bookings:
+        is_cancelled_str = booking.is_cancelled
+        if is_cancelled_str == 0:
+            is_cancelled_str = "Nein"
+        else:
+            is_cancelled_str = "Ja"
+        print(f"Buchungsnummer: {booking.booking_id}, Gast_ID: {booking.guest}, Raum_ID: {booking.room}")
+        print(f"Aufenthalt von: {booking.check_in_date.strftime("%d.%m.%Y")} bis {booking.check_out_date.strftime("%d.%m.%Y")}")
+        print(f"Buchung storniert? {is_cancelled_str} / Totaler Preis: {booking.total_amount}")
+        print("-" * 50)
+#TODO delete copy
 
 # Funktionierender Code------------------------
 
-if True:
+if False:
     print("all working user stories will now be runned trough")
     #Funktionierende Userstories (auf False sezten zum Testen)
     #Userstory 1.1 

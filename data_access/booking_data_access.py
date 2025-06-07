@@ -19,3 +19,15 @@ class BookingDataAccess(BaseDataAccess):
             Booking(booking_id, guest_id, room_id, check_in_date, check_out_date, is_cancelled, total_amount)
             for booking_id, guest_id, room_id, check_in_date, check_out_date, is_cancelled, total_amount in rows
             ]
+    
+
+    def create_new_booking(self, guest_id, room_id, check_in_date, check_out_date, is_cancelled, total_amount) -> Booking:
+        sql = """
+        INSERT into Booking (guest_id, room_id, check_in_date, check_out_date, is_cancelled, total_amount)
+        VALUES (?, ?, ?, ?, ?, ?) 
+        """
+
+        params = tuple([guest_id, room_id, check_in_date, check_out_date, is_cancelled, total_amount])
+
+        self.execute(sql, params)
+        
