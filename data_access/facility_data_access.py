@@ -23,3 +23,11 @@ class FacilityDataAccess(BaseDataAccess):
             return Facility(facility_id=facility_id, facility_name=facility_name)
         else:
             return None
+        
+    
+    # Used in User Story 10
+    def update_facility(self, id:int, new_value):
+        sql = """
+        UPDATE Facilities SET facility_name = ? WHERE facility_id = ?
+        """
+        self.execute(sql, (new_value, id)) 

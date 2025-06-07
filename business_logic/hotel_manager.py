@@ -38,3 +38,11 @@ class HotelManager:
     #Used in User Story 9
     def read_hotel_by_id(self, hotel_id:int):
         return self.__hotel_da.get_hotel_by_id()
+    
+    #User Story 3.1
+    def add_hotel(self, hotel: Hotel) -> int:
+        return self.__hotel_da.add_hotel(
+            name=hotel.name,
+            address_id=hotel.address.address_id,
+            stars=hotel.stars
+        )

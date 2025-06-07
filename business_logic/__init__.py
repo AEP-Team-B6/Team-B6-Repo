@@ -7,4 +7,3 @@ from .invoice_manager import InvoiceManager
 from .room_facility_manager import RoomFacilityManager
 from .room_manager import RoomManager
 from .room_type_manager import RoomTypeManager
-from .admin_data_manager import AdminDataManager

@@ -22,3 +22,18 @@ class AddressDataAccess(BaseDataAccess):
             return Address(address_id=address_id, street=street, zip_code=zip_code, city=city)
         else:
             return None
+        
+#User Story 3.1
+    def add_address(self, address: Address) -> int:
+        sql = """
+        INSERT INTO Address (street, zip_code, city)
+        VALUES (?, ?, ?)
+        """
+        params = (
+            address.street,
+            address.zip_code,
+            address.city,
+        )
+
+        address_id, _ = self.execute(sql, params)
+        return address_id
