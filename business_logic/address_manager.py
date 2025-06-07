@@ -13,6 +13,10 @@ class AddressManager:
     def read_address_by_id(self, address_id:int):
         return self.__address_da.read_address_by_id(address_id)
     
-    #Userstory 3.1
+    #User Story 3.1
     def create_address(self, address: Address):
         return self.__address_da.add_address(address)
+    
+    #User Story 3.2
+    def delete_address(self, address_id: int) -> bool:
+        return self.__address_da.delete_address(address_id)

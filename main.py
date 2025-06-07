@@ -14,6 +14,7 @@ import ui
 import ui.input_helper as input_helper
 from model.hotel import Hotel
 from model.address import Address
+from model.booking import Booking
 
 hotel_reservation_sample = "./database/hotel_reservation_sample.db"
 current_db = "./database/current_db.db"
@@ -47,16 +48,16 @@ room_type_manager = business_logic.RoomTypeManager()
 
 # Individuelles Testing ------------------------
 
-if False:
+if True:
     print("test")
     # Testbereich (auf True sezten zum Testen)
     
- 
+
 
 
 # Funktionierender Code------------------------
 
-if True:
+if False:
     print("all working user stories will now be runned trough")
     #Funktionierende Userstories (auf False sezten zum Testen)
     #Userstory 1.1 
@@ -429,6 +430,7 @@ if True:
         except ValueError as err:
             print(f"Fehler: {err}\n")
     #---------------------------------------------------------------  
+
     # Uster Story 3.1 (Als Admin) Ich möchte neue Hotels zum System hinzufügen
     print("Neues Hotel hinzufügen")
     print("1. Adresse erfassen:")
@@ -452,3 +454,26 @@ if True:
     hotel_id = hotel_manager.add_hotel(hotel)
 
     print(f"Hotel erfolgreich hinzugefügt (ID: {hotel_id})")
+
+    #--------------------------------------------------------------- 
+
+    # User Story 3.2 (Als Admin) Ich möchte Hotels aus dem System entfernen
+    print("Hotel entfernen")
+
+    # Eingabe der Hotel-ID und Adress-ID
+    hotel_id = input_helper.input_valid_int("Bitte gib die Hotel-ID ein: ")
+    address_id = input_helper.input_valid_int("Bitte gib die Adress-ID ein: ")
+
+    # Hotel löschen
+    success_hotel = hotel_manager.delete_hotel(hotel_id)
+    if success_hotel:
+        print(f"Hotel mit ID {hotel_id} wurde erfolgreich gelöscht.")
+    else:
+        print(f"Hotel mit ID {hotel_id} konnte nicht gefunden oder gelöscht werden.")
+
+    # Adresse löschen
+    success_address = address_manager.delete_address(address_id)
+    if success_address:
+        print(f"Adresse mit ID {address_id} wurde erfolgreich gelöscht.")
+    else:
+        print(f"Adresse mit ID {address_id} konnte nicht gefunden oder gelöscht werden.")

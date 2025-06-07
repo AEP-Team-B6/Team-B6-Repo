@@ -1,3 +1,6 @@
+from model.booking import Booking
+from model.hotel import Hotel
+
 class Review:
     def __init__(self, review_id:int, rating:int, booking: Booking, hotel: Hotel):
 
