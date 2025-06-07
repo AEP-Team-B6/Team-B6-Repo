@@ -6,13 +6,16 @@ if TYPE_CHECKING: #WICHTIG: alle Imports in diesem IF schreiben, da so verhinder
     from datetime import datetime
     from booking import Booking
 
-
+Status = {"Offen", "Bezahlt", "Storniert"}
 class Invoice:
-    def __init__(invoice_id:int, booking:Booking, issue_date:datetime, total_amount:float):
+    def __init__(self,invoice_id: int, booking:Booking, issue_date:datetime, total_amount:float, invoice_status: str = "Offen"):
+        if invoice_status not in Status:
+            raise ValueError(f"Ungültiger Rechnungsstatus!!!")
         self.__invoice_id = invoice_id
         self.__booking = booking
         self.__issue_date = issue_date
         self.__total_amount = total_amount
+        self.__invoice_status = invoice_status
 
     @property
     def invoice_id(self):
