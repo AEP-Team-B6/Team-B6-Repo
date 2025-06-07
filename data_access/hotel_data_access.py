@@ -262,7 +262,12 @@ class HotelDataAccess(BaseDataAccess):
         )
         hotel_id, _ = self.execute(sql, params)
 
+        sql = """
+        SELECT MAX(hotel_id) FROM Hotel
+        """
+        hotel_id = self.fetchone(sql)[0]
         return hotel_id
+
    
     #Uster Story 3.2
     def delete_hotel(self, hotel_id: int) -> bool:
