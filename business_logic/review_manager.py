@@ -9,16 +9,14 @@ class ReviewManager:
         self.booking_da = BookingDataAccess()
         self.hotel_da = HotelDataAccess()
 
-    def submit_review(self,review: Review):
-        booking = self.booking_da.get_booking_by_id(booking_id)
-        hotel = self.hotel_da.get_hotel_by_id(hotel_id)
+    def submit_review(self, review: Review):
+        booking = self.booking_da.get_booking_by_id(review.booking_id)
+        hotel = self.hotel_da.get_hotel_by_id(review.hotel_id)
 
-        if not self._has_booking(booking, hotel_id: int):
+        if not self._has_booking(booking, review.hotel_id):
             raise Exception("Gast hat kein Booking für dieses Hotel.")
 
-
-        review_id = self.__generate_review_id()
-        review = Review(review_id, rating, booking_id, hotel_id, comment)
+        review.review_id = self.new_review_id()
 
         booking.add_review(review)
         hotel.add_review(review)
@@ -26,8 +24,11 @@ class ReviewManager:
         self.review_da.save(review)
         self.booking_da.update(booking)
         self.hotel_da.update(hotel)
-
+        
         return review
 
     def _has_booking(self, booking, hotel_id: int) -> bool:
         return booking.hotel_id == hotel_id
+
+    def new_review_id(self) -> int:
+        return self.review_da.get_new_review_id()
