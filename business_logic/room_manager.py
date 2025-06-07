@@ -12,3 +12,8 @@ class RoomManager:
     # User Story 9
     def read_room_details(self):
         return self.__room_da.get_room_details()
+    
+
+    # Used in User Story 10
+    def update_room(self, id, attribute, new_value):
+        self.__room_da.update_room(id, attribute, new_value)

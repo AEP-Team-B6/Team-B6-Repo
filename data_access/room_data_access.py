@@ -43,3 +43,11 @@ class RoomDataAccess(BaseDataAccess):
             rooms.append(room)
 
         return rooms 
+    
+
+    # Used in User Story 10
+    def update_room(self, id:int, attribute:str, new_value):
+        sql = f"""
+        UPDATE Room SET {attribute} = ? WHERE room_id = ?
+        """
+        self.execute(sql, (new_value, id))
