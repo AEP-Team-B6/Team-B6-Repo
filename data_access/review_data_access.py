@@ -4,9 +4,9 @@ from model import review
 from data_access.base_data_access import BaseDataAccess
 import sqlite3 
 
-
+#bim str fehlt es None, ha de fehler nonig entdeckt
 class ReviewDataAccess(BaseDataAccess):
-    def __init__(self, db_path: str = None):
+    def __init__(self, db_path: str = ""):
         super().__init__(db_path)
     
     
