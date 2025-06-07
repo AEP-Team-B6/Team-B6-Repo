@@ -1,11 +1,12 @@
 class Review:
-    def __init__(self, review_id:int, rating:int, booking: Booking, hotel: Hotel):
+    def __init__(self, review_id:int, rating:int, comment: str, booking: Booking, hotel: Hotel):
 
         if not (1<= rating <=10):
             raise ValueError("Rating must be between 1-10!")
 
         self.__review_id = review_id
         self.__rating = rating
+        self.__comment = comment
         self.__booking = booking
         self.__hotel = hotel
 
@@ -16,6 +17,10 @@ class Review:
     @property
     def rating(self):
         return self.__rating
+    
+    @property
+    def comment(self):
+        return self.__comment
     
     @property
     def booking(self) -> Booking:
@@ -30,6 +35,11 @@ class Review:
         if not (1<= rating <=10):
             raise ValueError("Rating must be between 1-10!")
         self.__rating = rating
+
+    @comment.setter
+    def comment(self, comment: str):
+        self.__comment = comment
+
 
     @booking.setter
     def booking(self, booking: Booking):
