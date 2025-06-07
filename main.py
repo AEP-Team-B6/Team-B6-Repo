@@ -14,12 +14,14 @@ import ui
 import ui.input_helper as input_helper
 from model.hotel import Hotel
 from model.address import Address
-from model.booking import Booking
+from model import Booking
+from model import Guest
+from model import Room
 
 hotel_reservation_sample = "./database/hotel_reservation_sample.db"
 current_db = "./database/current_db.db"
 
-shutil.copyfile(hotel_reservation_sample, current_db)
+#shutil.copyfile(hotel_reservation_sample, current_db)
 
 os.environ["DB_FILE"] = current_db
 
@@ -325,7 +327,7 @@ if False:
             print("-" * 50)
     #---------------------------------------------------------------
 
-        # User Story 8
+    # User Story 8
     # Als Admin des Buchungssystems möchte ich alle Buchungen aller Hotels sehen können, um eine Übersicht zu erhalten.
     print("\n Als Admin des Buchungssystems möchte ich alle Buchungen aller Hotels sehen können, um eine Übersicht zu erhalten.\n")
     all_bookings = booking_manager.read_all_bookings()
@@ -477,3 +479,164 @@ if False:
         print(f"Adresse mit ID {address_id} wurde erfolgreich gelöscht.")
     else:
         print(f"Adresse mit ID {address_id} konnte nicht gefunden oder gelöscht werden.")
+        
+    #--------------------------------------------------------------- 
+
+    #User Story DB 2.1 
+    # Als Gast möchte ich auf meine Buchungshistorie zuzugreifen ("lesen"), damit ich meine kommenden Reservierungen verwalten kann.
+    # 2.1. Die Anwendungsfälle für meine Buchungen sind "neu/erstellen", "ändern/aktualisieren", "stornieren/löschen".
+
+    print("Als Gast möchte ich auf meine Buchungshistorie zuzugreifen (lesen), damit ich meine kommenden Reservierungen verwalten kann.")
+    print("US 2.1: Die Anwendungsfälle für meine Buchungen sind neu/erstellen, ändern/aktualisieren, stornieren/löschen")
+
+    # Anzeigen aller Buchungen
+    guest_id = None
+    cancel = False
+    while not guest_id and not cancel:
+        try:
+            guest_id = input_helper.input_valid_int("bitte geben Sie ihre Kundennummer ein: ", min_value=1)
+        except input_helper.EmptyInputError:
+            cancel = True #TODO wir müssen bestimmen ob bei leerer Eingabe die Aufforderung wiederholt oder abgebrochen wird.
+        except ValueError as err:
+            print(err)
+
+    result = booking_manager.get_booking_by_guest_id(guest_id)
+    if result is not None:
+        matching_bookings = result
+            
+        print()
+        print("-" * 50)
+        print("Folgende Buchungen sind zu ihrer Kundennummer erfasst:\n") #TODO Ausgaben könnten später durch UI gemacht werden
+        for booking in matching_bookings:
+            is_cancelled_str = booking.is_cancelled
+            if is_cancelled_str == 0:
+                is_cancelled_str = "Nein"
+            else:
+                is_cancelled_str = "Ja"
+            print(f"Buchungsnummer: {booking.booking_id} | Gast_ID: {booking.guest.guest_id} | Raum_ID: {booking.room.room_id}")
+            print(f"Aufenthalt von: {booking.check_in_date.strftime("%d.%m.%Y")} bis {booking.check_out_date.strftime("%d.%m.%Y")}")
+            print(f"Buchung storniert? {is_cancelled_str} | Totaler Preis: {booking.total_amount}")
+            print("-" * 50)          
+    else:
+        print("Leider wurden keine Buchungen gefunden")
+
+
+    # Bearbeiten der Buchungen
+    print("\nBuchungen bearbeiten")
+    print("-" * 50)  
+    booking_edit_mode = None
+    cancel = False
+    while not booking_edit_mode and not cancel:
+        try:
+            booking_edit_mode = input_helper.input_valid_int("bitte wählen sie den Bearbeitungsmodus:\n1: neu erstellen\n2: aktualisieren\n3: stornieren\n", min_value=1, max_value=3)
+        except input_helper.EmptyInputError:
+            cancel = True #TODO wir müssen bestimmen ob bei leerer Eingabe die Aufforderung wiederholt oder abgebrochen wird.
+        except ValueError as err:
+            print(err)
+    
+    match booking_edit_mode:
+        case 1: 
+            print("\nNeue Buchung eintragen")
+            print("-" * 50)
+            booking_id = None
+
+        case 2: 
+            print("\nBuchung aktualisiern (nur die zu ändernden Werte eingeben)")
+            print("-" * 50)
+
+        case 3:
+            guest_id = None
+            room_id = None
+            start_date = None
+            end_date = None
+            is_cancelled = 1
+            total_amount = 0
+
+    #einlesen der Buchungsnummer für Ändern oder Stornieren
+    if booking_edit_mode == 2 or booking_edit_mode == 3:
+        booking_id = None
+        while booking_id is None:
+            try:
+                booking_id = input_helper.input_valid_int("Buchungsnummer: ", min_value=1,)
+            except Exception as e:
+                print(e)
+
+    #einlesen der Informationen für Erstellen oder Ändern
+    if booking_edit_mode == 1 or booking_edit_mode == 2:
+    #Kundennummer
+        guest_id = None
+        while guest_id is None:
+            try:
+                guest_id = input_helper.input_valid_int("Kundennummer: ", min_value=1, allow_empty=(booking_edit_mode == 2)) #darf nur leer sein beim Ändern, nicht beim Erstellen
+                break
+            except Exception as e:
+                print(e)
+
+    #Zimmer ID
+        room_id = None
+        while room_id is None:
+            try:
+                room_id = input_helper.input_valid_int("Zimmer ID: ", min_value=1, allow_empty=(booking_edit_mode == 2)) #TODO hier könnte noch geprüft werden, welche Zimmer IDs es gibt und es dann mit max_value begrenzen
+                break
+            except Exception as e:
+                print(e)
+                
+    #Startdatum
+        start_date = None
+        while start_date is None:
+            try:
+                start_date_str = input_helper.input_valid_string("Startdatum (TT.MM.JJJJ): ", allow_empty=(booking_edit_mode == 2))
+                if start_date_str:
+                    start_date = datetime.strptime(start_date_str, "%d.%m.%Y").date()
+                break
+            except Exception as e:
+                print(e)
+    #Enddatum
+        end_date = None
+        if start_date is not None:
+            while end_date is None:
+                try:
+                    end_date_str = input_helper.input_valid_string("Enddatum (TT.MM.JJJJ): ")
+                    if end_date_str:
+                        end_date = datetime.strptime(end_date_str, "%d.%m.%Y").date()
+                        if end_date <= start_date: #TODO möglicherweise könnte hier noch ein spezifischer error eingebaut werden, jedoch sollte das wahrscheinlich im UI sein
+                            print("Enddatum muss nach dem Startdatum liegen")
+                            end_date = None
+                    if end_date is not None:        
+                        break
+                except Exception as e:
+                    print(e)
+    #Storniert
+        is_cancelled = 0
+
+    #Gesamtbetrag
+        total_amount = None
+        while total_amount is None:
+            try:
+                total_amount = input_helper.input_valid_int("Gesamtbetrag: ", min_value=0, allow_empty=(booking_edit_mode == 2))
+                break
+            except Exception as e:
+                print(e)
+
+    # Erstellen der Objekte
+    guest = Guest(guest_id=guest_id, first_name=None, last_name=None, email=None, address=None, bookings=None)
+    room = Room(room_id=room_id, room_number=None, price_per_night=None, room_type=None, hotel=None)
+    booking = Booking(booking_id=booking_id, guest=guest, room=room, check_in_date=start_date, check_out_date=end_date, is_cancelled=is_cancelled, total_amount=total_amount)
+
+    # Aufrufen der Manager und bestätigen
+    match booking_edit_mode:
+        case 1:
+            new_booking_id = booking_manager.create_booking(booking)
+            print(f"Neue Buchung erstellt mit der Buchungsnummer {new_booking_id}")
+        case 2:
+            updated_booking = booking_manager.update_booking(booking)
+            print(f"Buchung mit der Buchungsnummer {booking_id} aktuallisiert")
+            print(f"Buchungsnummer: {updated_booking.booking_id} | Guest-ID: {updated_booking.guest.guest_id} | Room-ID: {updated_booking.room.room_id} | Startdatum: {updated_booking.check_in_date} | Enddatum: {updated_booking.check_out_date} | Storniert: {updated_booking.is_cancelled} | Gesamtbetrag: {updated_booking.total_amount}")
+        case 3:
+            print("\nBuchung stornieren")
+            print("-" * 50)
+            updated_booking = booking_manager.update_booking(booking)
+            print(f"Buchung mit der Buchungsnummer {booking_id} storniert")
+            print(f"Buchungsnummer: {updated_booking.booking_id} | Guest-ID: {updated_booking.guest.guest_id} | Room-ID: {updated_booking.room.room_id} | Startdatum: {updated_booking.check_in_date} | Enddatum: {updated_booking.check_out_date} | Storniert: {updated_booking.is_cancelled} | Gesamtbetrag: {updated_booking.total_amount}")
+    #---------------------------------------------------------------
+
