@@ -36,4 +36,16 @@ class AddressDataAccess(BaseDataAccess):
         )
 
         address_id, _ = self.execute(sql, params)
+        sql = """
+        SELECT MAX(address_id) FROM Address
+        """
+        address_id = self.fetchone(sql)[0]
         return address_id
+
+
+#User Story 3.2
+    def delete_address(self, address_id: int) -> bool:
+        sql = "DELETE FROM Address WHERE address_id = ?"
+        params = (address_id,)
+        result = self.execute(sql, params)
+        return result[0] > 0

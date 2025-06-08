@@ -1,3 +1,12 @@
+#Creating class Hotel
+from __future__ import annotations
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING: #WICHTIG: alle Imports in diesem IF schreiben, da so verhindert wird, dass wenn man in file A, file B importiert und in file B, file A importiert es eine Schlaufe gibt.
+
+    from model import Booking
+    from model import Hotel
+
 class Review:
     def __init__(self, review_id:int, rating:int, comment: str, booking: Booking, hotel: Hotel):
 

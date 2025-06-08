@@ -249,7 +249,7 @@ class HotelDataAccess(BaseDataAccess):
             return Hotel(hotel_id=hotel_id, name=name, stars=stars, address=address, rooms=[])
         return None
     
-    #Userstory 3.1
+    #User Story 3.1
     def add_hotel(self, name:str, address_id:int, stars:int) -> int:
         sql = """
         INSERT INTO Hotel (name, address_id, stars)
@@ -262,4 +262,17 @@ class HotelDataAccess(BaseDataAccess):
         )
         hotel_id, _ = self.execute(sql, params)
 
+        sql = """
+        SELECT MAX(hotel_id) FROM Hotel
+        """
+        hotel_id = self.fetchone(sql)[0]
         return hotel_id
+
+   
+    #Uster Story 3.2
+    def delete_hotel(self, hotel_id: int) -> bool:
+        sql = "DELETE FROM Hotel WHERE hotel_id = ?"
+        params = (hotel_id,)
+        result = self.execute(sql, params)
+        return result[0] > 0  
+    

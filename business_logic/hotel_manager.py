@@ -46,3 +46,6 @@ class HotelManager:
             address_id=hotel.address.address_id,
             stars=hotel.stars
         )
+    #User Story 3.2
+    def delete_hotel(self, hotel_id: int) -> bool:
+         return self.__hotel_da.delete_hotel(hotel_id)
