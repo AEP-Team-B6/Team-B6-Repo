@@ -7,6 +7,7 @@ import pandas as pd
 
 import shutil
 
+import business_logic.review_manager
 import model
 import data_access
 import business_logic
@@ -40,6 +41,7 @@ invoice_manager = business_logic.InvoiceManager()
 room_facility_manager = business_logic.RoomFacilityManager()
 room_manager = business_logic.RoomManager()
 room_type_manager = business_logic.RoomTypeManager()
+review_manager = business_logic.ReviewManager()
 
 
 #TODO: Add more stuff
@@ -452,3 +454,7 @@ if True:
     hotel_id = hotel_manager.add_hotel(hotel)
 
     print(f"Hotel erfolgreich hinzugefügt (ID: {hotel_id})")
+
+
+#---------------------------------------------------------------------------------------------------------------
+# User Story 3 Als Gast möchte ich nach meinem Aufenthalt eine Bewertung für ein Hotel abgeben, damit ich meine Erfahrungen teilen kann.
