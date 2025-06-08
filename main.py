@@ -56,94 +56,11 @@ if True:
     print("test")
     # Testbereich (auf True sezten zum Testen)
     #--------------------------------------------------------------- 
-    #Ich möchte die folgenden Informationen pro Hotel sehen: Name, Adresse, Anzahl der Sterne.
+   
 
-
-  #---------------------------------------------------------------
     
-    # User Story 10 und 3.3
-    # TODO: error handling einbauen wenn ID nicht vorhanden
-    # Als Admin möchte ich in der Lage sein, Stammdaten zu verwalten, z.B. Zimmertypen, Einrichtungen, 
-    # und Preise in Echtzeit zu aktualisieren, damit das Backend-System aktuelle Informationen hat.
-    print("\nUser Story 10: Als Admin möchte ich in der Lage sein, Stammdaten zu verwalten, z.B. Zimmertypen, Einrichtungen, und Preise in Echtzeit zu aktualisieren, damit das Backend-System aktuelle Informationen hat.")
-    supported_tables = {                               #Sets the changeable tables and attributes in a dict
-        "room_type": ["description", "max_guests"],
-        "facility": ["facility_name"],
-        "room": ["room_number", "type_id", "price_per_night"],
-        "guest": ["first_name", "last_name", "email"],
-        "hotel": ["name", "stars"],
-        "address": ["street", "city", "zip_code"]
-        }
-    print("Admin-Stammdatenänderung gestartet (Abbruch jederzeit durch leere Eingabe)\n")
 
-    while True:
-        try:
-            # Choose correct table, this block will fetch an input for the table and will check if it is allowed to make changes
-            table = input_helper.input_valid_string(f"Welche Tabelle möchtest du ändern? ({list(supported_tables.keys())}): ", min_length=3)
-            table = table.lower()
-            if table not in supported_tables:
-                raise ValueError(f"Ungültige Tabelle '{table}'. Erlaubt: {list(supported_tables.keys())}")
-
-            # Now the corresponding ID will be requested from the admin
-            id = input_helper.input_valid_int("Gib die ID des zu ändernden Eintrags ein: ", min_value=1)
-
-            # Here is the same logic used as in the table fetch, but only for the attribute
-            attribute = input_helper.input_valid_string(f"Welches Attribut von '{table}' möchtest du ändern? {supported_tables[table]}: ")
-            attribute = attribute.lower()
-            if attribute not in supported_tables[table]:
-                raise ValueError(f"Ungültiges Attribut '{attribute}' für Tabelle '{table}'.")
-
-            # The new value that should be set is asked from the admin. With conditions it is guaranteed, that there won't be any wrong types or negatives
-            if attribute in ["max_guests", "type_id", "stars"]:
-                new_value = input_helper.input_valid_int(f"Neuer Wert für {attribute} (Ganzzahl): ", min_value=0)
-            elif attribute == "price_per_night":
-                new_value = input_helper.input_valid_float(f"Neuer Preis (z.B. 199.99): ", min_value=0.0)
-            else:
-                new_value = input_helper.input_valid_string(f"Neuer Textwert für {attribute}: ", min_length=1, max_length=255)
-
-            # Validation to make sure that the admin wants to confirm the expected change
-            confirm = input_helper.input_y_n(f"Wirklich '{attribute}' von ID {id} in '{table}' auf '{new_value}' setzen? (y/n): ")
-            # Now we need to ensure that the for the change the corresponding method from the correct manager will be called
-            if confirm:
-                if table == "room_type":
-                    room_type_manager.update_room_type(id, attribute, new_value)
-                elif table == "facility":
-                    facility_manager.update_facility(id, new_value)
-                elif table == "room":
-                    room_manager.update_room(id, attribute, new_value)
-                elif table == "guest":
-                    guest_manager.update_guest(id, attribute, new_value)
-                elif table == "hotel":
-                    hotel_manager.update_hotel(id, attribute, new_value)
-                elif table == "address":
-                    address_manager.update_address(id, attribute, new_value)
-                print("Update erfolgreich.\n")
-            else:
-                print("Änderung abgebrochen.\n")
-
-            # Break for the loop, if the admin chooses "y" he can change another attribute value
-            again = input_helper.input_y_n("Weitere Änderung durchführen? (y/n): ")
-            if not again:
-                print("Vorgang beendet.")
-                break
-
-        except input_helper.EmptyInputError:
-            print("Vorgang abgebrochen.")
-            break
-        except ValueError as err:
-            print(f"Fehler: {err}\n")
-    #---------------------------------------------------------------
-    print("\nUser Story 1.6: Alle Hotels anzeigen (Name, Adresse, Sterne)\n")
-
-    hotels = hotel_manager.read_all_hotels()
-
-    if not hotels:
-        print("Keine Hotels gefunden.")
-    else:
-        for hotel in hotels:
-            print(f"{hotel.name} ({hotel.stars} Sterne)")
-            print(f"Adresse: {hotel.address.street}, {hotel.address.zip_code} {hotel.address.city}")
-            print("-" * 50)
+    
 
 # Funktionierender Code------------------------
 
@@ -456,22 +373,25 @@ if False:
         print("-" * 50)
     #---------------------------------------------------------------  
 
-    # User Story 10    
-    # Als Admin möchte ich in der Lage sein, Stammdaten zu verwalten, z.B. Zimmertypen, Einrichtungen, 
+    # User Story 10 und 3.3
+    # TODO: error handling einbauen wenn ID nicht vorhanden
+    # Als Admin möchte ich in der Lage sein, Stammdaten zu verwalten, z.B. Hoteldaten, Zimmertypen, Einrichtungen, 
     # und Preise in Echtzeit zu aktualisieren, damit das Backend-System aktuelle Informationen hat.
     print("\nUser Story 10: Als Admin möchte ich in der Lage sein, Stammdaten zu verwalten, z.B. Zimmertypen, Einrichtungen, und Preise in Echtzeit zu aktualisieren, damit das Backend-System aktuelle Informationen hat.")
     supported_tables = {                               #Sets the changeable tables and attributes in a dict
         "room_type": ["description", "max_guests"],
         "facility": ["facility_name"],
         "room": ["room_number", "type_id", "price_per_night"],
-        "guest": ["first_name", "last_name", "email"]
+        "guest": ["first_name", "last_name", "email"],
+        "hotel": ["name", "stars"],
+        "address": ["street", "city", "zip_code"]
         }
     print("Admin-Stammdatenänderung gestartet (Abbruch jederzeit durch leere Eingabe)\n")
 
     while True:
         try:
             # Choose correct table, this block will fetch an input for the table and will check if it is allowed to make changes
-            table = input_helper.input_valid_string("Welche Tabelle möchtest du ändern? (room, facility, guest, room_type): ", min_length=3)
+            table = input_helper.input_valid_string(f"Welche Tabelle möchtest du ändern? ({list(supported_tables.keys())}): ", min_length=3)
             table = table.lower()
             if table not in supported_tables:
                 raise ValueError(f"Ungültige Tabelle '{table}'. Erlaubt: {list(supported_tables.keys())}")
@@ -486,7 +406,7 @@ if False:
                 raise ValueError(f"Ungültiges Attribut '{attribute}' für Tabelle '{table}'.")
 
             # The new value that should be set is asked from the admin. With conditions it is guaranteed, that there won't be any wrong types or negatives
-            if attribute in ["max_guests", "type_id"]:
+            if attribute in ["max_guests", "type_id", "stars"]:
                 new_value = input_helper.input_valid_int(f"Neuer Wert für {attribute} (Ganzzahl): ", min_value=0)
             elif attribute == "price_per_night":
                 new_value = input_helper.input_valid_float(f"Neuer Preis (z.B. 199.99): ", min_value=0.0)
@@ -505,6 +425,10 @@ if False:
                     room_manager.update_room(id, attribute, new_value)
                 elif table == "guest":
                     guest_manager.update_guest(id, attribute, new_value)
+                elif table == "hotel":
+                    hotel_manager.update_hotel(id, attribute, new_value)
+                elif table == "address":
+                    address_manager.update_address(id, attribute, new_value)
                 print("Update erfolgreich.\n")
             else:
                 print("Änderung abgebrochen.\n")
@@ -520,6 +444,7 @@ if False:
             break
         except ValueError as err:
             print(f"Fehler: {err}\n")
+
     #---------------------------------------------------------------  
 
     # Uster Story 3.1 (Als Admin) Ich möchte neue Hotels zum System hinzufügen
@@ -546,11 +471,9 @@ if False:
 
     print(f"Hotel erfolgreich hinzugefügt (ID: {hotel_id})")
 
-<<<<<<< HEAD
 
 #---------------------------------------------------------------------------------------------------------------
 # User Story 3 Als Gast möchte ich nach meinem Aufenthalt eine Bewertung für ein Hotel abgeben, damit ich meine Erfahrungen teilen kann.
-=======
     #--------------------------------------------------------------- 
 
     # User Story 3.2 (Als Admin) Ich möchte Hotels aus dem System entfernen
@@ -734,4 +657,3 @@ if False:
             print(f"Buchungsnummer: {updated_booking.booking_id} | Guest-ID: {updated_booking.guest.guest_id} | Room-ID: {updated_booking.room.room_id} | Startdatum: {updated_booking.check_in_date} | Enddatum: {updated_booking.check_out_date} | Storniert: {updated_booking.is_cancelled} | Gesamtbetrag: {updated_booking.total_amount}")
     #---------------------------------------------------------------
 
->>>>>>> d7cfd70c21cd067eea609861d2f6c96a59be212e
