@@ -7,6 +7,7 @@ import pandas as pd
 
 import shutil
 
+import business_logic.review_manager
 import model
 import data_access
 import business_logic
@@ -43,6 +44,7 @@ invoice_manager = business_logic.InvoiceManager()
 room_facility_manager = business_logic.RoomFacilityManager()
 room_manager = business_logic.RoomManager()
 room_type_manager = business_logic.RoomTypeManager()
+review_manager = business_logic.ReviewManager()
 
 
 #TODO: Add more stuff
@@ -544,6 +546,11 @@ if False:
 
     print(f"Hotel erfolgreich hinzugefügt (ID: {hotel_id})")
 
+<<<<<<< HEAD
+
+#---------------------------------------------------------------------------------------------------------------
+# User Story 3 Als Gast möchte ich nach meinem Aufenthalt eine Bewertung für ein Hotel abgeben, damit ich meine Erfahrungen teilen kann.
+=======
     #--------------------------------------------------------------- 
 
     # User Story 3.2 (Als Admin) Ich möchte Hotels aus dem System entfernen
@@ -727,3 +734,4 @@ if False:
             print(f"Buchungsnummer: {updated_booking.booking_id} | Guest-ID: {updated_booking.guest.guest_id} | Room-ID: {updated_booking.room.room_id} | Startdatum: {updated_booking.check_in_date} | Enddatum: {updated_booking.check_out_date} | Storniert: {updated_booking.is_cancelled} | Gesamtbetrag: {updated_booking.total_amount}")
     #---------------------------------------------------------------
 
+>>>>>>> d7cfd70c21cd067eea609861d2f6c96a59be212e
