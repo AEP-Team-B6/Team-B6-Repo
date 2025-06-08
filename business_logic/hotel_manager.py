@@ -49,3 +49,7 @@ class HotelManager:
     #User Story 3.2
     def delete_hotel(self, hotel_id: int) -> bool:
          return self.__hotel_da.delete_hotel(hotel_id)
+    
+    # Used in User Story 10 und 3.3
+    def update_hotel(self, id, attribute, new_value):
+        return self.__hotel_da.update_hotel(id, attribute, new_value)

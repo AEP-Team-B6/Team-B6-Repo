@@ -49,3 +49,10 @@ class AddressDataAccess(BaseDataAccess):
         params = (address_id,)
         result = self.execute(sql, params)
         return result[0] > 0
+
+#Used in User Story 10 und 3.3
+    def update_address(self, id:int, attribute:str, new_value):
+        sql = f"""
+        UPDATE Address SET {attribute} = ? WHERE address_id = ?
+        """
+        self.execute(sql, (new_value, id))

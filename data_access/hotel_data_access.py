@@ -276,3 +276,10 @@ class HotelDataAccess(BaseDataAccess):
         result = self.execute(sql, params)
         return result[0] > 0  
     
+    # Used in User Story 10 und 3.3
+    def update_hotel(self, id:int, attribute:str, new_value):
+        sql = f"""
+        UPDATE Hotel SET {attribute} = ? WHERE hotel_id = ?
+        """
+        self.execute(sql, (new_value, id))
+    

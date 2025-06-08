@@ -10,6 +10,6 @@ class RoomTypeManager:
 
     # Used in User Story 10
     def update_room_type(self, id, attribute, new_value):
-        self.__roomtype_da.update_room_type(id, attribute, new_value)
+        return self.__roomtype_da.update_room_type(id, attribute, new_value)
 
         

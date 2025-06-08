@@ -14,4 +14,4 @@ class FacilityManager:
 
     # Used in User Story 10
     def update_facility(self, id, new_value):
-        self.__facility_da.update_facility(id, new_value)
+        return self.__facility_da.update_facility(id, new_value)

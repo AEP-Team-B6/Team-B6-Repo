@@ -20,3 +20,7 @@ class AddressManager:
     #User Story 3.2
     def delete_address(self, address_id: int) -> bool:
         return self.__address_da.delete_address(address_id)
+    
+    # Used in User Story 10 und 3.3
+    def update_address(self, id, attribute, new_value):
+        return self.__address_da.update_address(id, attribute, new_value)

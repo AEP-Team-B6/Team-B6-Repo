@@ -10,4 +10,4 @@ class GuestManager:
 
     # Used in User Story 10
     def update_guest(self, id, attribute, new_value):
-        self.__guest_da.update_guest(id, attribute, new_value)
+        return self.__guest_da.update_guest(id, attribute, new_value)
