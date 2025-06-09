@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import model
 from data_access.base_data_access import BaseDataAccess
+from data_access.address_data_access import AddressDataAccess
 
 
 class GuestDataAccess(BaseDataAccess):
@@ -15,3 +16,20 @@ class GuestDataAccess(BaseDataAccess):
         UPDATE Guest SET {attribute} = ? WHERE guest_id = ?
         """
         self.execute(sql, (new_value, id))
+
+
+    # Used in User Story 4
+    def get_all_guests(self) -> list[model.Guest]:
+        sql = """
+        SELECT guest_id, first_name, last_name, email, address_id FROM Guest
+        """
+        rows = self.fetchall(sql)
+
+        address_da = AddressDataAccess()
+
+        guests = []
+        for guest_id, first_name, last_name, email, address_id in rows: #TODO Listcomprahension
+            address = address_da.read_address_by_id(address_id)
+            guests.append(model.Guest(guest_id, first_name, last_name, email, address_id, address))
+        return guests
+                          

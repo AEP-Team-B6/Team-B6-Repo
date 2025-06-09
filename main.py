@@ -31,13 +31,13 @@ pd.set_option("display.max_colwidth", None)  # Show full column content
 #Manager initialization
 address_manager = business_logic.AddressManager()
 booking_manager = business_logic.BookingManager()
-#facility_manager = business_logic.FacilityManager()
-#guest_manager = business_logic.GuestManager()
+facility_manager = business_logic.FacilityManager()
+guest_manager = business_logic.GuestManager()
 hotel_manager = business_logic.HotelManager()
-#invoice_manager = business_logic.InvoiceManager()
-#room_facility_manager = business_logic.RoomFacilityManager()
-#room_manager = business_logic.RoomManager()
-#room_type_manager = business_logic.RoomTypeManager()
+invoice_manager = business_logic.InvoiceManager()
+room_facility_manager = business_logic.RoomFacilityManager()
+room_manager = business_logic.RoomManager()
+room_type_manager = business_logic.RoomTypeManager()
 
 
 #TODO: Add more stuff
@@ -45,141 +45,14 @@ hotel_manager = business_logic.HotelManager()
 
 # Individuelles Testing ------------------------
 
-if True:
+if False:
     print("test")
     # Testbereich (auf True sezten zum Testen)
     
-    # User Story 4
-    # Als Gast möchte ich ein Zimmer in einem bestimmten Hotel buchen, um meinen Urlaub zu planen.
-    print("\n Als Gast möchte ich ein Zimmer in einem bestimmten Hotel buchen, um meinen Urlaub zu planen.\n")
-
-    """
-    hotel_choice = None
-    hotels = hotel_manager.read_all_hotels()
-    
-
-    while not hotel_choice:
-        for hotel in hotels:
-            print(f"Hotelnummer: {hotel.hotel_id}")
-            print(f"Hotelname: {hotel.name}")
-            print(f"Stadt: {hotel.address.city}")
-            print("-" * 50)
-        hotel_choice = input_helper.input_valid_int("Bitte geben Sie die gewünschte Hotelnummer an: ")    
-    
-    hotel_name_by_id = hotel_manager.read_hotel_by_id(hotel_id = hotel_choice)
-        
-    print(f"Ihr gewähltes Hotel ist {hotel_name_by_id.name}")
-    guest_id = input("Bitte geben Sie Ihre Kundennummer an: ")
-    room_id = input("Bitte geben Sie die gewünschte Zimmernummern an: ")
-    #TODO: Abfrage der room_id ändern und nach room_type abfragen, anschliessend room_id erörtern im Vergleich von hotel_id und type_id
-    
-    # Mit folgenden while Loops wird sichergestellt, dass nur valide Datumseingabgen stattfinden.
-    check_in_date = None
-    check_out_date = None
-
-    cancel = False
-    while not check_in_date and not cancel:
-        try:
-            inp_check_in = input_helper.input_valid_string("Bitte geben Sie das gewünschte Startdatum ein (TT.MM.JJJJ): ")
-            check_in_date = datetime.strptime(input_str, "%d.%m.%Y").date()
-        except input_helper.EmptyInputError:
-            cancel = True #TODO wir müssen bestimmen ob bei leerer Eingabe die Aufforderung wiederholt oder abgebroben wird.
-        except ValueError:
-            print("Ungültiges Format. Bitte TT.MM.JJJJ eingeben.")
-
-    cancel = False
-    while not check_out_date and not cancel:
-        try:
-            inp_check_out = input_helper.input_valid_string("Bitte geben Sie das gewünschte Enddatum ein (TT.MM.JJJJ): ")
-            check_out_date = datetime.strptime(input_str, "%d.%m.%Y").date()
-        except input_helper.EmptyInputError:
-            cancel = True #TODO wir müssen bestimmen ob bei leerer Eingabe die Aufforderung wiederholt oder abgebroben wird.
-        except ValueError:
-            print("Ungültiges Format. Bitte TT.MM.JJJJ eingeben.")
-    #TODO es muss noch geprüft werden, ob der Raum zu dieser Zeit verfügbar ist.
-
-    is_cancelled = 0
-    total_amount = 999 #TEST PURPOSE
-    #TODO Preisberechnung erstellen im BL die von check_in und check_out die Nächte berechnet und dass dann mit dem price_per_night multipliziert.
-
-    while not cancel:
-        confirmation = input(f"Wollen Sie die Buchung im {hotel} von {check_in_date} bis {check_out_date} bestätigen? (y/n): ")
-        confirmation = confirmation.lower()
-        if confirmation == "y":
-            confirm_booking = True
-            cancel = True
-
-    if confirm_booking == True:
-        booking_manager.generate_booking(guest_id, room_id, check_in_date, check_out_date, is_cancelled, total_amount)
-
-    """ 
-    #TESTCODE
-    hotel_choice = None
-    hotels = hotel_manager.read_all_hotels()
-    
-
-    while not hotel_choice:
-        for hotel in hotels:
-            print(f"Hotelnummer: {hotel.hotel_id}")
-            print(f"Hotelname: {hotel.name}")
-            print(f"Stadt: {hotel.address.city}")
-            print("-" * 50)
-        hotel_choice = input_helper.input_valid_int("Bitte geben Sie die gewünschte Hotelnummer an: ")    
-    
-    hotel_name_by_id = hotel_manager.read_hotel_by_id(hotel_id = hotel_choice)
-        
-    print(f"Ihr gewähltes Hotel ist {hotel_name_by_id.name}")
-
-    guest_id = 3
-    room_id = 4
-
-    inp_check_in_date = "08.06.2025"
-    inp_check_out_date = "10.06.2025"
-    check_in_date = datetime.strptime(inp_check_in_date, "%d.%m.%Y").date()
-    check_out_date = datetime.strptime(inp_check_out_date, "%d.%m.%Y").date()
-  
-    is_cancelled = 0
-    total_amount = 999 #TEST PURPOSE
-
-    confirm_booking = False
-    cancel = False
-
-    while not cancel:
-        confirmation = input(f"Wollen Sie die Buchung im {hotel} von {check_in_date} bis {check_out_date} bestätigen? (y/n): ")
-        confirmation = confirmation.lower()
-        if confirmation == "y":
-            confirm_booking = True
-            cancel = True
-        else:
-            print("Buchungsvorgang wurde abgebrochen")
-            cancel = True
-
-    if confirm_booking == True:
-        booking_manager.generate_booking(guest_id, room_id, check_in_date, check_out_date, is_cancelled, total_amount)
-    
-
-
-
-#COPIED CODE FOR TESTING PURPOSES OF US 4
-    # Als Admin des Buchungssystems möchte ich alle Buchungen aller Hotels sehen können, um eine Übersicht zu erhalten.
-    print("\n Als Admin des Buchungssystems möchte ich alle Buchungen aller Hotels sehen können, um eine Übersicht zu erhalten.\n")
-    all_bookings = booking_manager.read_all_bookings()
-    
-    for booking in all_bookings:
-        is_cancelled_str = booking.is_cancelled
-        if is_cancelled_str == 0:
-            is_cancelled_str = "Nein"
-        else:
-            is_cancelled_str = "Ja"
-        print(f"Buchungsnummer: {booking.booking_id}, Gast_ID: {booking.guest}, Raum_ID: {booking.room}")
-        print(f"Aufenthalt von: {booking.check_in_date.strftime("%d.%m.%Y")} bis {booking.check_out_date.strftime("%d.%m.%Y")}")
-        print(f"Buchung storniert? {is_cancelled_str} / Totaler Preis: {booking.total_amount}")
-        print("-" * 50)
-#TODO delete copy
 
 # Funktionierender Code------------------------
 
-if False:
+if True:
     print("all working user stories will now be runned trough")
     #Funktionierende Userstories (auf False sezten zum Testen)
     #Userstory 1.1 
@@ -552,3 +425,176 @@ if False:
         except ValueError as err:
             print(f"Fehler: {err}\n")
     #---------------------------------------------------------------  
+
+        # User Story 4
+    # Als Gast möchte ich ein Zimmer in einem bestimmten Hotel buchen, um meinen Urlaub zu planen.
+    print("\n Als Gast möchte ich ein Zimmer in einem bestimmten Hotel buchen, um meinen Urlaub zu planen.\n")
+
+    #Als erstes werden die Hotels angezeigt und der Input des gewünschten Hotels vom User abgefragt und auf dessen Richtigkeit geprüft
+    hotels = hotel_manager.read_all_hotels()
+    valid_hotel_ids = [hotel.hotel_id for hotel in hotels] #Liste von den hotel_id Werten der Datenbank wird erstellt.
+    hotel_name_by_id = None    
+
+    for hotel in hotels: #Print Output für User damit er die Hotels als Liste sieht
+        print(f"Hotelnummer: {hotel.hotel_id}")
+        print(f"Hotelname: {hotel.name}")
+        print(f"Stadt: {hotel.address.city}")
+        print("-" * 50)
+
+    while hotel_name_by_id is None:
+        try:
+            hotel_choice = input_helper.input_valid_int("Bitte geben Sie die gewünschte Hotelnummer an: ")  #Abfrage welche Hotel der User wählen möchte  
+    
+            if hotel_choice in valid_hotel_ids: #Vergleich User Input mit Datenbank
+                hotel_name_by_id = hotel_manager.read_hotel_by_id(hotel_choice)
+                if hotel_name_by_id:
+                    print(f"\nIhr gewähltes Hotel ist {hotel_name_by_id.name}")
+                else:
+                    print("\nFehler beim Abrufen der Hoteldaten. Bitte erneut versuchen.")
+            else:
+                print("\nDie eingegebene Hotelnummer ist nicht in der Liste. Bitte erneut versuchen.")
+        
+        except input_helper.EmptyInputError:
+            print("\nDie Eingabe darf nicht leer sein. Bitte geben Sie eine Hotelnummer ein.")
+        except ValueError as err:
+            print(err)
+
+    #Nun wird die Kundennummer vom User abgefragt und auf dessen Richtigkeit geprüft
+    guests = guest_manager.read_all_guests()
+    valid_guest_ids = [guest.guest_id for guest in guests] #Liste von den guest_id Werten der Datenbank wird erstellt.
+    client_number = None
+    
+    while client_number is None:
+        try:
+            client_number_input = input_helper.input_valid_int("\nBitte geben Sie Ihre Kundennummer an: ", min_value=1)
+
+            if client_number_input in valid_guest_ids: #Vergleich ob Kundennummer in Datenbank ist
+                try:
+                    confirm_client_number = input_helper.input_y_n(f"Bitte bestätigen Sie Ihre Kundennummer: {client_number_input} // (y oder n): ")
+                    if confirm_client_number:
+                        guest_id = client_number_input
+                        client_number = client_number_input
+                        print("\nKundennummer bestätigt.")
+                    else:
+                        print("\nBitte geben Sie Ihre Kundennummer erneut ein.")
+                except ValueError as err:
+                    print(err)
+            else:
+                print("Kundennummer existiert nicht, bitte geben Sie Ihre Kundennummer ein.\nBei wiederholtem auftreten, wenden Sie sich bitte an den System-Administrator")
+
+        except input_helper.EmptyInputError:
+            print("Die Eingabe darf nicht leer sein. Bitte geben Sie Ihre Kundennummer ein.")
+        except ValueError as err:
+            print(err)
+
+    # Mit folgenden while Loops wird sichergestellt, dass nur valide Datumseingabgen stattfinden. #TODO sicherstellen, dass nur Daten in der Zukunft eingegeben werden können
+    check_in_date = None
+    check_out_date = None
+
+    cancel = False
+    while not check_in_date and not cancel:
+        try:
+            inp_check_in = input_helper.input_valid_string("Bitte geben Sie das gewünschte Startdatum ein (TT.MM.JJJJ): ")
+            parsed_date = datetime.strptime(inp_check_in, "%d.%m.%Y").date()
+
+            if parsed_date < date.today():  # Error Handling Prüfung, ob das gewählte Startdatum in der Vergangenheit liegt.
+                print("Das Startdatum darf nicht in der Vergangenheit liegen.")
+            else:
+                check_in_date = parsed_date
+
+        except input_helper.EmptyInputError:
+            cancel = True #TODO wir müssen bestimmen ob bei leerer Eingabe die Aufforderung wiederholt oder abgebroben wird.
+        except ValueError:
+            print("Ungültiges Format. Bitte TT.MM.JJJJ eingeben.")
+
+    cancel = False
+    while not check_out_date and not cancel:
+        try:
+            inp_check_out = input_helper.input_valid_string("Bitte geben Sie das gewünschte Enddatum ein (TT.MM.JJJJ): ")
+            parsed_date = datetime.strptime(inp_check_out, "%d.%m.%Y").date()
+
+            if parsed_date <= check_in_date: # Error Handling Prüfung, ob das gewählte Enddatum nach dem Startdatum liegt.
+                print("Das Enddatum muss nach dem Startdatum liegen.")
+            else:
+                check_out_date = parsed_date
+
+        except input_helper.EmptyInputError:
+            cancel = True #TODO wir müssen bestimmen ob bei leerer Eingabe die Aufforderung wiederholt oder abgebroben wird.
+        except ValueError:
+            print("Ungültiges Format. Bitte TT.MM.JJJJ eingeben.")
+
+    name_and_time = [hotel_name_by_id.name, check_in_date, check_out_date]
+    prev_hotel_id = None
+
+    if name_and_time:
+        result = hotel_manager.find_hotel_by_name_and_time(name_and_time)
+        if result is not None:
+            matching_hotels, matching_roomtypes, matching_rooms = result
+            print(f"\nFolgende verfügbare Zimmer passen zu Ihrer Suche im Hotel {hotel_name_by_id.name}:") #TODO Ausgaben könnten später durch UI gemacht werden
+            
+            for hotel in matching_hotels:
+                if hotel.hotel_id != prev_hotel_id:
+                    prev_hotel_id = hotel.hotel_id
+            
+            for room in matching_rooms:
+                if room.hotel.hotel_id == hotel.hotel_id:
+                    
+                    print(f"Zimmer Nr.: {room.room_number}  |  Raumtyp: {room.room_type.description}  |  max. Personen: {room.room_type.max_guests}")
+            print("-" * 50)  
+            cancel_booking = False
+
+            valid_room_numbers = [int(room.room_number) for room in matching_rooms] #Liste aus Matching Rooms erstellt um zu Prüfen, dass der nächste Input ein Wert aus dieser Liste ist
+
+            room_id = None
+
+            while room_id is None:
+                try:
+                    room_number = input_helper.input_valid_int("\nBitte wählen Sie eine Zimmernummer aus dieser Liste: ") #User Input, welche Raumnummer er möchte
+                    if room_number in valid_room_numbers: #Prüfung ob gewählter Raum in obiger Liste vorhanden ist
+                        room_id_by_number = room_manager.read_room_details_by_room_number(room_number) #Aufruf der Methode damit room_id gefetched werden kann
+                        if room_id_by_number:
+                            room_id = room_id_by_number.room_id
+                            price_per_night = float(room_id_by_number.price_per_night)
+                        else:
+                            print("Fehler beim Abruf der Raum ID")
+
+                    else:
+                        print("Ungültige Zimmernummer ausgewählt.")
+                
+                except input_helper.EmptyInputError:
+                    print("Die Eingabe darf nicht leer sein. Bitte geben Sie eine Hotelnummer ein.")
+                except ValueError as err:
+                    print(err)
+     
+        else:
+            print(f"Leider wurden keine verfügbaren Räume zum angegebenen Zeitraum im Hotel {hotel_name_by_id.name} gefunden")
+            cancel_booking = True
+
+    is_cancelled = 0
+
+    duration = check_out_date - check_in_date
+    booked_nights = duration.days
+   
+    total_amount = booked_nights * price_per_night
+
+    confirm_booking = False
+
+    while not cancel_booking:
+        confirmation = input(f"\nWollen Sie die Buchung im {hotel_name_by_id.name} von {check_in_date} bis {check_out_date} bestätigen? (y/n): ")
+        confirmation = confirmation.lower()
+        if confirmation == "y":
+            confirm_booking = True
+            break
+        elif confirmation == "n":
+            print("Buchungsvorgang wurde abgebrochen")
+            break
+        else:
+            print("Ungültige Eingabe. Bitte geben Sie 'y' (ja) oder 'n' (nein) ein.")
+
+    if confirm_booking == True:
+        final_booking = booking_manager.generate_booking(guest_id, room_id, check_in_date, check_out_date, is_cancelled, total_amount)
+        print(f"\nBuchung erfolgreich! Ihre Buchungsnummer lautet: {final_booking}")
+    else:
+        print("Buchungsvorgang fehlgeschlagen")
+
+    #---------------------------------------------------------------

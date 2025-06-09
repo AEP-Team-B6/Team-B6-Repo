@@ -17,3 +17,8 @@ class RoomManager:
     # Used in User Story 10
     def update_room(self, id, attribute, new_value):
         self.__room_da.update_room(id, attribute, new_value)
+
+
+    #Used in User Story 4
+    def read_room_details_by_room_number(self, room_number:int):
+        return self.__room_da.get_room_details_by_room_number(room_number)

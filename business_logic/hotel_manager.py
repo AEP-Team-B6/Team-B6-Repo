@@ -39,3 +39,7 @@ class HotelManager:
     def read_hotel_by_id(self, hotel_id:int):
         return self.__hotel_da.get_hotel_by_id(hotel_id)
     
+
+    #User Story 4
+    def find_hotel_by_name_and_time(self, name_and_time: list) -> list[list[Hotel], list[Room_Type], list[Room]]:
+        return self.__hotel_da.find_hotel_by_name_and_time(name_and_time)

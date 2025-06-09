@@ -29,5 +29,7 @@ class BookingDataAccess(BaseDataAccess):
 
         params = tuple([guest_id, room_id, check_in_date, check_out_date, is_cancelled, total_amount])
 
-        self.execute(sql, params)
+        last_row_id, _ = self.execute(sql, params)
+
+        return last_row_id
         

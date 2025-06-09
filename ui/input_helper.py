@@ -137,7 +137,8 @@ def input_valid_float(prompt: str, min_value: float = -float('inf'), max_value: 
 def input_y_n(prompt: str, default: YesOrNo = None) -> bool:
     y = ['y', 'yes']
     n = ['n', 'no']
-
+    #Version 1 #TODO Bereinigen?
+    """ 
     user_input = input(prompt).strip().lower()
     match user_input:
         case _ if user_input in y:
@@ -149,5 +150,20 @@ def input_y_n(prompt: str, default: YesOrNo = None) -> bool:
                 return bool(default.value)
             else:
                 raise ValueError(f"Invalid input. Please enter 'y' or 'n'.")
+    """
+    while True: # Version 2
+        user_input = input(prompt).strip().lower()
+
+        if user_input in y:
+            return True
+        elif user_input in n:
+            return False
+        elif user_input == "":
+            if default is not None:
+                return bool(default.value)
+            else:
+                print("Eingabe darf nicht leer sein. Bitte geben Sie 'y' oder 'n' ein.")
+        else:
+            print("Ungültige Eingabe. Bitte geben Sie 'y' oder 'n' ein.")
             
 

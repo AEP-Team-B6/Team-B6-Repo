@@ -249,3 +249,46 @@ class HotelDataAccess(BaseDataAccess):
             return Hotel(hotel_id=hotel_id, name=name, stars=stars, address=address, rooms=[])
         return None
     
+    #User Story 4
+    def find_hotel_by_name_and_time(self, name_and_time: list) -> list[Hotel]| None:
+        if (name_and_time[0] is None) or (name_and_time[1] is None) or (name_and_time[2] is None):
+            raise ValueError("Bitte geben Sie die gewünschten Parameter ein")
+
+        iso_start_date = date_to_db(name_and_time[1])
+        iso_end_date = date_to_db(name_and_time[2])
+
+        sql = """
+        SELECT DISTINCT 
+            h.hotel_id, h.name, h.stars, 
+            r.room_id, r.room_number, 
+            rt.type_id, rt.description, rt.max_guests
+        FROM Hotel h
+        JOIN Address a ON h.address_id = a.address_id
+        JOIN Room r ON h.hotel_id = r.hotel_id
+        JOIN Room_Type rt ON r.type_id = rt.type_id
+        WHERE h.name = ?
+        AND r.room_id NOT IN (
+            SELECT b.room_id FROM Booking b
+            WHERE b.is_cancelled = 0
+            AND b.check_out_date > ? AND b.check_in_date < ?
+            )
+        """
+        params = tuple([name_and_time[0], iso_start_date, iso_end_date])
+        result = self.fetchall(sql, params)
+        if result:        
+            l_hotels = []
+            l_rooms = []
+            l_room_types = []
+            for row in result: #TODO Listcomprahension
+                hotel_id, name, stars, room_id, room_number, type_id, description, max_guests = row #tuple unpacking
+                hotel = Hotel(hotel_id=hotel_id, name=name, stars=stars, address=None, rooms=None)
+                l_hotels.append(hotel)
+                room_type = Room_Type(type_id=type_id, description=description, max_guests=max_guests)
+                l_room_types.append(room_type)
+                room = Room(room_id=room_id, room_number=room_number, price_per_night=None, room_type=room_type, hotel=hotel)
+                l_rooms.append(room)
+            return [l_hotels, l_room_types, l_rooms]
+
+        else:
+            return None
+    
