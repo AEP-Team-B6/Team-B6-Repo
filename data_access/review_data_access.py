@@ -1,0 +1,53 @@
+from __future__ import annotations
+from datetime import date, datetime
+from model import review
+from data_access.base_data_access import BaseDataAccess
+import sqlite3 
+
+#bim str fehlt es None, ha de fehler nonig entdeckt
+class ReviewDataAccess(BaseDataAccess):
+    def __init__(self, db_path: str = ""):
+        super().__init__(db_path)
+    
+    # Used in User Story DB 3
+    def write_review(self, review: Review):
+        sql = """
+
+            INSERT INTO reviews
+            (review_id,
+            rating,
+            booking_id,
+            hotel_id,
+            comment,
+            date)
+
+            VALUES (?, ?, ?, ?, ?, ?)
+        """
+        params = (
+
+            review.review_id,
+            review.rating,
+            review.booking.booking_id,
+            review.hotel.hotel_id,
+            review.comment,
+            date.today()
+
+        )
+
+        self.execute(sql, params)
+
+        
+    #def write_review(self, review_id: int, rating: int, booking_id: int, hotel_id: int, comment: str, review_date: date):
+    #    sql= """
+    #        INSERT INTO reviews (review_id, rating, booking_id, hotel_id, comment, date)
+    #        VALUES (?, ?, ?, ?, ?, ?)
+    #   """
+    #   params=(
+    #      review_id,
+    #       rating,
+    #       booking_id,
+    #       hotel_id,
+    #       comment,
+    #       review_date
+    #   )
+    #   self.execute(sql, params)

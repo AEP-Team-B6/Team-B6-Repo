@@ -28,7 +28,7 @@ class HotelDataAccess(BaseDataAccess):
         super().__init__(db_path)
  
     
-    #User Story 1.1
+    # Used in User Story 1.1
     def find_hotel_by_city(self, city: str) -> list[Hotel]| None:
         if city is None:
             raise ValueError("Bitte geben sie die gewünschte Stadt ein")
@@ -52,7 +52,7 @@ class HotelDataAccess(BaseDataAccess):
             return None
 
 
-    #User Story 1.2
+    # Used in User Story 1.2
     def find_hotel_by_city_and_min_stars(self, city_and_min_stars: list) -> list[Hotel]:
         if city_and_min_stars[0] is None and city_and_min_stars[1] is None:
             raise ValueError("Bitte geben Sie die gewünschten Parameter an")
@@ -77,7 +77,7 @@ class HotelDataAccess(BaseDataAccess):
             return None
         
 
-    #User Story 1.3
+    # Used in User Story 1.3
     def find_hotel_by_city_and_guests(self, city_and_guests: list) -> list[Hotel]| None:
         if (city_and_guests[0] is None) or (city_and_guests[1] is None):
             raise ValueError("Bitte geben Sie die gewünschten Parameter ein")
@@ -110,7 +110,7 @@ class HotelDataAccess(BaseDataAccess):
             return None
         
 
-    #User Story 1.4
+    # Used in User Story 1.4
     def find_hotel_by_city_and_time(self, city_and_time: list) -> list[Hotel]| None:
         if (city_and_time[0] is None) or (city_and_time[1] is None) or (city_and_time[2] is None):
             raise ValueError("Bitte geben Sie die gewünschten Parameter ein")
@@ -153,7 +153,7 @@ class HotelDataAccess(BaseDataAccess):
         else:
             return None
     
-    #User Story 1.5
+    # Used in User Story 1.5
     def find_hotel_by_search_params(self, search_params: list) -> list[Hotel]| None:
 
         if search_params[3] is not None:
@@ -218,7 +218,7 @@ class HotelDataAccess(BaseDataAccess):
         else:
             return None
 
-    #User Story 1.6 (Used in 4)
+    # Used in User Story 1.6 and 4
     def get_all_hotels(self) -> list[Hotel]:
         sql = """
         SELECT hotel_id, name, stars, address_id FROM Hotel
@@ -233,23 +233,44 @@ class HotelDataAccess(BaseDataAccess):
             hotels.append(Hotel(hotel_id, name, stars, address, rooms=[]))  #TODO rooms später befüllen wird in US 1.6 nicht benötigt
         return hotels
     
-
-    # Used in User Story 9
-    def get_hotel_by_id(self, hotel_id: int) -> Hotel:
-        sql = """
-        SELECT h.hotel_id, h.name, h.stars, a.address_id, a.street, a.zip_code, a.city
-        FROM Hotel h
-        JOIN Address a ON h.address_id = a.address_id
-        WHERE h.hotel_id = ?
-        """
-        result = self.fetchone(sql, (hotel_id,))
-        if result:
-            hotel_id, name, stars, address_id, street, zip_code, city = result
-            address = Address(address_id=address_id, street=street, zip_code=zip_code, city=city)
-            return Hotel(hotel_id=hotel_id, name=name, stars=stars, address=address, rooms=[])
-        return None
     
-    #User Story 4
+    #Used in User Story 3.1
+    def add_hotel(self, name:str, address_id:int, stars:int) -> int:
+        sql = """
+        INSERT INTO Hotel (name, address_id, stars)
+        VALUES (?, ?, ?)
+        """
+        params = (
+            name,
+            address_id,
+            stars,
+        )
+        hotel_id, _ = self.execute(sql, params)
+
+        sql = """
+        SELECT MAX(hotel_id) FROM Hotel
+        """
+        hotel_id = self.fetchone(sql)[0]
+        return hotel_id
+
+   
+    #Used in User Story 3.2
+    def delete_hotel(self, hotel_id: int) -> bool:
+        sql = "DELETE FROM Hotel WHERE hotel_id = ?"
+        params = (hotel_id,)
+        result = self.execute(sql, params)
+        return result[0] > 0  
+    
+    
+    # Used in User Story 10 und 3.3
+    def update_hotel(self, id:int, attribute:str, new_value):
+        sql = f"""
+        UPDATE Hotel SET {attribute} = ? WHERE hotel_id = ?
+        """
+        self.execute(sql, (new_value, id))
+    
+    
+    # Used in User Story 4
     def find_hotel_by_name_and_time(self, name_and_time: list) -> list[Hotel]| None:
         if (name_and_time[0] is None) or (name_and_time[1] is None) or (name_and_time[2] is None):
             raise ValueError("Bitte geben Sie die gewünschten Parameter ein")
@@ -292,3 +313,18 @@ class HotelDataAccess(BaseDataAccess):
         else:
             return None
     
+
+    # Used in User Story 9
+    def get_hotel_by_id(self, hotel_id: int) -> Hotel:
+        sql = """
+        SELECT h.hotel_id, h.name, h.stars, a.address_id, a.street, a.zip_code, a.city
+        FROM Hotel h
+        JOIN Address a ON h.address_id = a.address_id
+        WHERE h.hotel_id = ?
+        """
+        result = self.fetchone(sql, (hotel_id,))
+        if result:
+            hotel_id, name, stars, address_id, street, zip_code, city = result
+            address = Address(address_id=address_id, street=street, zip_code=zip_code, city=city)
+            return Hotel(hotel_id=hotel_id, name=name, stars=stars, address=address, rooms=[])
+        return None

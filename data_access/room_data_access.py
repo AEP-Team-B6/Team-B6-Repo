@@ -14,7 +14,24 @@ class RoomDataAccess(BaseDataAccess):
         super().__init__(db_path)
 
 
-    # User Story 9
+    # Used in User Story 4
+    def get_room_details_by_room_number(self, room_number: int) -> Room:
+        sql = """
+        SELECT room_id, hotel_id, room_number, type_id, price_per_night From Room WHERE room_number = ?
+        """
+
+        params = tuple([room_number])
+
+        result = self.fetchone(sql, params)
+
+        if result:
+            room_id, hotel_id, room_number, type_id, price_per_night = result
+            return Room(room_id, hotel_id, room_number, type_id, price_per_night)
+        else:
+            return None
+        
+
+    # Used in User Story 9
     def get_room_details(self) -> list[Room]:
         sql = """
         SELECT Room.room_id, room_number, price_per_night, Room.type_id, hotel_id, description, max_guests FROM Room
@@ -51,20 +68,3 @@ class RoomDataAccess(BaseDataAccess):
         UPDATE Room SET {attribute} = ? WHERE room_id = ?
         """
         self.execute(sql, (new_value, id))
-
-
-    # Used in User Story 4
-    def get_room_details_by_room_number(self, room_number: int) -> Room:
-        sql = """
-        SELECT room_id, hotel_id, room_number, type_id, price_per_night From Room WHERE room_number = ?
-        """
-
-        params = tuple([room_number])
-
-        result = self.fetchone(sql, params)
-
-        if result:
-            room_id, hotel_id, room_number, type_id, price_per_night = result
-            return Room(room_id, hotel_id, room_number, type_id, price_per_night)
-        else:
-            return None

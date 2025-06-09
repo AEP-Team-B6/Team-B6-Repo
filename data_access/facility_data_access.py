@@ -8,7 +8,7 @@ class FacilityDataAccess(BaseDataAccess):
         super().__init__(db_path)
 
     
-    #Used in User Story 9
+    # Used in User Story 9
     def get_facility_by_id(self, facility_id) -> Facility:
         
         sql = """
