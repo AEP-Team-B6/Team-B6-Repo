@@ -51,19 +51,30 @@ review_manager = business_logic.ReviewManager()
 
 # Individuelles Testing ------------------------
 
-if True:
+if False:
     print("test")
     # Testbereich (auf True sezten zum Testen)
     #--------------------------------------------------------------- 
    
+    # User Story Vis 1
+    # Als Admin möchte ich die Belegungsraten für jeden Zimmertyp in meinem Hotel sehen, damit ich weiss, 
+    # welche Zimmer am beliebtesten sind und ich meine Buchungsstrategien optimieren kann.
+    print("Als Admin möchte ich die Belegungsraten für jeden Zimmertyp in meinem Hotel sehen, damit ich weiss,") 
+    print("welche Zimmer am beliebtesten sind und ich meine Buchungsstrategien optimieren kann.")
 
-    
+    df = room_type_manager.get_stays_per_room_type()
+    df.set_index("type_id", inplace=True) # inplace aktiviert um nicht andauernd Kopien zu erstellen und speicher zu verschwenden
+    df.sort_values(by="stays", ascending=False, inplace=True)
 
-    
+    print("Raumtypen absteigend sortiert nach Übernachtungen")
+    print("-" * 50) 
+    print(df)
+    #---------------------------------------------------------------
+
 
 # Funktionierender Code------------------------
 
-if False:
+if True:
     print("all working user stories will now be runned trough")
     #Funktionierende Userstories (auf False sezten zum Testen)
     #Userstory 1.1 
@@ -656,3 +667,17 @@ if False:
             print(f"Buchungsnummer: {updated_booking.booking_id} | Guest-ID: {updated_booking.guest.guest_id} | Room-ID: {updated_booking.room.room_id} | Startdatum: {updated_booking.check_in_date} | Enddatum: {updated_booking.check_out_date} | Storniert: {updated_booking.is_cancelled} | Gesamtbetrag: {updated_booking.total_amount}")
     #---------------------------------------------------------------
 
+    # User Story Vis 1
+    # Als Admin möchte ich die Belegungsraten für jeden Zimmertyp in meinem Hotel sehen, damit ich weiss, 
+    # welche Zimmer am beliebtesten sind und ich meine Buchungsstrategien optimieren kann.
+    print("\nAls Admin möchte ich die Belegungsraten für jeden Zimmertyp in meinem Hotel sehen, damit ich weiss,") 
+    print("welche Zimmer am beliebtesten sind und ich meine Buchungsstrategien optimieren kann.")
+
+    df = room_type_manager.get_stays_per_room_type()
+    df.set_index("type_id", inplace=True) # inplace aktiviert um nicht andauernd Kopien zu erstellen und speicher zu verschwenden
+    df.sort_values(by="stays", ascending=False, inplace=True)
+
+    print("Raumtypen absteigend sortiert nach Übernachtungen")
+    print("-" * 50) 
+    print(df)
+    #---------------------------------------------------------------
