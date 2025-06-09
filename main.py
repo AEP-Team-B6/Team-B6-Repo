@@ -7,14 +7,13 @@ import pandas as pd
 
 import shutil
 
-import business_logic.review_manager
 import model
 import data_access
 import business_logic
 import ui
 import ui.input_helper as input_helper
-from model.hotel import Hotel
-from model.address import Address
+from model import Hotel
+from model import Address
 from model import Booking
 from model import Guest
 from model import Room
