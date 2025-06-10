@@ -25,7 +25,22 @@ class BookingDataAccess(BaseDataAccess):
     def __init__(self, db_path: str = None):
         super().__init__(db_path)
 
-    # User Story 8
+
+    # Used in User Story 4
+    def create_new_booking(self, guest_id, room_id, check_in_date, check_out_date, is_cancelled, total_amount) -> Booking:
+        sql = """
+        INSERT into Booking (guest_id, room_id, check_in_date, check_out_date, is_cancelled, total_amount)
+        VALUES (?, ?, ?, ?, ?, ?) 
+        """
+
+        params = tuple([guest_id, room_id, check_in_date, check_out_date, is_cancelled, total_amount])
+
+        last_row_id, _ = self.execute(sql, params)
+
+        return last_row_id
+    
+
+    # Used in User Story 8
     def get_all_bookings(self) -> list[Booking]:
         sql = """
         SELECT booking_id, guest_id, room_id, check_in_date, check_out_date, is_cancelled, total_amount FROM Booking
@@ -37,7 +52,8 @@ class BookingDataAccess(BaseDataAccess):
             for booking_id, guest_id, room_id, check_in_date, check_out_date, is_cancelled, total_amount in rows
             ]
     
-    # User Story 2.1 DB
+
+    # Used in User Story 2.1 DB
     def get_booking_by_guest_id(self, guest_id:int) -> list[Booking]:
 
         sql = """
@@ -73,8 +89,9 @@ class BookingDataAccess(BaseDataAccess):
                                   total_amount=total_amount)
                 l_bookings.append(booking)
             return l_bookings
-        
-    # User Story 2.1 DB
+
+
+    # Used in User Story 2.1 DB #TODO Check ob redundant US 4
     def create_booking(self, booking:Booking) -> int:
         iso_start_date = date_to_db(booking.check_in_date)
         iso_end_date = date_to_db(booking.check_out_date)
@@ -91,7 +108,8 @@ class BookingDataAccess(BaseDataAccess):
         booking_id = self.fetchone(sql)[0]
         return booking_id
     
-    # User Story 2.1 DB
+
+    # Used in User Story 2.1 DB
     def update_booking(self, booking:Booking) -> Booking:
         if booking.check_in_date is not None:
             iso_start_date = date_to_db(booking.check_in_date)
@@ -137,6 +155,4 @@ class BookingDataAccess(BaseDataAccess):
             return updated_booking
         
         else:
-            raise BrokenPipeError #TODO möglicherweise nicht genau passender Error, selber ein Error dafür schreiben
-
-        
+            raise BrokenPipeError #TODO möglicherweise nicht genau passender Error, selber ein Error dafür schreiben     

@@ -9,6 +9,8 @@ class ReviewManager:
         self.booking_da = BookingDataAccess()
         self.hotel_da = HotelDataAccess()
 
+
+    # Used in User Story DB 3
     def submit_review(self, review: Review):
         booking = review.booking
         hotel = review.hotel
@@ -27,8 +29,10 @@ class ReviewManager:
 
         return review
 
+    # Used in User Story DB 3
     def _has_booking(self, booking, hotel_id: int) -> bool:
         return booking.hotel.hotel_id == hotel_id
 
+    # Used in User Story DB 3
     def new_review_id(self) -> int:
         return self.review_da.get_new_review_id()

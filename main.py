@@ -7,14 +7,13 @@ import pandas as pd
 
 import shutil
 
-import business_logic.review_manager
 import model
 import data_access
 import business_logic
 import ui
 import ui.input_helper as input_helper
-from model.hotel import Hotel
-from model.address import Address
+from model import Hotel
+from model import Address
 from model import Booking
 from model import Guest
 from model import Room
@@ -51,27 +50,27 @@ room_type_manager = business_logic.RoomTypeManager()
 
 # Individuelles Testing ------------------------
 
-if True:
+if False:
     print("test")
     # Testbereich (auf True sezten zum Testen)
-    #---------------------------------------------------------------
-
-     
-
+    
 
 # Funktionierender Code------------------------
 
-if False:
+if True:
     print("all working user stories will now be runned trough")
     #Funktionierende Userstories (auf False sezten zum Testen)
-    #Userstory 1.1 
-    #Ich möchte alle Hotels in einer Stadt durchsuchen, damit ich das Hotel nach meinem bevorzugten Standort (Stadt) auswählen kann.
+
+    #---------------------------------------------------------------
+    
+    # Userstory 1.1 
+    # Ich möchte alle Hotels in einer Stadt durchsuchen, damit ich das Hotel nach meinem bevorzugten Standort (Stadt) auswählen kann.
     print("\nUser Story 1.1: Ich möchte alle Hotels in einer Stadt durchsuchen, damit ich das Hotel nach meinem bevorzugten Standort (Stadt) auswählen kann.\n")
     city_name = None
     cancel = False
     while not city_name and not cancel:
         try:
-            city_name = input_helper.input_valid_string("Gewünschte Stadt: ")
+            city_name = input_helper.input_valid_string("Gewünschte Stadt: ")   #TODO Gross-Kleinschreibungs Unterschied eliminieren
         except input_helper.EmptyInputError:
             cancel = True #TODO wir müssen bestimmen ob bei leerer Eingabe die Aufforderung wiederholt oder abgebroben wird.
         except ValueError as err:
@@ -92,16 +91,16 @@ if False:
 
     #---------------------------------------------------------------
 
-    #Userstory 1.2
-    #Ich möchte alle Hotels in einer Stadt nach der Anzahl der Sterne (z.B. mindestens 4 Sterne) durchsuchen. 
-    #TODO Hier könnte noch eine Auswahl umgesetzt werden, ob man =, > oder < der angegeben Anzahl sternen suchen will. Momentan zeigt es einfach alle >= an.
+    # Userstory 1.2
+    # Ich möchte alle Hotels in einer Stadt nach der Anzahl der Sterne (z.B. mindestens 4 Sterne) durchsuchen. 
+    #TODO Hier könnte noch eine Auswahl umgesetzt werden, ob man =, > oder < der angegeben Anzahl sternen suchen will. Momentan zeigt es einfach alle >= an. #Finde ich irrelevant (Nils)
     print("\nUser Story 1.2: Ich möchte alle Hotels in einer Stadt nach der Anzahl der Sterne (z.B. mindestens 4 Sterne) durchsuchen.\n")
     city_and_min_stars = [None, None]
     cancel = False
 
     while not city_and_min_stars[0] and not cancel:
         try:
-            city_and_min_stars[0] = input_helper.input_valid_string("Gewünschte Stadt: ")
+            city_and_min_stars[0] = input_helper.input_valid_string("Gewünschte Stadt: ")   #TODO Gross-Kleinschreibungs Unterschied eliminieren
         except input_helper.EmptyInputError:
             cancel = True #TODO wir müssen bestimmen ob bei leerer Eingabe die Aufforderung wiederholt oder abgebroben wird.
         except ValueError as err:
@@ -129,14 +128,14 @@ if False:
             print("Leider wurden keine passenden Hotels gefunden")
     #---------------------------------------------------------------
 
-    #Userstory 1.3 
-    #Ich möchte alle Hotels in einer Stadt durchsuchen, die Zimmer haben, die meiner Gästezahl entsprechen (nur 1 Zimmer pro Buchung).
+    # Userstory 1.3 
+    # Ich möchte alle Hotels in einer Stadt durchsuchen, die Zimmer haben, die meiner Gästezahl entsprechen (nur 1 Zimmer pro Buchung).
     print("\nIch möchte alle Hotels in einer Stadt durchsuchen, die Zimmer haben, die meiner Gästezahl entsprechen (nur 1 Zimmer pro Buchung).\n")
     city_and_guests = [None, None]
     cancel = False
     while not city_and_guests[0] and not cancel:
         try:
-            city_and_guests[0] = input_helper.input_valid_string("Gewünschte Stadt: ")
+            city_and_guests[0] = input_helper.input_valid_string("Gewünschte Stadt: ")  #TODO Gross-Kleinschreibungs Unterschied eliminieren
         except input_helper.EmptyInputError:
             cancel = True #TODO wir müssen bestimmen ob bei leerer Eingabe die Aufforderung wiederholt oder abgebroben wird.
         except ValueError as err:
@@ -156,7 +155,7 @@ if False:
         result = hotel_manager.find_hotel_by_city_and_guests(city_and_guests)
         if result is not None:
             matching_hotels, matching_roomtypes, matching_rooms = result
-            print("Folgende Hotels passen zu Ihrer Suche:") #TODO Ausgaben könnten später durch UI gemacht werden
+            print("Folgende Hotels passen zu Ihrer Suche:")
             for hotel in matching_hotels:
                 if hotel.hotel_id != prev_hotel_id:
                     prev_hotel_id = hotel.hotel_id
@@ -174,8 +173,8 @@ if False:
             print("Leider wurden keine passenden Hotels gefunden")
      #---------------------------------------------------------------
 
-    #User Story 1.4
-    #Ich möchte alle Hotels in einer Stadt durchsuchen, die während meines Aufenthaltes ("von" (check_in_date) und "bis" (check_out_date)) 
+    # User Story 1.4
+    # Ich möchte alle Hotels in einer Stadt durchsuchen, die während meines Aufenthaltes ("von" (check_in_date) und "bis" (check_out_date)) 
     # Zimmer zur Verfügung haben, damit ich nur relevante Ergebnisse sehe.
     print("\nIch möchte alle Hotels in einer Stadt durchsuchen, die während meines Aufenthaltes (von (check_in_date) und bis (check_out_date)).")
     print("Zimmer zur Verfügung haben, damit ich nur relevante Ergebnisse sehe.\n")
@@ -183,7 +182,7 @@ if False:
     cancel = False
     while not city_and_time[0] and not cancel: #TODO für diese Inputbnlöcke könnte eine Funktion mit Übergabeparametern definiert werden (weniger redunanter code)
         try:
-            city_and_time[0] = input_helper.input_valid_string("Gewünschte Stadt: ")
+            city_and_time[0] = input_helper.input_valid_string("Gewünschte Stadt: ")    #TODO Gross-Kleinschreibungs Unterschied eliminieren
         except input_helper.EmptyInputError:
             cancel = True #TODO wir müssen bestimmen ob bei leerer Eingabe die Aufforderung wiederholt oder abgebroben wird.
         except ValueError as err:
@@ -192,7 +191,7 @@ if False:
     cancel = False
     while not city_and_time[1] and not cancel:
         try:
-            input_str = input_helper.input_valid_string("Startdatum (TT.MM.JJJJ): ")
+            input_str = input_helper.input_valid_string("Startdatum (TT.MM.JJJJ): ")    #TODO Datumseingabe muss for date.today() sein
             city_and_time[1] = datetime.strptime(input_str, "%d.%m.%Y").date()
         except input_helper.EmptyInputError:
             cancel = True #TODO wir müssen bestimmen ob bei leerer Eingabe die Aufforderung wiederholt oder abgebroben wird.
@@ -202,7 +201,7 @@ if False:
     cancel = False
     while not city_and_time[2] and not cancel:
         try:
-            input_str = input_helper.input_valid_string("Enddatum (TT.MM.JJJJ): ")
+            input_str = input_helper.input_valid_string("Enddatum (TT.MM.JJJJ): ")  #TODO Datumseingabe muss nach Startdatum sein
             city_and_time[2] = datetime.strptime(input_str, "%d.%m.%Y").date()
         except input_helper.EmptyInputError:
             cancel = True #TODO wir müssen bestimmen ob bei leerer Eingabe die Aufforderung wiederholt oder abgebroben wird.
@@ -243,7 +242,7 @@ if False:
 
         while search_params[0] is None:
             try:
-                city = input_helper.input_valid_string("Gewünschte Stadt: ", allow_empty=True)
+                city = input_helper.input_valid_string("Gewünschte Stadt: ", allow_empty=True)  #TODO Gross-Kleinschreibungs Unterschied eliminieren
                 if city:
                     search_params[0] = city
                 break
@@ -266,7 +265,7 @@ if False:
 
         while search_params[3] is None:
             try:
-                start_date_str = input_helper.input_valid_string("Startdatum (TT.MM.JJJJ): ", allow_empty=True)
+                start_date_str = input_helper.input_valid_string("Startdatum (TT.MM.JJJJ): ", allow_empty=True)     #TODO Datumseingabe muss for date.today() sein
                 if start_date_str:
                     search_params[3] = datetime.strptime(start_date_str, "%d.%m.%Y").date()
                 break
@@ -276,7 +275,7 @@ if False:
         if search_params[3] is not None:
             while search_params[4] is None:
                 try:
-                    end_date_str = input_helper.input_valid_string("Enddatum (TT.MM.JJJJ): ", allow_empty=False)
+                    end_date_str = input_helper.input_valid_string("Enddatum (TT.MM.JJJJ): ", allow_empty=False)    #TODO Datumseingabe muss nach Startdatum sein     
                     if end_date_str:
                         search_params[4] = datetime.strptime(end_date_str, "%d.%m.%Y").date()
                         if search_params[4] <= search_params[3]: #TODO möglicherweise könnte hier noch ein spezifischer error eingebaut werden, jedoch sollte das wahrscheinlich im UI sein
@@ -315,8 +314,8 @@ if False:
         print("Leider wurden keine passenden Hotels gefunden")
     #---------------------------------------------------------------
 
-    #Userstory 1.6
-    #Ich möchte die folgenden Informationen pro Hotel sehen: Name, Adresse, Anzahl der Sterne.
+    # Userstory 1.6
+    # Ich möchte die folgenden Informationen pro Hotel sehen: Name, Adresse, Anzahl der Sterne.
 
     print("\nUser Story 1.6: Alle Hotels anzeigen (Name, Adresse, Sterne)\n")
 
@@ -331,9 +330,231 @@ if False:
             print("-" * 50)
     #---------------------------------------------------------------
 
+    # User Story 3.1 
+    # (Als Admin) Ich möchte neue Hotels zum System hinzufügen
+    print("\nUser Story 3.1: (Als Admin) Ich möchte neue Hotels zum System hinzufügen\n")
+    print("1. Adresse erfassen:")
+
+    street = input_helper.input_valid_string("Bitte gebe Strasse an: ")
+    zip_code = input_helper.input_valid_int("Bitte gebe Postleitzahl an: ", min_value=1000, max_value=9999)
+    city = input_helper.input_valid_string("Bitte gebe Stadt an: ")
+
+    address = Address(address_id= None, street=street, zip_code=zip_code, city=city)
+    address_id = address_manager.create_address(address)
+    address.address_id = address_id
+
+    print(f"Adresse wurde erfolgreich hinzugefügt (ID: {address_id})")
+
+    print("2. Hotel erfassen")
+
+    hotel_name = input_helper.input_valid_string("Hotelname: ")
+    stars = input_helper.input_valid_int("Anzahl Sterne: ")
+
+    hotel = Hotel(hotel_id=None, name=hotel_name, stars=stars, address=address, rooms=None)
+    hotel_id = hotel_manager.add_hotel(hotel)
+
+    print(f"Hotel erfolgreich hinzugefügt (ID: {hotel_id})")
+    #--------------------------------------------------------------- 
+
+    # User Story 3.2 
+    # (Als Admin) Ich möchte Hotels aus dem System entfernen        #TODO kompletter Code double check 
+    print("\nUser Story 3.2: (Als Admin) Ich möchte Hotels aus dem System entfernen\n")
+
+    # Eingabe der Hotel-ID und Adress-ID
+    hotel_id = input_helper.input_valid_int("Bitte gib die Hotel-ID ein: ")
+    address_id = input_helper.input_valid_int("Bitte gib die Adress-ID ein: ")
+
+    # Hotel löschen
+    success_hotel = hotel_manager.delete_hotel(hotel_id)
+    if success_hotel:
+        print(f"Hotel mit ID {hotel_id} wurde erfolgreich gelöscht.")
+    else:
+        print(f"Hotel mit ID {hotel_id} konnte nicht gefunden oder gelöscht werden.")
+
+    # Adresse löschen
+    success_address = address_manager.delete_address(address_id)
+    if success_address:
+        print(f"Adresse mit ID {address_id} wurde erfolgreich gelöscht.")
+    else:
+        print(f"Adresse mit ID {address_id} konnte nicht gefunden oder gelöscht werden.")
+    #--------------------------------------------------------------- 
+
+    # User Story 4
+    # Als Gast möchte ich ein Zimmer in einem bestimmten Hotel buchen, um meinen Urlaub zu planen.
+    print("\n Als Gast möchte ich ein Zimmer in einem bestimmten Hotel buchen, um meinen Urlaub zu planen.\n")
+
+    #Als erstes werden die Hotels angezeigt und der Input des gewünschten Hotels vom User abgefragt und auf dessen Richtigkeit geprüft
+    hotels = hotel_manager.read_all_hotels()
+    valid_hotel_ids = [hotel.hotel_id for hotel in hotels] #Liste von den hotel_id Werten der Datenbank wird erstellt.
+    hotel_name_by_id = None    
+
+    for hotel in hotels: #Print Output für User damit er die Hotels als Liste sieht
+        print(f"Hotelnummer: {hotel.hotel_id}")
+        print(f"Hotelname: {hotel.name}")
+        print(f"Stadt: {hotel.address.city}")
+        print("-" * 50)
+
+    while hotel_name_by_id is None:
+        try:
+            hotel_choice = input_helper.input_valid_int("Bitte geben Sie die gewünschte Hotelnummer an: ")  #Abfrage welche Hotel der User wählen möchte  
+    
+            if hotel_choice in valid_hotel_ids: #Vergleich User Input mit Datenbank
+                hotel_name_by_id = hotel_manager.read_hotel_by_id(hotel_choice)
+                if hotel_name_by_id:
+                    print(f"\nIhr gewähltes Hotel ist {hotel_name_by_id.name}")
+                else:
+                    print("\nFehler beim Abrufen der Hoteldaten. Bitte erneut versuchen.")
+            else:
+                print("\nDie eingegebene Hotelnummer ist nicht in der Liste. Bitte erneut versuchen.")
+        
+        except input_helper.EmptyInputError:
+            print("\nDie Eingabe darf nicht leer sein. Bitte geben Sie eine Hotelnummer ein.")
+        except ValueError as err:
+            print(err)
+
+    #Nun wird die Kundennummer vom User abgefragt und auf dessen Richtigkeit geprüft
+    guests = guest_manager.read_all_guests()
+    valid_guest_ids = [guest.guest_id for guest in guests] #Liste von den guest_id Werten der Datenbank wird erstellt.
+    client_number = None
+    
+    while client_number is None:
+        try:
+            client_number_input = input_helper.input_valid_int("\nBitte geben Sie Ihre Kundennummer an: ", min_value=1)
+
+            if client_number_input in valid_guest_ids: #Vergleich ob Kundennummer in Datenbank ist
+                try:
+                    confirm_client_number = input_helper.input_y_n(f"Bitte bestätigen Sie Ihre Kundennummer: {client_number_input} // (y oder n): ")
+                    if confirm_client_number:
+                        guest_id = client_number_input
+                        client_number = client_number_input
+                        print("\nKundennummer bestätigt.")
+                    else:
+                        print("\nBitte geben Sie Ihre Kundennummer erneut ein.")
+                except ValueError as err:
+                    print(err)
+            else:
+                print("Kundennummer existiert nicht, bitte geben Sie Ihre Kundennummer ein.\nBei wiederholtem auftreten, wenden Sie sich bitte an den System-Administrator")
+
+        except input_helper.EmptyInputError:
+            print("Die Eingabe darf nicht leer sein. Bitte geben Sie Ihre Kundennummer ein.")
+        except ValueError as err:
+            print(err)
+
+    # Mit folgenden while Loops wird sichergestellt, dass nur valide Datumseingabgen stattfinden. #TODO sicherstellen, dass nur Daten in der Zukunft eingegeben werden können
+    check_in_date = None
+    check_out_date = None
+
+    cancel = False
+    while not check_in_date and not cancel:
+        try:
+            inp_check_in = input_helper.input_valid_string("Bitte geben Sie das gewünschte Startdatum ein (TT.MM.JJJJ): ")
+            parsed_date = datetime.strptime(inp_check_in, "%d.%m.%Y").date()
+
+            if parsed_date < date.today():  # Error Handling Prüfung, ob das gewählte Startdatum in der Vergangenheit liegt.
+                print("Das Startdatum darf nicht in der Vergangenheit liegen.")
+            else:
+                check_in_date = parsed_date
+
+        except input_helper.EmptyInputError:
+            cancel = True #TODO wir müssen bestimmen ob bei leerer Eingabe die Aufforderung wiederholt oder abgebroben wird.
+        except ValueError:
+            print("Ungültiges Format. Bitte TT.MM.JJJJ eingeben.")
+
+    cancel = False
+    while not check_out_date and not cancel:
+        try:
+            inp_check_out = input_helper.input_valid_string("Bitte geben Sie das gewünschte Enddatum ein (TT.MM.JJJJ): ")
+            parsed_date = datetime.strptime(inp_check_out, "%d.%m.%Y").date()
+
+            if parsed_date <= check_in_date: # Error Handling Prüfung, ob das gewählte Enddatum nach dem Startdatum liegt.
+                print("Das Enddatum muss nach dem Startdatum liegen.")
+            else:
+                check_out_date = parsed_date
+
+        except input_helper.EmptyInputError:
+            cancel = True #TODO wir müssen bestimmen ob bei leerer Eingabe die Aufforderung wiederholt oder abgebroben wird.
+        except ValueError:
+            print("Ungültiges Format. Bitte TT.MM.JJJJ eingeben.")
+
+    name_and_time = [hotel_name_by_id.name, check_in_date, check_out_date]
+    prev_hotel_id = None
+
+    if name_and_time:
+        result = hotel_manager.find_hotel_by_name_and_time(name_and_time)
+        if result is not None:
+            matching_hotels, matching_roomtypes, matching_rooms = result
+            print(f"\nFolgende verfügbare Zimmer passen zu Ihrer Suche im Hotel {hotel_name_by_id.name}:") #TODO Ausgaben könnten später durch UI gemacht werden
+            
+            for hotel in matching_hotels:
+                if hotel.hotel_id != prev_hotel_id:
+                    prev_hotel_id = hotel.hotel_id
+            
+            for room in matching_rooms:
+                if room.hotel.hotel_id == hotel.hotel_id:
+                    
+                    print(f"Zimmer Nr.: {room.room_number}  |  Raumtyp: {room.room_type.description}  |  max. Personen: {room.room_type.max_guests}")
+            print("-" * 50)  
+            cancel_booking = False
+
+            valid_room_numbers = [int(room.room_number) for room in matching_rooms] #Liste aus Matching Rooms erstellt um zu Prüfen, dass der nächste Input ein Wert aus dieser Liste ist
+
+            room_id = None
+
+            while room_id is None:
+                try:
+                    room_number = input_helper.input_valid_int("\nBitte wählen Sie eine Zimmernummer aus dieser Liste: ") #User Input, welche Raumnummer er möchte
+                    if room_number in valid_room_numbers: #Prüfung ob gewählter Raum in obiger Liste vorhanden ist
+                        room_id_by_number = room_manager.read_room_details_by_room_number(room_number) #Aufruf der Methode damit room_id gefetched werden kann
+                        if room_id_by_number:
+                            room_id = room_id_by_number.room_id
+                            price_per_night = float(room_id_by_number.price_per_night)
+                        else:
+                            print("Fehler beim Abruf der Raum ID")
+
+                    else:
+                        print("Ungültige Zimmernummer ausgewählt.")
+                
+                except input_helper.EmptyInputError:
+                    print("Die Eingabe darf nicht leer sein. Bitte geben Sie eine Hotelnummer ein.")
+                except ValueError as err:
+                    print(err)
+     
+        else:
+            print(f"Leider wurden keine verfügbaren Räume zum angegebenen Zeitraum im Hotel {hotel_name_by_id.name} gefunden")
+            cancel_booking = True
+
+    is_cancelled = 0
+
+    duration = check_out_date - check_in_date
+    booked_nights = duration.days
+   
+    total_amount = booked_nights * price_per_night
+
+    confirm_booking = False
+
+    while not cancel_booking:
+        confirmation = input(f"\nWollen Sie die Buchung im {hotel_name_by_id.name} von {check_in_date} bis {check_out_date} bestätigen? (y/n): ")
+        confirmation = confirmation.lower()
+        if confirmation == "y":
+            confirm_booking = True
+            break
+        elif confirmation == "n":
+            print("Buchungsvorgang wurde abgebrochen")
+            break
+        else:
+            print("Ungültige Eingabe. Bitte geben Sie 'y' (ja) oder 'n' (nein) ein.")
+
+    if confirm_booking == True:
+        final_booking = booking_manager.generate_booking(guest_id, room_id, check_in_date, check_out_date, is_cancelled, total_amount)
+        print(f"\nBuchung erfolgreich! Ihre Buchungsnummer lautet: {final_booking}")
+    else:
+        print("Buchungsvorgang fehlgeschlagen")
+
+    #---------------------------------------------------------------
+
     # User Story 8
     # Als Admin des Buchungssystems möchte ich alle Buchungen aller Hotels sehen können, um eine Übersicht zu erhalten.
-    print("\n Als Admin des Buchungssystems möchte ich alle Buchungen aller Hotels sehen können, um eine Übersicht zu erhalten.\n")
+    print("\nUser Story 8: Als Admin des Buchungssystems möchte ich alle Buchungen aller Hotels sehen können, um eine Übersicht zu erhalten.\n")
     all_bookings = booking_manager.read_all_bookings()
     
     for booking in all_bookings:
@@ -350,7 +571,7 @@ if False:
 
     # User Story 9
     # Als Admin möchte ich eine Liste der Zimmer mit ihrer Ausstattung sehen, damit ich sie besser bewerben kann.
-    print("\nAls Admin möchte ich eine Liste der Zimmer mit ihrer Ausstattung sehen, damit ich sie besser bewerben kann.\n")
+    print("\nUser Story 9: Als Admin möchte ich eine Liste der Zimmer mit ihrer Ausstattung sehen, damit ich sie besser bewerben kann.\n")
 
     room_details = room_manager.read_room_details()
 
@@ -373,9 +594,14 @@ if False:
 
     # User Story 10 und 3.3
     # TODO: error handling einbauen wenn ID nicht vorhanden
+    # User Stroy 10:
     # Als Admin möchte ich in der Lage sein, Stammdaten zu verwalten, z.B. Hoteldaten, Zimmertypen, Einrichtungen, 
     # und Preise in Echtzeit zu aktualisieren, damit das Backend-System aktuelle Informationen hat.
+    # User Story 3.3
+    # (Als Admin) Ich möchte die Informationen bestimmter Hotels aktualisieren, z. B. den Namen, die Sterne usw. (hinzugefügt: Addresse)
     print("\nUser Story 10: Als Admin möchte ich in der Lage sein, Stammdaten zu verwalten, z.B. Zimmertypen, Einrichtungen, und Preise in Echtzeit zu aktualisieren, damit das Backend-System aktuelle Informationen hat.")
+    print("und")
+    print("User Story 3.3: (Als Admin) Ich möchte die Informationen bestimmter Hotels aktualisieren, z. B. den Namen, die Sterne usw.\n")
     supported_tables = {                               #Sets the changeable tables and attributes in a dict
         "room_type": ["description", "max_guests"],
         "facility": ["facility_name"],
@@ -445,6 +671,11 @@ if False:
 
     #---------------------------------------------------------------  
 
+    # User Story DB 3 Als Gast möchte ich nach meinem Aufenthalt eine Bewertung für ein Hotel abgeben, damit ich meine Erfahrungen teilen kann.
+    #TODO Working Code eingeben
+
+    #---------------------------------------------------------------  
+    
     # Uster Story 3.1 (Als Admin) Ich möchte neue Hotels zum System hinzufügen
 
     while True:
@@ -522,13 +753,13 @@ if False:
         except ValueError as err:
             print(f"Fehler: {err}\n")
     #--------------------------------------------------------------- 
-
+    
     #User Story DB 2.1 
     # Als Gast möchte ich auf meine Buchungshistorie zuzugreifen ("lesen"), damit ich meine kommenden Reservierungen verwalten kann.
     # 2.1. Die Anwendungsfälle für meine Buchungen sind "neu/erstellen", "ändern/aktualisieren", "stornieren/löschen".
 
-    print("Als Gast möchte ich auf meine Buchungshistorie zuzugreifen (lesen), damit ich meine kommenden Reservierungen verwalten kann.")
-    print("US 2.1: Die Anwendungsfälle für meine Buchungen sind neu/erstellen, ändern/aktualisieren, stornieren/löschen")
+    print("\nAls Gast möchte ich auf meine Buchungshistorie zuzugreifen (lesen), damit ich meine kommenden Reservierungen verwalten kann.")
+    print("US 2.1: Die Anwendungsfälle für meine Buchungen sind neu/erstellen, ändern/aktualisieren, stornieren/löschen\n")
 
     # Anzeigen aller Buchungen
     guest_id = None
@@ -560,7 +791,6 @@ if False:
             print("-" * 50)          
     else:
         print("Leider wurden keine Buchungen gefunden")
-
 
     # Bearbeiten der Buchungen
     print("\nBuchungen bearbeiten")
@@ -632,6 +862,7 @@ if False:
                 break
             except Exception as e:
                 print(e)
+
     #Enddatum
         end_date = None
         if start_date is not None:
@@ -647,6 +878,7 @@ if False:
                         break
                 except Exception as e:
                     print(e)
+
     #Storniert
         is_cancelled = 0
 
@@ -681,3 +913,19 @@ if False:
             print(f"Buchungsnummer: {updated_booking.booking_id} | Guest-ID: {updated_booking.guest.guest_id} | Room-ID: {updated_booking.room.room_id} | Startdatum: {updated_booking.check_in_date} | Enddatum: {updated_booking.check_out_date} | Storniert: {updated_booking.is_cancelled} | Gesamtbetrag: {updated_booking.total_amount}")
     #---------------------------------------------------------------
 
+    # User Story Vis 1
+    # Als Admin möchte ich die Belegungsraten für jeden Zimmertyp in meinem Hotel sehen, damit ich weiss, 
+    # welche Zimmer am beliebtesten sind und ich meine Buchungsstrategien optimieren kann.
+    print("\nUser Story Vis 1: Als Admin möchte ich die Belegungsraten für jeden Zimmertyp in meinem Hotel sehen, damit ich weiss,") 
+    print("welche Zimmer am beliebtesten sind und ich meine Buchungsstrategien optimieren kann.\n")
+
+    df = room_type_manager.get_stays_per_room_type()
+    df.set_index("type_id", inplace=True) # inplace aktiviert um nicht andauernd Kopien zu erstellen und speicher zu verschwenden
+    df.sort_values(by="stays", ascending=False, inplace=True)
+
+    print("Raumtypen absteigend sortiert nach Übernachtungen")
+    print("-" * 50) 
+    print(df)
+    #---------------------------------------------------------------
+
+    

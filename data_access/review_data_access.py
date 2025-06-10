@@ -9,7 +9,7 @@ class ReviewDataAccess(BaseDataAccess):
     def __init__(self, db_path: str = ""):
         super().__init__(db_path)
     
-
+    # Used in User Story DB 3
     def write_review(self, review: Review):
         sql = """
 

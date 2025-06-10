@@ -10,7 +10,6 @@ class FacilityManager:
     # Used in User Story 9
     def read_facility_by_id(self, facility_id:int):
         return self.__facility_da.get_facility_by_id(facility_id)
-    
 
     # Used in User Story 10
     def update_facility(self, id, new_value):

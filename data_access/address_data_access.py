@@ -7,7 +7,8 @@ class AddressDataAccess(BaseDataAccess):
     def __init__(self, db_path: str = None):
         super().__init__(db_path)
 
-#Used in User Story 1.6
+
+# Used in User Story 1.6
     def read_address_by_id(self, address_id) -> Address | None:
 
         sql = """
@@ -23,7 +24,8 @@ class AddressDataAccess(BaseDataAccess):
         else:
             return None
         
-#User Story 3.1
+
+# Used in User Story 3.1
     def add_address(self, address: Address) -> int:
         sql = """
         INSERT INTO Address (street, zip_code, city)
@@ -43,14 +45,15 @@ class AddressDataAccess(BaseDataAccess):
         return address_id
 
 
-#User Story 3.2
+# Used in User Story 3.2
     def delete_address(self, address_id: int) -> bool:
         sql = "DELETE FROM Address WHERE address_id = ?"
         params = (address_id,)
         result = self.execute(sql, params)
         return result[0] > 0
 
-#Used in User Story 10 und 3.3
+
+# Used in User Story 10 und 3.3
     def update_address(self, id:int, attribute:str, new_value):
         sql = f"""
         UPDATE Address SET {attribute} = ? WHERE address_id = ?
