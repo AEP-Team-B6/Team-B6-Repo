@@ -17,7 +17,7 @@ class RoomDataAccess(BaseDataAccess):
     # Used in User Story 4
     def get_room_details_by_room_number(self, room_number: int) -> Room:
         sql = """
-        SELECT room_id, hotel_id, room_number, type_id, price_per_night From Room WHERE room_number = ?
+        SELECT room_id, hotel_id, room_number, type_id, price_per_night, price_per_night_ls From Room WHERE room_number = ?
         """
 
         params = tuple([room_number])
@@ -25,8 +25,8 @@ class RoomDataAccess(BaseDataAccess):
         result = self.fetchone(sql, params)
 
         if result:
-            room_id, hotel_id, room_number, type_id, price_per_night = result
-            return Room(room_id, hotel_id, room_number, type_id, price_per_night)
+            room_id, hotel_id, room_number, type_id, price_per_night, price_per_night_ls = result
+            return Room(room_id, hotel_id, room_number, type_id, price_per_night, price_per_night_ls)
         else:
             return None
         
@@ -34,7 +34,7 @@ class RoomDataAccess(BaseDataAccess):
     # Used in User Story 9
     def get_room_details(self) -> list[Room]:
         sql = """
-        SELECT Room.room_id, room_number, price_per_night, Room.type_id, hotel_id, description, max_guests FROM Room
+        SELECT Room.room_id, room_number, price_per_night, price_per_night_ls, Room.type_id, hotel_id, description, max_guests FROM Room
         JOIN Room_Type ON Room.type_id = Room_Type.type_id
         """
 
@@ -45,11 +45,11 @@ class RoomDataAccess(BaseDataAccess):
         hotel_da = HotelDataAccess()
 
         rooms = []
-        for room_id, room_number, price_per_night, type_id, hotel_id, description, max_guests in rows:
+        for room_id, room_number, price_per_night, price_per_night_ls, type_id, hotel_id, description, max_guests in rows:
             room_type = Room_Type(type_id, description, max_guests)
             hotel = hotel_da.get_hotel_by_id(hotel_id)
             
-            room = Room(room_id, room_number, price_per_night, room_type, hotel)
+            room = Room(room_id, room_number, price_per_night, price_per_night_ls, room_type, hotel)
 
             facility_ids = roomfacility_da.get_facility_ids_by_room(room_id)
             for fid in facility_ids:

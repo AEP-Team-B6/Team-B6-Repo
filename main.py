@@ -61,24 +61,28 @@ if True:
     print("all working user stories will now be runned trough")
     #Funktionierende Userstories (auf False sezten zum Testen)
 
-    #---------------------------------------------------------------
-    # User Story 1.1-1.5 und User Story 2.2
+        #--------------------------------------------------------------- 
     # US 1.1: Ich möchte alle Hotels in einer Stadt durchsuchen, damit ich das Hotel nach meinem bevorzugten Standort (Stadt) auswählen kann.
     # US 1.2: Ich möchte alle Hotels in einer Stadt nach der Anzahl der Sterne (z.B. mindestens 4 Sterne) durchsuchen.
     # US 1.3: Ich möchte alle Hotels in einer Stadt durchsuchen, die Zimmer haben, die meiner Gästezahl entsprechen (nur 1 Zimmer pro Buchung).
     # US 1.4: Ich möchte alle Hotels in einer Stadt durchsuchen, die während meines Aufenthaltes ("von" (check_in_date) und "bis" (check_out_date)) Zimmer zur Verfügung haben, damit ich nur relevante Ergebnisse sehe.
     # US 1.5: Ich möchte Wünsche kombinieren können, z.B. die verfügbaren Zimmer zusammen mit meiner Gästezahl und der mindest Anzahl Sterne.
+    # US 2.1: Ich möchte die folgenden Informationen pro Zimmer sehen: Zimmertyp, max. Anzahl der Gäste, Beschreibung, Ausstattung, Preis pro Nacht und Gesamtpreis.
     # US 2.2: Ich möchte nur die verfügbaren Zimmer sehen, sofern ich meinen Aufenthalt (von – bis) spezifiziert habe.
+    # US   7: Als Gast möchte ich eine dynamische Preisgestaltung auf der Grundlage der Nachfrage sehen, damit ich ein Zimmer zum besten Preis buchen kann.
 
-    print("\nUser Story 1.1-1.5 und User Story 2.2 \n")
+    print("\nUser Story 1.1-1.5 und User Story 2.1, 2.2 und User Story 7")
+    print("\nSie können nun nach Belieben nach Hotels und Zimmereigenschaften suchen")
     search_params = [None, None, None, None, None]
-    print("3 von 4 Suchparameter können bei Bedarf leer gelassen werden")
+    print("(3 von 4 Suchparameter können bei Bedarf leer gelassen werden)\n")
+
+    today = date.today()
+    nights = 1
 
     while search_params[0] is None and search_params[1] is None and search_params[2] is None and search_params[3] is None:
-
         while search_params[0] is None:
             try:
-                city = input_helper.input_valid_string("Gewünschte Stadt: ", allow_empty=True)  #TODO Gross-Kleinschreibungs Unterschied eliminieren
+                city = input_helper.input_valid_string("Gewünschte Stadt: ", allow_empty=True)  
                 if city:
                     search_params[0] = city
                 break
@@ -101,54 +105,99 @@ if True:
 
         while search_params[3] is None:
             try:
-                start_date_str = input_helper.input_valid_string("Startdatum (TT.MM.JJJJ): ", allow_empty=True)     #TODO Datumseingabe muss for date.today() sein
+                start_date_str = input_helper.input_valid_string("Startdatum (TT.MM.JJJJ): ", allow_empty=True)
                 if start_date_str:
-                    search_params[3] = datetime.strptime(start_date_str, "%d.%m.%Y").date()
+                    start_date = datetime.strptime(start_date_str, "%d.%m.%Y").date()
+                    if start_date < today: #prüfen ob Startdatum nicht in der Vergangenheit liegt
+                        print("Fehler: Startdatum darf nicht vor heute liegen.")
+                        continue
+                    search_params[3] = start_date
                 break
+            except ValueError:
+                print("Ungültiges Format. Bitte TT.MM.JJJJ eingeben.")
             except Exception as e:
                 print(e)
 
         if search_params[3] is not None:
             while search_params[4] is None:
                 try:
-                    end_date_str = input_helper.input_valid_string("Enddatum (TT.MM.JJJJ): ", allow_empty=False)    #TODO Datumseingabe muss nach Startdatum sein     
+                    end_date_str = input_helper.input_valid_string("Enddatum (TT.MM.JJJJ): ", allow_empty=False)
                     if end_date_str:
-                        search_params[4] = datetime.strptime(end_date_str, "%d.%m.%Y").date()
-                        if search_params[4] <= search_params[3]: #TODO möglicherweise könnte hier noch ein spezifischer error eingebaut werden, jedoch sollte das wahrscheinlich im UI sein
-                            print("Enddatum muss nach dem Startdatum liegen")
-                            search_params[4] = None
-                    if search_params[4] is not None:        
-                        break
+                        end_date = datetime.strptime(end_date_str, "%d.%m.%Y").date()
+                        if end_date <= search_params[3]: #TODO möglicherweise könnte hier noch ein spezifischer error eingebaut werden, jedoch sollte das wahrscheinlich im UI sein
+                            print("Fehler: Enddatum muss nach dem Startdatum liegen.")
+                            continue
+                        search_params[4] = end_date
+                        nights = (end_date - search_params[3]).days
+                    break
+                except ValueError:
+                    print("Ungültiges Format. Bitte TT.MM.JJJJ eingeben.")
                 except Exception as e:
                     print(e)
-
+                    
         if search_params[0] is None and search_params[1] is None and search_params[2] is None and search_params[3] is None and search_params[4] is None:
             print("\nBitte geben Sie mindestens einen gültigen Suchparameter ein\n")
 
+    result = hotel_manager.find_hotel_by_search_params(search_params) #übergeben der Suchparameter an den Hotelmanager und abfüllen des Ergebniss in result
 
-    prev_hotel_id = None
-    result = hotel_manager.find_hotel_by_search_params(search_params)
     if result is not None:
-        matching_hotels, matching_rooms, matching_addresses, matching_roomtypes = result
-        print()
-        print("-" * 50)
-        print("Folgende Hotels passen zu Ihrer Suche:\n") #TODO Ausgaben könnten später durch UI gemacht werden
-        for hotel in matching_hotels:
-            if hotel.hotel_id != prev_hotel_id:
-                prev_hotel_id = hotel.hotel_id
-                if hotel.stars == 1:
-                    print(f"Hotel {hotel.name} in {hotel.address.city} mit {hotel.stars} Stern")
-                else:
-                    print(f"Hotel {hotel.name} in {hotel.address.city} mit {hotel.stars} Sternen")
+        matching_hotels, matching_rooms, matching_addresses, matching_roomtypes  = result #entpacken der Liste
+        print("\n" + "-"*80)
+        print("Folgende Hotels passen zu Ihrer Suche:\n")
+        print("─"*100)
 
-                for room in matching_rooms:
-                    if room.hotel.hotel_id == hotel.hotel_id:
-                        
-                        print(f"Raum Nr.: {room.room_number}  |  Raumtyp: {room.room_type.description}  |  max. Personen: {room.room_type.max_guests}")
-                print("-" * 50)          
+        for hotel in matching_hotels:
+            print(f"{hotel.name} in {hotel.address.city} mit {hotel.stars} Stern{'en' if hotel.stars>1 else ''}")
+            print(f"{'':<4}" + "-" * 80)
+
+            for room in matching_rooms:
+                if room.hotel.hotel_id == hotel.hotel_id:
+                    if search_params[3]:
+                        mon = search_params[3].month
+
+                        if 5 <= mon <= 9:
+                            season = "Hauptsaison ist"
+                            price = room.price_per_night
+                            other = room.price_per_night_ls
+                            other_season = "Nebensaison wäre"
+
+                        else:
+                            season = "Nebensaison ist"
+                            price = room.price_per_night_ls
+                            other = room.price_per_night
+                            other_season = "Hauptsaison wäre"
+
+                    else:
+                        season = "in der Hauptsaison ist"
+                        price = room.price_per_night
+                        other = room.price_per_night_ls
+                        other_season = "Nebensaison ist"
+
+                    total = nights * price
+
+                    print(f"{'':<4}Raum {room.room_number} | Typ: {room.room_type.description} | max. {room.room_type.max_guests} Pers.")
+                    print(f"{'':<10}• Preis pro Nacht in der {season}: {price:.2f} CHF") #einrücken der Zeile um 10 Stellen, damit es übersichtlicher ist.
+                    print(f"{'':<10}• Preis pro Nacht in der {other_season}: {other:.2f} CHF")
+
+                    if search_params[3]: # Anzeigen der Anzahl Nächte und des daraus resultierenden Gesamttotals, jedoch nur wenn ein Zeitraum eingegeben wurde
+                        print(f"{'':<10}• Nächte: {nights}, Gesamttotal: {total:.2f} CHF")
+
+                    if room.room_facility: # Wenn das Zimmer eine oder mehrere Ausstattungen hat, werden sie angezeigt
+                        print(f"{'':<10}• Ausstattung:")
+
+                        for facility in room.room_facility:
+                            print(f"{'':<14}→ {facility}")
+
+                    else:
+                        print(f"{'':<10}Keine Zusatz-Ausstattung")
+
+                    print(f"{'':<4}" + "-" * 80)
+                    
+            print("─"*100)
     else:
         print("Leider wurden keine passenden Hotels gefunden")
-    #---------------------------------------------------------------
+
+    #--------------------------------------------------------------- 
 
     # Userstory 1.6
     # Ich möchte die folgenden Informationen pro Hotel sehen: Name, Adresse, Anzahl der Sterne.
@@ -292,7 +341,7 @@ if True:
                 check_in_date = parsed_date
 
         except input_helper.EmptyInputError:
-            cancel = True #TODO wir müssen bestimmen ob bei leerer Eingabe die Aufforderung wiederholt oder abgebroben wird.
+            cancel = False # Geändert auf false, da du das datum umbedingt benötigst um eine Buchung zu erstellen
         except ValueError:
             print("Ungültiges Format. Bitte TT.MM.JJJJ eingeben.")
 
@@ -308,7 +357,7 @@ if True:
                 check_out_date = parsed_date
 
         except input_helper.EmptyInputError:
-            cancel = True #TODO wir müssen bestimmen ob bei leerer Eingabe die Aufforderung wiederholt oder abgebroben wird.
+            cancel = False #TODO wir müssen bestimmen ob bei leerer Eingabe die Aufforderung wiederholt oder abgebroben wird.
         except ValueError:
             print("Ungültiges Format. Bitte TT.MM.JJJJ eingeben.")
 
@@ -404,7 +453,7 @@ if True:
         print(f"Buchung storniert? {is_cancelled_str} / Totaler Preis: {booking.total_amount}")
         print("-" * 50)
     #---------------------------------------------------------------  
-
+if False:
     # User Story 9
     # Als Admin möchte ich eine Liste der Zimmer mit ihrer Ausstattung sehen, damit ich sie besser bewerben kann.
     print("\nUser Story 9: Als Admin möchte ich eine Liste der Zimmer mit ihrer Ausstattung sehen, damit ich sie besser bewerben kann.\n")
@@ -427,7 +476,7 @@ if True:
 
         print("-" * 50)
     #---------------------------------------------------------------  
-
+if True:
     # User Story 10 und 3.3
     # TODO: error handling einbauen wenn ID nicht vorhanden
     # User Stroy 10:
@@ -441,7 +490,7 @@ if True:
     supported_tables = {                               #Sets the changeable tables and attributes in a dict
         "room_type": ["description", "max_guests"],
         "facility": ["facility_name"],
-        "room": ["room_number", "type_id", "price_per_night"],
+        "room": ["room_number", "type_id", "price_per_night", "price_per_night_ls"],
         "guest": ["first_name", "last_name", "email"],
         "hotel": ["name", "stars"],
         "address": ["street", "city", "zip_code"]
@@ -469,6 +518,8 @@ if True:
             if attribute in ["max_guests", "type_id", "stars"]:
                 new_value = input_helper.input_valid_int(f"Neuer Wert für {attribute} (Ganzzahl): ", min_value=0)
             elif attribute == "price_per_night":
+                new_value = input_helper.input_valid_float(f"Neuer Preis (z.B. 199.99): ", min_value=0.0)
+            elif attribute == "price_per_night_ls":
                 new_value = input_helper.input_valid_float(f"Neuer Preis (z.B. 199.99): ", min_value=0.0)
             else:
                 new_value = input_helper.input_valid_string(f"Neuer Textwert für {attribute}: ", min_length=1, max_length=255)
@@ -729,7 +780,7 @@ if True:
 
     # Erstellen der Objekte
     guest = Guest(guest_id=guest_id, first_name=None, last_name=None, email=None, address=None, bookings=None)
-    room = Room(room_id=room_id, room_number=None, price_per_night=None, room_type=None, hotel=None)
+    room = Room(room_id=room_id, room_number=None, price_per_night=None, price_per_night_ls=None, room_type=None, hotel=None)
     booking = Booking(booking_id=booking_id, guest=guest, room=room, check_in_date=start_date, check_out_date=end_date, is_cancelled=is_cancelled, total_amount=total_amount)
 
     # Aufrufen der Manager und bestätigen

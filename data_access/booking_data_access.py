@@ -77,7 +77,7 @@ class BookingDataAccess(BaseDataAccess):
             for row in result: #TODO Listcomprahension
                 booking_id, guest_id, room_id, check_in_date, check_out_date, is_cancelled, total_amount = row #tuple unpacking
                 #create Room Object with room_id in it
-                room = Room(room_id=room_id, room_number=None, price_per_night=None, room_type=None, hotel=None)
+                room = Room(room_id=room_id, room_number=None, price_per_night=None, room_type=None, hotel=None, price_per_night_ls=None)
                 #create Guest Object with guest_id in it
                 guest = Guest(guest_id=guest_id, first_name=None, last_name=None, email=None, address=None, bookings=None)
                 #create Booking Object with guest and room and append to Bookings list                
@@ -150,7 +150,7 @@ class BookingDataAccess(BaseDataAccess):
         if result:    
             booking_id, guest_id, room_id, check_in_date, check_out_date, is_cancelled, total_amount = result[0]          
             guest = Guest(guest_id=guest_id, first_name=None, last_name=None, email=None, address=None, bookings=None)
-            room = Room(room_id=room_id, room_number=None, price_per_night=None, room_type=None, hotel=None)
+            room = Room(room_id=room_id, room_number=None, price_per_night=None, room_type=None, hotel=None, price_per_night_ls=None)
             updated_booking = Booking(booking_id=booking_id, guest=guest, room=room, check_in_date=check_in_date, check_out_date=check_out_date, is_cancelled=is_cancelled, total_amount=total_amount)
             return updated_booking
         

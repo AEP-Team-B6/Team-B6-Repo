@@ -3,18 +3,19 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING: #WICHTIG: alle Imports in diesem IF schreiben, da so verhindert wird, dass wenn man in file A, file B importiert und in file B, file A importiert es eine Schlaufe gibt.
-    from room_type import Room_Type #TODO: irgendwie findet das Program die Verknüpfung nicht wenn nur "from model import Room_Type " ist, deswegen wird das init file so umgangen. Fragen bei Coaching
-    from hotel import Hotel #TODO: irgendwie findet das Program die Verknüpfung nicht wenn nur "from model import Hotel" ist, deswegen wird das init file so umgangen. Fragen bei Coaching
+    from room_type import Room_Type 
+    from hotel import Hotel 
     from facility import Facility
 
 class Room:
-    def __init__(self, room_id:int, room_number:int, price_per_night:float, room_type:Room_Type, hotel:Hotel):
+    def __init__(self, room_id:int, room_number:int, price_per_night:float, room_type:Room_Type, hotel:Hotel, price_per_night_ls:float):
         self.__room_id = room_id
         self.__room_number = room_number
         self.__price_per_night = price_per_night
         self.__room_type = room_type  # Fixed: Use the parameter room_type instead of Room_Type
         self.__room_facility = []
         self.__hotel = hotel
+        self.__price_per_night_ls = price_per_night_ls
     
     @property
     def room_id(self):
@@ -60,6 +61,22 @@ class Room:
             raise TypeError("hotel must be an instance of Hotel")
         self.__hotel = new_hotel
 
-    #Used in User Story 9
+    @property
+    def price_per_night_ls(self):
+        return self.__price_per_night_ls
+
+    @price_per_night_ls.setter
+    def price_per_night_ls(self, new_price_ls):
+        self.__price_per_night_ls = new_price_ls
+
+    @property
+    def room_facility(self) -> list:
+        return self.__room_facility
+
+    @room_facility.setter
+    def room_facility(self, room_facility: list):
+        self.__room_facility = room_facility
+    
+    #Used in User Story 9 #TODO das gehört nicht hier hin
     def add_facility(self, facility: Facility):
         self.__room_facility.append(facility)

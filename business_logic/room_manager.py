@@ -14,7 +14,7 @@ class RoomManager:
         return self.__room_da.get_room_details_by_room_number(room_number)
     
     # User Story 9
-    def read_room_details(self):
+    def read_room_details(self): #TODO Definieren was die Methode zurückgibt
         return self.__room_da.get_room_details()
 
     # Used in User Story 10
