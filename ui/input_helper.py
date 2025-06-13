@@ -75,83 +75,11 @@ def input_valid_float(prompt: str, min_value: float = -float('inf'), max_value: 
         raise OutOfRangeError(value, min_value, max_value)
     return value
 
-
-# alte input helper
-#def input_valid_string(prompt: str, min_length: int = 0, max_length: int = sys.maxsize) -> str:
-#    """Function to get a valid string input, enforcing length constraints."""
-#    user_input = input(prompt).strip()  # Entfernt führende und nachfolgende Leerzeichen
-#
-#    if not (min_length <= len(user_input) <= max_length):
-#        raise StringLengthError(user_input, min_length, max_length)
-#
-#    return user_input  # Gültige Zeichenkette zurückgeben
-
-
-#def input_valid_int(prompt: str, min_value: int = -sys.maxsize, max_value: int = sys.maxsize,
-#                    default: int = None) -> int:
-#
-#    user_input = input(prompt).strip()
-#    if user_input == "":
-#        if default is None:
-#            raise EmptyInputError("Input cannot be empty.")
-#        else:
-#            return default
-#
-#    try:
-#        value = int(user_input)  # Versuch, die Eingabe in eine Zahl umzuwandeln
-#    except ValueError as err:
-#        raise ValueError("Invalid input. Please enter a valid number.") from err  # Exception-Chaining
-#
-#    if value < min_value or value > max_value:
-#        raise OutOfRangeError(value, min_value, max_value)  # Eigene Exception für Werte außerhalb des Bereichs
-#
-#    return value  # Gültige Zahl zurückgeben
-
-
-#def input_valid_float(
-#        prompt: str,
-#        min_value: float = -float('inf'),
-#        max_value: float = float('inf'),
-#        default: float = None
-#) -> float:
-#    """Function to get a valid float within a range, raising specific exceptions."""
-#    user_input = input(prompt).strip()
-#
-#    if user_input == "":
-#        if default is None:
-#            raise EmptyInputError("Input cannot be empty.")
-#        else:
-#            return default
-#
-#    try:
-#        value = float(user_input)  # Versuch, die Eingabe in eine Fließkommazahl umzuwandeln
-#    except ValueError as err:
-#        raise ValueError("Invalid input. Please enter a valid float number.") from err  # Exception-Chaining
-#
-#    if value < min_value or value > max_value:
-#        raise OutOfRangeError(value, min_value, max_value)  # Eigene Exception für Werte außerhalb des Bereichs
-#
-#    return value  # Gültige Zahl zurückgeben
-
-
 def input_y_n(prompt: str, default: YesOrNo = None) -> bool:
     y = ['y', 'yes']
     n = ['n', 'no']
-    #Version 1 #TODO Bereinigen?
-    """ 
-    user_input = input(prompt).strip().lower()
-    match user_input:
-        case _ if user_input in y:
-            return True
-        case _ if user_input in n:
-            return False
-        case _:
-            if user_input == "" and default:
-                return bool(default.value)
-            else:
-                raise ValueError(f"Invalid input. Please enter 'y' or 'n'.")
-    """
-    while True: # Version 2
+
+    while True:
         user_input = input(prompt).strip().lower()
 
         if user_input in y:
@@ -165,5 +93,3 @@ def input_y_n(prompt: str, default: YesOrNo = None) -> bool:
                 print("Eingabe darf nicht leer sein. Bitte geben Sie 'y' oder 'n' ein.")
         else:
             print("Ungültige Eingabe. Bitte geben Sie 'y' oder 'n' ein.")
-            
-

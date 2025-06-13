@@ -3,15 +3,15 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING: #WICHTIG: alle Imports in diesem IF schreiben, da so verhindert wird, dass wenn man in file A, file B importiert und in file B, file A importiert es eine Schlaufe gibt.
-
     from model import Booking
     from model import Hotel
+
 
 class Review:
     def __init__(self, review_id:int, rating:int, comment: str, booking: Booking, hotel: Hotel):
 
         if not (1<= rating <=10):
-            raise ValueError("Rating must be between 1-10!")
+            raise ValueError("Bewertung (rating) muss zwischen 1 und 10 liegen!")
 
         self.__review_id = review_id
         self.__rating = rating
@@ -20,25 +20,25 @@ class Review:
         self.__hotel = hotel
 
     @property
-    def review_id(self):
+    def review_id(self) -> int:
         return self.__review_id
     
     @review_id.setter
-    def review_id(self, value):
+    def review_id(self, value: int):
         self.__review_id = value
 
     @property
-    def rating(self):
+    def rating(self) -> int:
         return self.__rating
     
     @rating.setter
     def rating(self, rating: int):
         if not (1<= rating <=10):
-            raise ValueError("Rating must be between 1-10!")
+            raise ValueError("Bewertung (rating) muss zwischen 1 und 10 liegen!")
         self.__rating = rating  
 
     @property
-    def comment(self):
+    def comment(self) -> str:
         return self.__comment
 
     @comment.setter

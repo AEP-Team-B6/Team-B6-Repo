@@ -7,14 +7,14 @@ class RoomFacilityDataAccess(BaseDataAccess):
     def __init__(self, db_path: str = None):
         super().__init__(db_path)
 
-
     # Used in User Story 9
     def get_facility_ids_by_room(self, room_id: int) -> list[int]:
+        """Gibt eine Liste von Einrichtungs-IDs zu einem Zimmer zurück."""
 
         sql = """
         SELECT facility_id FROM Room_Facilities WHERE room_id = ?
         """
 
-        params = tuple([room_id])
+        params = (room_id,)
         result = self.fetchall(sql, params)
         return [row[0] for row in result]

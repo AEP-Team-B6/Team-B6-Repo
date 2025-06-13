@@ -16,6 +16,8 @@ class RoomDataAccess(BaseDataAccess):
 
     # Used in User Story 4
     def get_room_details_by_room_number(self, room_number: int) -> Room:
+        """Liefert Zimmerdetails zur Zimmernummer oder None, falls nicht gefunden."""
+
         sql = """
         SELECT room_id, hotel_id, room_number, type_id, price_per_night, price_per_night_ls From Room WHERE room_number = ?
         """
@@ -29,10 +31,11 @@ class RoomDataAccess(BaseDataAccess):
             return Room(room_id, hotel_id, room_number, type_id, price_per_night, price_per_night_ls)
         else:
             return None
-        
 
     # Used in User Story 9
     def get_room_details(self) -> list[Room]:
+        """Liefert eine Liste aller Zimmer mit Zimmertyp, Hotel und Ausstattung."""
+
         sql = """
         SELECT Room.room_id, room_number, price_per_night, Room.type_id, hotel_id, price_per_night_ls, description, max_guests FROM Room
         JOIN Room_Type ON Room.type_id = Room_Type.type_id
@@ -61,9 +64,11 @@ class RoomDataAccess(BaseDataAccess):
 
         return rooms 
     
-
     # Used in User Story 10
     def update_room(self, id:int, attribute:str, new_value):
+        """Aktualisiert ein bestimmtes Attribut eines Zimmers anhand der ID."""
+        # Hinweis: Attribut wurde im Input bereits validiert.
+
         sql = f"""
         UPDATE Room SET {attribute} = ? WHERE room_id = ?
         """

@@ -8,7 +8,7 @@ if TYPE_CHECKING: #WICHTIG: alle Imports in diesem IF schreiben, da so verhinder
     from review import Review
 
 class Hotel:
-    def __init__(self, hotel_id:int, name:str, stars:int, address:Address, rooms:Room, reviews:Review):
+    def __init__(self, hotel_id:int, name:str, stars:int, address:Address, rooms: list[Room], reviews: list[Review]):
         self.__hotel_id = hotel_id
         self.__name = name
         self.__stars = stars
@@ -16,34 +16,28 @@ class Hotel:
         self.__rooms = rooms if rooms else []
         self.__reviews = reviews if reviews else []
 
-    #def __str__(self): #TODO möglicherweise muss hier noch etwas gemacht werden 
-    #    return f"{self.name} ({self.stars} Sterne)"
-
-    #def __repr__(self): #TODO möglicherweise muss hier noch etwas gemacht werden 
-    #    return self.__str__()
-
     @property
-    def hotel_id(self):
+    def hotel_id(self) -> int:
         return self.__hotel_id
 
     @hotel_id.setter
-    def hotel_id(self, new_hotel_id):
+    def hotel_id(self, new_hotel_id: int):
         self.__hotel_id = new_hotel_id
 
     @property
-    def name(self):
+    def name(self) -> str:
         return self.__name
 
     @name.setter
-    def name(self, new_name):
+    def name(self, new_name: str):
         self.__name = new_name
 
     @property
-    def stars(self):
+    def stars(self) -> int:
         return self.__stars
 
     @stars.setter
-    def stars(self, new_stars):
+    def stars(self, new_stars: int):
         self.__stars = new_stars
 
     @property
@@ -53,20 +47,21 @@ class Hotel:
     @address.setter
     def address(self, new_address:Address):
         if not isinstance(new_address, Address):
-            raise TypeError("address must be an instance of Address")
+            raise TypeError("address muss vom Typ Address sein")
         self.__address = new_address
 
     @property
-    def rooms(self) -> Room:
+    def rooms(self) -> list[Room]:
         return self.__rooms
 
     @rooms.setter
-    def rooms(self, new_rooms:Room):
-        if not isinstance(new_rooms, Room):
-            raise TypeError("room must be an instance of Room")
+    def rooms(self, new_rooms: list[Room]):
+        if not isinstance(new_rooms, list) or not all(isinstance(r, Room) for r in new_rooms):
+            raise TypeError("rooms muss eine Liste von Room-Objekten sein")
         self.__rooms = new_rooms
 
     def add_review(self, review: Review):
+        """Fügt dem Hotel eine neue Bewertung hinzu."""
         self.__reviews.append(review)
 
     @property

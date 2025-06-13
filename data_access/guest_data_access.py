@@ -9,9 +9,9 @@ class GuestDataAccess(BaseDataAccess):
     def __init__(self, db_path: str = None):
         super().__init__(db_path)
 
-
     # Used in User Story 4
     def get_all_guests(self) -> list[model.Guest]:
+        """Liefert eine Liste aller Gaeste mit zugehoeriger Adresse."""
         sql = """
         SELECT guest_id, first_name, last_name, email, address_id FROM Guest
         """
@@ -24,10 +24,11 @@ class GuestDataAccess(BaseDataAccess):
             address = address_da.read_address_by_id(address_id)
             guests.append(model.Guest(guest_id, first_name, last_name, email, address_id, address))
         return guests
-    
 
     # Used in User Story 10
     def update_guest(self, id:int, attribute:str, new_value):
+        """Aktualisiert ein Attribut eines Gasts anhand der ID."""
+        # Hinweis: Attribut wurde im Input bereits validiert.
         sql = f"""
         UPDATE Guest SET {attribute} = ? WHERE guest_id = ?
         """

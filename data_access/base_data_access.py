@@ -13,9 +13,10 @@ class BaseDataAccess:
             self.__db_connection_str = db_connection_str
 
 
+       
     def _connect(self):
         return sqlite3.connect(self.__db_connection_str, detect_types=sqlite3.PARSE_DECLTYPES)
-
+    
 
     def fetchone(self, sql: str, params: tuple | None = ()):
         with self._connect() as conn:
@@ -58,6 +59,7 @@ class BaseDataAccess:
             finally:
                 cur.close()
         return cur.lastrowid, cur.rowcount
+
 
     def get_connection(self):
         if self.__db_connection_str is None:

@@ -1,6 +1,5 @@
-import os
-
 import data_access
+
 
 class RoomFacilityManager:
     def __init__(self) -> None:
@@ -9,4 +8,5 @@ class RoomFacilityManager:
 
     # Used in User Story 9
     def read_facility_ids_by_room(self, room_id:int):
+        """Liefert alle Einrichtungs-IDs zu einem gegebenen Zimmer."""
         return self.__roomfacility_da.get_facility_ids_by_room(room_id)

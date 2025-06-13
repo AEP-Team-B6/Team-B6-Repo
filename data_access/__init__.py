@@ -18,7 +18,7 @@ def date_to_db(d: date) -> str:
     return d.isoformat()
 
 def db_to_date(s: str) -> date:
-    return datetime.strptime(s.decode(), "%Y-%m-%d").date()
+    return datetime.strptime(s.decode().split(" ")[0], "%Y-%m-%d").date()
 
 ## Adapter: Wandelt `date`-Objekt in `TEXT` um
 sqlite3.register_adapter(date, date_to_db)

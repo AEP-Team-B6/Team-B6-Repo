@@ -1,4 +1,3 @@
-#Creating class Guest
 from __future__ import annotations
 from typing import TYPE_CHECKING
 
@@ -16,35 +15,35 @@ class Guest:
         self.__bookings = bookings
 
     @property
-    def guest_id(self):
+    def guest_id(self) -> int:
         return self.__guest_id
 
     @guest_id.setter
-    def guest_id(self, new_guest_id):
+    def guest_id(self, new_guest_id: int):
         self.__guest_id = new_guest_id
 
     @property
-    def first_name(self):
+    def first_name(self) -> str:
         return self.__first_name
 
     @first_name.setter
-    def first_name(self, new_first_name):
+    def first_name(self, new_first_name: str):
         self.__first_name = new_first_name
 
     @property
-    def last_name(self):
+    def last_name(self) -> str:
         return self.__last_name
 
     @last_name.setter
-    def last_name(self, new_last_name):
+    def last_name(self, new_last_name: str):
         self.__last_name = new_last_name
 
     @property
-    def email(self):
+    def email(self) -> str:
         return self.__email
 
     @email.setter
-    def email(self, new_email):
+    def email(self, new_email: str):
         self.__email = new_email
 
     @property
@@ -54,7 +53,7 @@ class Guest:
     @address.setter
     def address(self, new_address:Address):
         if not isinstance(new_address, Address):
-            raise TypeError("address must be an instance of Address")
+            raise TypeError("address muss vom Typ Address sein")
         self.__address = new_address
 
     @property
@@ -62,7 +61,7 @@ class Guest:
         return self.__bookings
 
     @bookings.setter
-    def bookings(self, new_bookings:Booking):
-        if not isinstance(new_bookings, Booking):
-            raise TypeError("bookings must be an instance of Bookings")
+    def bookings(self, new_bookings: list[Booking]):
+        if not isinstance(new_bookings, list) or not all(isinstance(b, Booking) for b in new_bookings):
+            raise TypeError("bookings muss eine Liste von Booking-Objekten sein")
         self.__bookings = new_bookings

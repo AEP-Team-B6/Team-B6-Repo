@@ -3,19 +3,19 @@ from __future__ import annotations
 from data_access.base_data_access import BaseDataAccess
 from model import Facility
 
+
 class FacilityDataAccess(BaseDataAccess):
     def __init__(self, db_path: str = None):
         super().__init__(db_path)
 
-    
     # Used in User Story 9
     def get_facility_by_id(self, facility_id) -> Facility:
-        
+        """Liefert eine Einrichtung anhand der ID oder None, falls nicht vorhanden."""
         sql = """
         SELECT facility_id, facility_name FROM Facilities WHERE facility_id = ?    
         """
 
-        params = tuple([facility_id])
+        params = (facility_id,)
         result = self.fetchone(sql, params)
 
         if result:
@@ -24,9 +24,10 @@ class FacilityDataAccess(BaseDataAccess):
         else:
             return None
         
-    
     # Used in User Story 10
     def update_facility(self, id:int, new_value):
+        """Aktualisiert den Namen einer Einrichtung anhand der ID."""
+        # Hinweis: Attribut wurde im Input bereits validiert.
         sql = """
         UPDATE Facilities SET facility_name = ? WHERE facility_id = ?
         """

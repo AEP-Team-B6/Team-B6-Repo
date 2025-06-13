@@ -1,6 +1,3 @@
-import os
-
-import model
 import data_access
 from model.address import Address
 

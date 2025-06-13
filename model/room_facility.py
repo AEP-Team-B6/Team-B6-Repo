@@ -12,17 +12,21 @@ class Room_Facility:
         self.__facility = facility
 
     @property
-    def room(self):
+    def room(self) -> Room:
         return self.__room
 
     @room.setter
     def room(self, room: Room):
+        if not isinstance(room, Room):
+            raise TypeError("room muss vom Typ Room sein")
         self.__room = room
 
     @property
-    def facility(self):
+    def facility(self) -> Facility:
         return self.__facility
 
     @facility.setter
     def facility(self, facility: Facility):
+        if not isinstance(facility, Facility):
+            raise TypeError("facility muss vom Typ Facility sein")
         self.__facility = facility

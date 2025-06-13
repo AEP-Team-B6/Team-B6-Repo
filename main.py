@@ -1,5 +1,3 @@
-# allgemeiner Teil
-
 from datetime import datetime, date
 import os
 
@@ -12,12 +10,7 @@ import data_access
 import business_logic
 import ui
 import ui.input_helper as input_helper
-from model import Hotel
-from model import Address
-from model import Booking
-from model import Guest
-from model import Room
-from model import Review
+from model import Hotel, Address, Booking, Guest, Room, Review, Invoice
 
 hotel_reservation_sample = "./database/hotel_reservation_sample.db"
 current_db = "./database/current_db.db"
@@ -27,14 +20,14 @@ shutil.copyfile(hotel_reservation_sample, current_db)
 os.environ["DB_FILE"] = current_db
 
 
-# Increase row and column display limits
-pd.set_option("display.max_rows", None)  # Show all rows
-pd.set_option("display.max_columns", None)  # Show all columns
-pd.set_option("display.width", None)  # Auto-adjust display width
-pd.set_option("display.max_colwidth", None)  # Show full column content
+# Anzeigegrenzen für Zeilen und Spalten erhöhen
+pd.set_option("display.max_rows", None)        # Alle Zeilen anzeigen
+pd.set_option("display.max_columns", None)     # Alle Spalten anzeigen
+pd.set_option("display.width", None)           # Anzeige automatisch an Breite anpassen
+pd.set_option("display.max_colwidth", None)    # Gesamten Spalteninhalt anzeigen
 
 
-#Manager initialization
+#Manager Initialisierung
 address_manager = business_logic.AddressManager()
 booking_manager = business_logic.BookingManager()
 facility_manager = business_logic.FacilityManager()
@@ -47,9 +40,8 @@ room_type_manager = business_logic.RoomTypeManager()
 review_manager = business_logic.ReviewManager()
 
 
-#TODO: Add more stuff
 
-
+"""
 # Individuelles Testing ------------------------
 
 if False:
@@ -58,6 +50,7 @@ if False:
 
 
 
+"""
 
 # Funktionierender Code------------------------
 
@@ -65,7 +58,7 @@ if True:
     print("all working user stories will now be runned trough")
     #Funktionierende Userstories (auf False sezten zum Testen)
 
-        #--------------------------------------------------------------- 
+    #--------------------------------------------------------------- 
     # US 1.1: Ich möchte alle Hotels in einer Stadt durchsuchen, damit ich das Hotel nach meinem bevorzugten Standort (Stadt) auswählen kann.
     # US 1.2: Ich möchte alle Hotels in einer Stadt nach der Anzahl der Sterne (z.B. mindestens 4 Sterne) durchsuchen.
     # US 1.3: Ich möchte alle Hotels in einer Stadt durchsuchen, die Zimmer haben, die meiner Gästezahl entsprechen (nur 1 Zimmer pro Buchung).
@@ -112,7 +105,7 @@ if True:
                 start_date_str = input_helper.input_valid_string("Startdatum (TT.MM.JJJJ): ", allow_empty=True)
                 if start_date_str:
                     start_date = datetime.strptime(start_date_str, "%d.%m.%Y").date()
-                    if start_date < today: #prüfen ob Startdatum nicht in der Vergangenheit liegt
+                    if start_date < today: # Prüfen ob Startdatum nicht in der Vergangenheit liegt
                         print("Fehler: Startdatum darf nicht vor heute liegen.")
                         continue
                     search_params[3] = start_date
@@ -142,10 +135,10 @@ if True:
         if search_params[0] is None and search_params[1] is None and search_params[2] is None and search_params[3] is None and search_params[4] is None:
             print("\nBitte geben Sie mindestens einen gültigen Suchparameter ein\n")
 
-        result = hotel_manager.find_hotel_by_search_params(search_params) #übergeben der Suchparameter an den Hotelmanager und abfüllen des Ergebniss in result
+        result = hotel_manager.find_hotel_by_search_params(search_params) # Übergeben der Suchparameter an den Hotelmanager und abfüllen des Ergebniss in result
 
         if result is not None:
-            matching_hotels, matching_rooms, matching_addresses, matching_roomtypes  = result #entpacken der Liste
+            matching_hotels, matching_rooms, matching_addresses, matching_roomtypes  = result # Entpacken der Liste
             print("\n" + "-"*80)
             print("Folgende Hotels passen zu Ihrer Suche:\n")
             print("─"*100)
@@ -180,7 +173,7 @@ if True:
                         total = nights * price
 
                         print(f"{'':<4}Raum {room.room_number} | Typ: {room.room_type.description} | max. {room.room_type.max_guests} Pers.")
-                        print(f"{'':<10}• Preis pro Nacht in der {season}: {price:.2f} CHF") #einrücken der Zeile um 10 Stellen, damit es übersichtlicher ist.
+                        print(f"{'':<10}• Preis pro Nacht in der {season}: {price:.2f} CHF") # Einrücken der Zeile um 10 Stellen, damit es übersichtlicher ist.
                         print(f"{'':<10}• Preis pro Nacht in der {other_season}: {other:.2f} CHF")
 
                         if search_params[3]: # Anzeigen der Anzahl Nächte und des daraus resultierenden Gesamttotals, jedoch nur wenn ein Zeitraum eingegeben wurde
@@ -320,7 +313,7 @@ if True:
 
             print(f"Hotel erfolgreich hinzugefügt (ID: {hotel_id})")
 
-            # Break for the loop, if the admin chooses "y" he can change another attribute value
+            # Schleife fortsetzen, falls der Admin "y" wählt, um ein weiteres Attribut zu ändern
             again = input_helper.input_y_n("Weiteres Hotel hinzufügen? (y/n): ")
             if not again:
                 print("Vorgang beendet.")
@@ -356,7 +349,7 @@ if True:
                 print(f"Adresse mit ID {address_id} wurde erfolgreich gelöscht.")
             else:
                 print(f"Adresse mit ID {address_id} konnte nicht gefunden oder gelöscht werden.")
-            # Break for the loop, if the admin chooses "y" he can change another attribute value
+            # Schleife fortsetzen, falls der Admin "y" wählt, um ein weiteres Attribut zu ändern
             again = input_helper.input_y_n("Weiteres Hotel löschen? (y/n): ")
             if not again:
                 print("Vorgang beendet.")
@@ -373,12 +366,12 @@ if True:
     # Als Gast möchte ich ein Zimmer in einem bestimmten Hotel buchen, um meinen Urlaub zu planen.
     print("\n Als Gast möchte ich ein Zimmer in einem bestimmten Hotel buchen, um meinen Urlaub zu planen.\n")
 
-    #Als erstes werden die Hotels angezeigt und der Input des gewünschten Hotels vom User abgefragt und auf dessen Richtigkeit geprüft
+    # Als erstes werden die Hotels angezeigt und der Input des gewünschten Hotels vom User abgefragt und auf dessen Richtigkeit geprüft
     hotels = hotel_manager.read_all_hotels()
-    valid_hotel_ids = [hotel.hotel_id for hotel in hotels] #Liste von den hotel_id Werten der Datenbank wird erstellt.
+    valid_hotel_ids = [hotel.hotel_id for hotel in hotels] # Liste von den hotel_id Werten der Datenbank wird erstellt.
     hotel_name_by_id = None    
 
-    for hotel in hotels: #Print Output für User damit er die Hotels als Liste sieht
+    for hotel in hotels: # Print Output für User damit er die Hotels als Liste sieht
         print(f"Hotelnummer: {hotel.hotel_id}")
         print(f"Hotelname: {hotel.name}")
         print(f"Stadt: {hotel.address.city}")
@@ -386,9 +379,9 @@ if True:
 
     while hotel_name_by_id is None:
         try:
-            hotel_choice = input_helper.input_valid_int("Bitte geben Sie die gewünschte Hotelnummer an: ")  #Abfrage welche Hotel der User wählen möchte  
+            hotel_choice = input_helper.input_valid_int("Bitte geben Sie die gewünschte Hotelnummer an: ")  # Abfrage welche Hotel der User wählen möchte  
     
-            if hotel_choice in valid_hotel_ids: #Vergleich User Input mit Datenbank
+            if hotel_choice in valid_hotel_ids: # Vergleich User Input mit Datenbank
                 hotel_name_by_id = hotel_manager.read_hotel_by_id(hotel_choice)
                 if hotel_name_by_id:
                     print(f"\nIhr gewähltes Hotel ist {hotel_name_by_id.name}")
@@ -402,16 +395,16 @@ if True:
         except ValueError as err:
             print(err)
 
-    #Nun wird die Kundennummer vom User abgefragt und auf dessen Richtigkeit geprüft
+    # Nun wird die Kundennummer vom User abgefragt und auf dessen Richtigkeit geprüft
     guests = guest_manager.read_all_guests()
-    valid_guest_ids = [guest.guest_id for guest in guests] #Liste von den guest_id Werten der Datenbank wird erstellt.
+    valid_guest_ids = [guest.guest_id for guest in guests] # Liste von den guest_id Werten der Datenbank wird erstellt.
     client_number = None
     
     while client_number is None:
         try:
             client_number_input = input_helper.input_valid_int("\nBitte geben Sie Ihre Kundennummer an: ", min_value=1)
 
-            if client_number_input in valid_guest_ids: #Vergleich ob Kundennummer in Datenbank ist
+            if client_number_input in valid_guest_ids: # Vergleich ob Kundennummer in Datenbank ist
                 try:
                     confirm_client_number = input_helper.input_y_n(f"Bitte bestätigen Sie Ihre Kundennummer: {client_number_input} // (y oder n): ")
                     if confirm_client_number:
@@ -430,7 +423,7 @@ if True:
         except ValueError as err:
             print(err)
 
-    # Mit folgenden while Loops wird sichergestellt, dass nur valide Datumseingabgen stattfinden. #TODO sicherstellen, dass nur Daten in der Zukunft eingegeben werden können
+    # Mit folgenden while Loops wird sichergestellt, dass nur valide Datumseingabgen stattfinden.
     check_in_date = None
     check_out_date = None
 
@@ -446,7 +439,7 @@ if True:
                 check_in_date = parsed_date
 
         except input_helper.EmptyInputError:
-            cancel = False # Geändert auf false, da du das datum umbedingt benötigst um eine Buchung zu erstellen
+            cancel = False # Geändert auf false, da du das datum unbedingt benötigst um eine Buchung zu erstellen
         except ValueError:
             print("Ungültiges Format. Bitte TT.MM.JJJJ eingeben.")
 
@@ -462,7 +455,7 @@ if True:
                 check_out_date = parsed_date
 
         except input_helper.EmptyInputError:
-            cancel = False #TODO wir müssen bestimmen ob bei leerer Eingabe die Aufforderung wiederholt oder abgebroben wird.
+            cancel = False
         except ValueError:
             print("Ungültiges Format. Bitte TT.MM.JJJJ eingeben.")
 
@@ -473,7 +466,7 @@ if True:
         result = hotel_manager.find_hotel_by_name_and_time(name_and_time)
         if result is not None:
             matching_hotels, matching_roomtypes, matching_rooms = result
-            print(f"\nFolgende verfügbare Zimmer passen zu Ihrer Suche im Hotel {hotel_name_by_id.name}:") #TODO Ausgaben könnten später durch UI gemacht werden
+            print(f"\nFolgende verfügbare Zimmer passen zu Ihrer Suche im Hotel {hotel_name_by_id.name}:")
             
             for hotel in matching_hotels:
                 if hotel.hotel_id != prev_hotel_id:
@@ -492,9 +485,9 @@ if True:
 
             while room_id is None:
                 try:
-                    room_number = input_helper.input_valid_int("\nBitte wählen Sie eine Zimmernummer aus dieser Liste: ") #User Input, welche Raumnummer er möchte
-                    if room_number in valid_room_numbers: #Prüfung ob gewählter Raum in obiger Liste vorhanden ist
-                        room_id_by_number = room_manager.read_room_details_by_room_number(room_number) #Aufruf der Methode damit room_id gefetched werden kann
+                    room_number = input_helper.input_valid_int("\nBitte wählen Sie eine Zimmernummer aus dieser Liste: ") # User Input, welche Raumnummer er möchte
+                    if room_number in valid_room_numbers: # Prüfung ob gewählter Raum in obiger Liste vorhanden ist
+                        room_id_by_number = room_manager.read_room_details_by_room_number(room_number) # Aufruf der Methode damit room_id gefetched werden kann
                         if room_id_by_number:
                             room_id = room_id_by_number.room_id
                             price_per_night = float(room_id_by_number.price_per_night)
@@ -539,7 +532,112 @@ if True:
         print(f"\nBuchung erfolgreich! Ihre Buchungsnummer lautet: {final_booking}")
     else:
         print("Buchungsvorgang fehlgeschlagen")
+    #---------------------------------------------------------------
+    
+    #User Story 5 
+    # Als Gast möchte ich nach meinem Aufenthalt eine Rechnung
+    # erhalten, damit ich einen Zahlungsnachweis habe.
+    # Hint: Fügt einen Eintrag in der «Invoice» Tabelle hinzu.
+    # Für Coaches: Für Testing Guest_id 5 und Booking_id 7 nutzen (extra Buchung angelegt ohne bestehende Rechnung)
+    print("\nFür Coaches: Für Testing Guest_id 5 und Booking_id 7 nutzen (extra Buchung angelegt ohne bestehende Rechnung)\n")
 
+    guest_id = input_helper.input_valid_int("Bitte geben Sie Ihre Kundennummer ein: ", min_value=1)
+
+    guest_bookings = booking_manager.get_booking_by_guest_id(guest_id)
+
+    # Nur abgeschlossene Buchungen werden akzeptiert
+    past_bookings = [booking for booking in guest_bookings if booking.check_out_date < date.today()]
+
+    if not past_bookings:
+        print("Keine vergangenen Aufenthalte gefunden.")
+    else:
+        print("Vergangene Buchungen:")
+        for booking in past_bookings:
+            hotel_name = booking.room.hotel.name if booking.room.hotel else "Unbekannt"
+        print(f"Buchung ID: {booking.booking_id}, Aufenthalt: {booking.check_in_date} bis {booking.check_out_date}, Hotel: {hotel_name}")
+
+        booking_id = input_helper.input_valid_int("Für welche Buchung möchten Sie eine Rechnung erstellen? (Buchungs-ID): ", min_value=1)
+        selected_booking = next((booking for booking in past_bookings if booking.booking_id == booking_id), None)
+
+        if not selected_booking:
+                print("Ungültige Buchungsnummer.")
+        else:
+            # Prüfen ob bereits eine Rechnung zu der Buchung existiert
+            existing_invoice = invoice_manager.get_invoice_by_booking_id(booking_id)
+            if existing_invoice:
+                print("Für diese Buchung existiert bereits eine Rechnung.")
+            else:
+                issue_date = date.today()
+                total_amount = selected_booking.total_amount
+                invoice_status = "Offen"
+
+                invoice = Invoice(
+                    invoice_id=None,
+                    booking=selected_booking,
+                    issue_date=issue_date,
+                    total_amount=total_amount,
+                    invoice_status=invoice_status
+                    )
+
+                invoice_id = invoice_manager.create_invoice(invoice)
+                print(f"Rechnung erfolgreich erstellt (Rechnungsnummer: {invoice_id}) für Buchung {booking_id}")
+                print(f"Betrag: {total_amount} CHF | Ausgestellt am: {issue_date.strftime('%d.%m.%Y')} | Status: {invoice_status}")
+    #---------------------------------------------------------------
+       
+    # User Story 6
+    # Als Gast möchte ich meine Buchung stornieren, damit ich nicht belastet werde, wenn ich das Zimmer nicht mehr benötige.
+    # Hint: Sorgt für die entsprechende Invoice.
+    # Für Coaches: Für Testing Guest_id 1, 2, 3 oder 5 nutzen
+    print("\n# Für Coaches: Für Testing Guest_id 1, 2, 3 oder 5 nutzen\n")
+    guest_id = input_helper.input_valid_int("Bitte geben Sie Ihre Kundennummer ein: ", min_value=1)
+
+    bookings = booking_manager.get_booking_by_guest_id(guest_id)
+
+    # Nur zukünftige und nicht stornierte Buchungen anzeigen
+    open_bookings = [
+        booking for booking in bookings
+        if booking.check_in_date > date.today() and not booking.is_cancelled
+    ]
+
+    if not open_bookings:
+        print("Sie haben keine stornierbaren Buchungen.")
+    else:
+        print("Stornierbare Buchungen:")
+        for booking in open_bookings:
+            hotel_name = booking.room.hotel.name if booking.room.hotel else "Unbekannt"
+            print(f"Buchung ID: {booking.booking_id}, Aufenthalt: {booking.check_in_date} bis {booking.check_out_date}, Hotel: {hotel_name}")
+
+        booking_id = input_helper.input_valid_int("Welche Buchung möchten Sie stornieren? (Buchungs-ID): ", min_value=1)
+        selected_booking = next((booking for booking in open_bookings if booking.booking_id == booking_id), None)
+
+        if not selected_booking:
+            print("Ungültige Buchungsnummer.")
+        else:
+            confirm = input_helper.input_y_n(f"Möchten Sie Buchung {booking_id} wirklich stornieren? (y/n): ")
+            if confirm:
+                booking_manager.cancel_booking(booking_id)
+                print("Buchung wurde storniert.")
+
+                # Prüfen auf zugehöriger Rechnung
+                existing_invoice = invoice_manager.get_invoice_by_booking_id(booking_id)
+
+                if not existing_invoice:
+                    from model.invoice import Invoice
+                    invoice = Invoice(
+                        invoice_id=None,
+                        booking=selected_booking,
+                        issue_date=date.today(),
+                        total_amount=0.0,
+                        invoice_status="Storniert"
+                    )
+                    invoice_id = invoice_manager.create_invoice(invoice)
+                    print(f"Stornorechnung erstellt (ID: {invoice_id}), Betrag: 0.0 CHF, Status: Storniert")
+                else:
+                    # Optional: Rechnung nachträglich stornieren
+                    invoice_manager.cancel_invoice(existing_invoice.invoice_id)
+                    print("Bestehende Rechnung wurde storniert.")
+            else:
+                print("Stornierung abgebrochen.")
     #---------------------------------------------------------------
 
     # User Story 8
@@ -584,6 +682,7 @@ if True:
 
     # User Story 10 und 3.3
     # TODO: error handling einbauen wenn ID nicht vorhanden
+
     # User Stroy 10:
     # Als Admin möchte ich in der Lage sein, Stammdaten zu verwalten, z.B. Hoteldaten, Zimmertypen, Einrichtungen, 
     # und Preise in Echtzeit zu aktualisieren, damit das Backend-System aktuelle Informationen hat.
@@ -592,7 +691,7 @@ if True:
     print("\nUser Story 10: Als Admin möchte ich in der Lage sein, Stammdaten zu verwalten, z.B. Zimmertypen, Einrichtungen, und Preise in Echtzeit zu aktualisieren, damit das Backend-System aktuelle Informationen hat.")
     print("und")
     print("User Story 3.3: (Als Admin) Ich möchte die Informationen bestimmter Hotels aktualisieren, z. B. den Namen, die Sterne usw.\n")
-    supported_tables = {                               #Sets the changeable tables and attributes in a dict
+    supported_tables = {                               # Definiert die änderbaren Tabellen und Attribute in einem Dictionary
         "room_type": ["description", "max_guests"],
         "facility": ["facility_name"],
         "room": ["room_number", "type_id", "price_per_night", "price_per_night_ls"],
@@ -604,22 +703,22 @@ if True:
 
     while True:
         try:
-            # Choose correct table, this block will fetch an input for the table and will check if it is allowed to make changes
+            # Auswahl der richtigen Tabelle – dieser Block fordert eine Eingabe an und prüft, ob Änderungen erlaubt sind
             table = input_helper.input_valid_string(f"Welche Tabelle möchtest du ändern? ({list(supported_tables.keys())}): ", min_length=3)
             table = table.lower()
             if table not in supported_tables:
                 raise ValueError(f"Ungültige Tabelle '{table}'. Erlaubt: {list(supported_tables.keys())}")
 
-            # Now the corresponding ID will be requested from the admin
+            # Nun wird die entsprechende ID vom Admin abgefragt
             id = input_helper.input_valid_int("Gib die ID des zu ändernden Eintrags ein: ", min_value=1)
 
-            # Here is the same logic used as in the table fetch, but only for the attribute
+            # Hier wird dieselbe Logik wie bei der Tabellenauswahl verwendet, jedoch nur für das Attribut
             attribute = input_helper.input_valid_string(f"Welches Attribut von '{table}' möchtest du ändern? {supported_tables[table]}: ")
             attribute = attribute.lower()
             if attribute not in supported_tables[table]:
                 raise ValueError(f"Ungültiges Attribut '{attribute}' für Tabelle '{table}'.")
 
-            # The new value that should be set is asked from the admin. With conditions it is guaranteed, that there won't be any wrong types or negatives
+            # Der neue Wert, der gesetzt werden soll, wird vom Admin abgefragt. Durch Bedingungen wird sichergestellt, dass keine falschen Datentypen oder negativen Werte eingegeben werden
             if attribute in ["max_guests", "type_id", "stars"]:
                 new_value = input_helper.input_valid_int(f"Neuer Wert für {attribute} (Ganzzahl): ", min_value=0)
             elif attribute == "price_per_night":
@@ -629,9 +728,10 @@ if True:
             else:
                 new_value = input_helper.input_valid_string(f"Neuer Textwert für {attribute}: ", min_length=1, max_length=255)
 
-            # Validation to make sure that the admin wants to confirm the expected change
+            # Validierung zur Bestätigung, dass der Admin die gewünschte Änderung wirklich durchführen möchte
             confirm = input_helper.input_y_n(f"Wirklich '{attribute}' von ID {id} in '{table}' auf '{new_value}' setzen? (y/n): ")
-            # Now we need to ensure that the for the change the corresponding method from the correct manager will be called
+
+            # Nun muss sichergestellt werden, dass für die Änderung die entsprechende Methode des richtigen Managers aufgerufen wird
             if confirm:
                 if table == "room_type":
                     room_type_manager.update_room_type(id, attribute, new_value)
@@ -649,7 +749,7 @@ if True:
             else:
                 print("Änderung abgebrochen.\n")
 
-            # Break for the loop, if the admin chooses "y" he can change another attribute value
+            # Schleife fortsetzen, falls der Admin „y“ wählt, um einen weiteren Attributwert zu ändern
             again = input_helper.input_y_n("Weitere Änderung durchführen? (y/n): ")
             if not again:
                 print("Vorgang beendet.")
@@ -665,6 +765,7 @@ if True:
     #User Story DB 2.1 
     # Als Gast möchte ich auf meine Buchungshistorie zuzugreifen ("lesen"), damit ich meine kommenden Reservierungen verwalten kann.
     # 2.1. Die Anwendungsfälle für meine Buchungen sind "neu/erstellen", "ändern/aktualisieren", "stornieren/löschen".
+    # NOTE: Diese Anwendungsfälle sind für Admin Nutzer gedacht.
 
     print("\nAls Gast möchte ich auf meine Buchungshistorie zuzugreifen (lesen), damit ich meine kommenden Reservierungen verwalten kann.")
     print("US 2.1: Die Anwendungsfälle für meine Buchungen sind neu/erstellen, ändern/aktualisieren, stornieren/löschen\n")
@@ -676,7 +777,7 @@ if True:
         try:
             guest_id = input_helper.input_valid_int("bitte geben Sie ihre Kundennummer ein: ", min_value=1)
         except input_helper.EmptyInputError:
-            cancel = True #TODO wir müssen bestimmen ob bei leerer Eingabe die Aufforderung wiederholt oder abgebrochen wird.
+            cancel = True
         except ValueError as err:
             print(err)
 
@@ -686,7 +787,7 @@ if True:
             
         print()
         print("-" * 50)
-        print("Folgende Buchungen sind zu ihrer Kundennummer erfasst:\n") #TODO Ausgaben könnten später durch UI gemacht werden
+        print("Folgende Buchungen sind zu ihrer Kundennummer erfasst:\n")
         for booking in matching_bookings:
             is_cancelled_str = booking.is_cancelled
             if is_cancelled_str == 0:
@@ -709,7 +810,7 @@ if True:
         try:
             booking_edit_mode = input_helper.input_valid_int("bitte wählen sie den Bearbeitungsmodus:\n1: neu erstellen\n2: aktualisieren\n3: stornieren\n", min_value=1, max_value=3)
         except input_helper.EmptyInputError:
-            cancel = True #TODO wir müssen bestimmen ob bei leerer Eingabe die Aufforderung wiederholt oder abgebrochen wird.
+            cancel = True
         except ValueError as err:
             print(err)
     
@@ -731,7 +832,7 @@ if True:
             is_cancelled = 1
             total_amount = 0
 
-    #einlesen der Buchungsnummer für Ändern oder Stornieren
+    # Einlesen der Buchungsnummer für Ändern oder Stornieren
     if booking_edit_mode == 2 or booking_edit_mode == 3:
         booking_id = None
         while booking_id is None:
@@ -740,9 +841,8 @@ if True:
             except Exception as e:
                 print(e)
 
-    #einlesen der Informationen für Erstellen oder Ändern
+    # Einlesen der Informationen für Erstellen oder Ändern
     if booking_edit_mode == 1 or booking_edit_mode == 2:
-    #Kundennummer
         guest_id = None
         while guest_id is None:
             try:
@@ -751,7 +851,6 @@ if True:
             except Exception as e:
                 print(e)
 
-    #Zimmer ID
         room_id = None
         while room_id is None:
             try:
@@ -760,7 +859,6 @@ if True:
             except Exception as e:
                 print(e)
                 
-    #Startdatum
         start_date = None
         while start_date is None:
             try:
@@ -771,7 +869,6 @@ if True:
             except Exception as e:
                 print(e)
 
-    #Enddatum
         end_date = None
         if start_date is not None:
             while end_date is None:
@@ -787,10 +884,8 @@ if True:
                 except Exception as e:
                     print(e)
 
-    #Storniert
         is_cancelled = 0
 
-    #Gesamtbetrag
         total_amount = None
         while total_amount is None:
             try:
@@ -823,7 +918,9 @@ if True:
 
     # User Story DB 3 
     # Als Gast möchte ich nach meinem Aufenthalt eine Bewertung für ein Hotel abgeben, damit ich meine Erfahrungen teilen kann.
+    # Für Coaches: Für Testing Guest_id 1, 4 oder 5 nutzen
     print("-" * 50)
+    print("# Für Coaches: Für Testing Guest_id 1, 4 oder 5 nutzen")
     print("Als Gast möchte ich nach meinem Aufenthalt eine Bewertung für ein Hotel abgeben, damit ich meine Erfahrungen teilen kann.")
     print("Vielen Dank, dass Sie sich für eine Bewertung Zeit nehmen.")
 
@@ -921,109 +1018,3 @@ if True:
     print("-" * 50) 
     print(df)
     #---------------------------------------------------------------
-
-      #---------------------------------------------------------------
-    
-        #User Story 5 
-        # Als Gast möchte ich nach meinem Aufenthalt eine Rechnung
-        #erhalten, damit ich einen Zahlungsnachweis habe.
-        #Hint: Fügt einen Eintrag in der «Invoice» Tabelle hinzu.
-
-        
-    guest_id = input_helper.input_valid_int("Bitte geben Sie Ihre Kundennummer ein: ", min_value=1)
-
-    guest_bookings = booking_manager.get_booking_by_guest_id(guest_id)
-
-        ###Nur abgeschlossene Buchungen werden akzeptiert
-    past_bookings = [booking for booking in guest_bookings if booking.check_out_date < date.today()]
-
-    if not past_bookings:
-        print("Keine vergangenen Aufenthalte gefunden.")
-    else:
-        print("Vergangene Buchungen:")
-        for booking in past_bookings:
-            hotel_name = booking.room.hotel.name if booking.room.hotel else "Unbekannt"
-        print(f"Buchung ID: {booking.booking_id}, Aufenthalt: {booking.check_in_date} bis {booking.check_out_date}, Hotel: {hotel_name}")
-
-        booking_id = input_helper.input_valid_int("Für welche Buchung möchten Sie eine Rechnung erstellen? (Buchungs-ID): ", min_value=1)
-        selected_booking = next((booking for booking in past_bookings if booking.booking_id == booking_id), None)
-
-        if not selected_booking:
-                print("Ungültige Buchungsnummer.")
-        else:
-            ###prüefe gitts scho e rechnig für die Buechig
-            existing_invoice = invoice_manager.get_invoice_by_booking_id(booking_id)
-            if existing_invoice:
-                print("Für diese Buchung existiert bereits eine Rechnung.")
-            else:
-                issue_date = date.today()
-                total_amount = selected_booking.total_amount
-                invoice_status = "Offen"
-
-                invoice = Invoice(
-                    invoice_id=None,
-                    booking=selected_booking,
-                    issue_date=issue_date,
-                    total_amount=total_amount,
-                    invoice_status=invoice_status
-                    )
-
-                invoice_id = invoice_manager.create_invoice(invoice)
-                print(f"Rechnung erfolgreich erstellt (Rechnungsnummer: {invoice_id}) für Buchung {booking_id}")
-                print(f"Betrag: {total_amount} CHF | Ausgestellt am: {issue_date.strftime('%d.%m.%Y')} | Status: {invoice_status}")
-        
-        # User Story 6
-        #Als Gast möchte ich meine Buchung stornieren, damit ich nicht belastet werde, wenn ich das Zimmer nicht mehr benötige.
-        #Hint: Sorgt für die entsprechende Invoice.
-    
-    guest_id = input_helper.input_valid_int("Bitte geben Sie Ihre Kundennummer ein: ", min_value=1)
-
-    bookings = booking_manager.get_booking_by_guest_id(guest_id)
-
-    ###Nur zukünftige und nicht stornierte Buchungen anzeigen
-    open_bookings = [
-        booking for booking in bookings
-        if booking.check_in_date > date.today() and not booking.is_cancelled
-    ]
-
-    if not open_bookings:
-        print("Sie haben keine stornierbaren Buchungen.")
-    else:
-        print("Stornierbare Buchungen:")
-        for booking in open_bookings:
-            hotel_name = booking.room.hotel.name if booking.room.hotel else "Unbekannt"
-            print(f"Buchung ID: {booking.booking_id}, Aufenthalt: {booking.check_in_date} bis {booking.check_out_date}, Hotel: {hotel_name}")
-
-        booking_id = input_helper.input_valid_int("Welche Buchung möchten Sie stornieren? (Buchungs-ID): ", min_value=1)
-        selected_booking = next((booking for booking in open_bookings if booking.booking_id == booking_id), None)
-
-        if not selected_booking:
-            print("Ungültige Buchungsnummer.")
-        else:
-            confirm = input_helper.input_y_n(f"Möchten Sie Buchung {booking_id} wirklich stornieren? (y/n): ")
-            if confirm:
-                booking_manager.cancel_booking(booking_id)
-                print("Buchung wurde storniert.")
-
-                ### Gibt es eine Rechnung? 
-                existing_invoice = invoice_manager.get_invoice_by_booking_id(booking_id)
-
-                if not existing_invoice:
-                    from model.invoice import Invoice
-                    invoice = Invoice(
-                        invoice_id=None,
-                        booking=selected_booking,
-                        issue_date=date.today(),
-                        total_amount=0.0,
-                        invoice_status="Storniert"
-                    )
-                    invoice_id = invoice_manager.create_invoice(invoice)
-                    print(f"Stornorechnung erstellt (ID: {invoice_id}), Betrag: 0.0 CHF, Status: Storniert")
-                else:
-                    # Optional: Rechnung nachträglich stornieren
-                    invoice_manager.cancel_invoice(existing_invoice.invoice_id)
-                    print("Bestehende Rechnung wurde storniert.")
-            else:
-                print("Stornierung abgebrochen.")
-
-    
