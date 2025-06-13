@@ -55,7 +55,8 @@ review_manager = business_logic.ReviewManager()
 if False:
     print("test")
     # Testbereich (auf True sezten zum Testen)
-       
+
+
 # Funktionierender Code------------------------
 
 if True:
@@ -85,7 +86,7 @@ if True:
             try:
                 city = input_helper.input_valid_string("Gewünschte Stadt: ", allow_empty=True)  
                 if city:
-                    search_params[0] = city
+                    search_params[0] = city.title() # Stellt sicher, dass der User Input ins Format der Datenbank formatiert wird
                 break
             except Exception as e:
                 print(e)
@@ -139,64 +140,74 @@ if True:
         if search_params[0] is None and search_params[1] is None and search_params[2] is None and search_params[3] is None and search_params[4] is None:
             print("\nBitte geben Sie mindestens einen gültigen Suchparameter ein\n")
 
-    result = hotel_manager.find_hotel_by_search_params(search_params) #übergeben der Suchparameter an den Hotelmanager und abfüllen des Ergebniss in result
+        result = hotel_manager.find_hotel_by_search_params(search_params) #übergeben der Suchparameter an den Hotelmanager und abfüllen des Ergebniss in result
 
-    if result is not None:
-        matching_hotels, matching_rooms, matching_addresses, matching_roomtypes  = result #entpacken der Liste
-        print("\n" + "-"*80)
-        print("Folgende Hotels passen zu Ihrer Suche:\n")
-        print("─"*100)
+        if result is not None:
+            matching_hotels, matching_rooms, matching_addresses, matching_roomtypes  = result #entpacken der Liste
+            print("\n" + "-"*80)
+            print("Folgende Hotels passen zu Ihrer Suche:\n")
+            print("─"*100)
 
-        for hotel in matching_hotels:
-            print(f"{hotel.name} in {hotel.address.city} mit {hotel.stars} Stern{'en' if hotel.stars>1 else ''}")
-            print(f"{'':<4}" + "-" * 80)
+            for hotel in matching_hotels:
+                print(f"{hotel.name} in {hotel.address.city} mit {hotel.stars} Stern{'en' if hotel.stars>1 else ''}")
+                print(f"{'':<4}" + "-" * 80)
 
-            for room in matching_rooms:
-                if room.hotel.hotel_id == hotel.hotel_id:
-                    if search_params[3]:
-                        mon = search_params[3].month
+                for room in matching_rooms:
+                    if room.hotel.hotel_id == hotel.hotel_id:
+                        if search_params[3]:
+                            mon = search_params[3].month
 
-                        if 5 <= mon <= 9:
-                            season = "Hauptsaison ist"
-                            price = room.price_per_night
-                            other = room.price_per_night_ls
-                            other_season = "Nebensaison wäre"
+                            if 5 <= mon <= 9:
+                                season = "Hauptsaison ist"
+                                price = room.price_per_night
+                                other = room.price_per_night_ls
+                                other_season = "Nebensaison wäre"
+
+                            else:
+                                season = "Nebensaison ist"
+                                price = room.price_per_night_ls
+                                other = room.price_per_night
+                                other_season = "Hauptsaison wäre"
 
                         else:
-                            season = "Nebensaison ist"
-                            price = room.price_per_night_ls
-                            other = room.price_per_night
-                            other_season = "Hauptsaison wäre"
+                            season = "in der Hauptsaison ist"
+                            price = room.price_per_night
+                            other = room.price_per_night_ls
+                            other_season = "Nebensaison ist"
 
-                    else:
-                        season = "in der Hauptsaison ist"
-                        price = room.price_per_night
-                        other = room.price_per_night_ls
-                        other_season = "Nebensaison ist"
+                        total = nights * price
 
-                    total = nights * price
+                        print(f"{'':<4}Raum {room.room_number} | Typ: {room.room_type.description} | max. {room.room_type.max_guests} Pers.")
+                        print(f"{'':<10}• Preis pro Nacht in der {season}: {price:.2f} CHF") #einrücken der Zeile um 10 Stellen, damit es übersichtlicher ist.
+                        print(f"{'':<10}• Preis pro Nacht in der {other_season}: {other:.2f} CHF")
 
-                    print(f"{'':<4}Raum {room.room_number} | Typ: {room.room_type.description} | max. {room.room_type.max_guests} Pers.")
-                    print(f"{'':<10}• Preis pro Nacht in der {season}: {price:.2f} CHF") #einrücken der Zeile um 10 Stellen, damit es übersichtlicher ist.
-                    print(f"{'':<10}• Preis pro Nacht in der {other_season}: {other:.2f} CHF")
+                        if search_params[3]: # Anzeigen der Anzahl Nächte und des daraus resultierenden Gesamttotals, jedoch nur wenn ein Zeitraum eingegeben wurde
+                            print(f"{'':<10}• Nächte: {nights}, Gesamttotal: {total:.2f} CHF")
 
-                    if search_params[3]: # Anzeigen der Anzahl Nächte und des daraus resultierenden Gesamttotals, jedoch nur wenn ein Zeitraum eingegeben wurde
-                        print(f"{'':<10}• Nächte: {nights}, Gesamttotal: {total:.2f} CHF")
+                        if room.room_facility: # Wenn das Zimmer eine oder mehrere Ausstattungen hat, werden sie angezeigt
+                            print(f"{'':<10}• Ausstattung:")
 
-                    if room.room_facility: # Wenn das Zimmer eine oder mehrere Ausstattungen hat, werden sie angezeigt
-                        print(f"{'':<10}• Ausstattung:")
+                            for facility in room.room_facility:
+                                print(f"{'':<14}→ {facility}")
 
-                        for facility in room.room_facility:
-                            print(f"{'':<14}→ {facility}")
+                        else:
+                            print(f"{'':<10}Keine Zusatz-Ausstattung")
 
-                    else:
-                        print(f"{'':<10}Keine Zusatz-Ausstattung")
-
-                    print(f"{'':<4}" + "-" * 80)
-                    
-            print("─"*100)
-    else:
-        print("Leider wurden keine passenden Hotels gefunden")
+                        print(f"{'':<4}" + "-" * 80)
+                        
+                print("─"*100)
+        else:
+            print("Leider wurden keine passenden Hotels gefunden")
+            try:
+                retry = input_helper.input_y_n("Möchten Sie eine neue Suche starten? (y/n): ")
+                if retry:
+                    # Zurück zum Anfang der while-Schleife, indem die search_params zurückgesetzt werden
+                    search_params = [None, None, None, None, None]
+                    continue
+                else:
+                    print("Vorgang beendet.")
+            except Exception as e:
+                print(f"Ungültige Eingabe. Vorgang beendet. ({e})")
 
     #--------------------------------------------------------------- 
 
@@ -324,7 +335,7 @@ if True:
         
     while True:
         try:
-            print("Hotel entfernen")
+            print("Hotel entfernen. (Durch leere Eingabe Vorgang abbrechen)")
 
             # Eingabe der Hotel-ID und Adress-ID
             hotel_id = input_helper.input_valid_int("Bitte gib die Hotel-ID ein: ")
@@ -559,13 +570,13 @@ if True:
         print(f"Zimmertyp: {room.room_type.description} (max. {room.room_type.max_guests} Gäste)")
         print(f"Hotel ID: {room.hotel.hotel_id}")
 
-        facilities = room.get_facility_names() if hasattr(room, "get_facility_names") else [f.facility_name for f in room._Room__room_facility]
+        facilities = room.room_facility
 
         if facilities:
-            print(f"Ausstattung: {', '.join(facilities)}")
+            print("Ausstattung:", ", ".join([f.facility_name for f in facilities]))
         else:
-            print("Ausstattung: Keine zusätzlich Ausstattung verfügbar")
-
+            print("Ausstattung: -")
+        
         print("-" * 50)
     #---------------------------------------------------------------  
 

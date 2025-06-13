@@ -77,6 +77,9 @@ class Room:
     def room_facility(self, room_facility: list):
         self.__room_facility = room_facility
     
-    #Used in User Story 9 #TODO das gehört nicht hier hin
+    #Used in User Story 9 
+    # Fügt eine Ausstattung (Facility) zum Raum hinzu.
+    # Diese Methode gehört in die Room-Klasse, da sie das Verhalten und den Zustand des Objekts verändert
+    # und nicht mit der Datenbank kommuniziert. Sie ist Teil der Geschäftslogik und unterstützt die Kapselung.
     def add_facility(self, facility: Facility):
         self.__room_facility.append(facility)
