@@ -159,4 +159,40 @@ class BookingDataAccess(BaseDataAccess):
             return updated_booking
         
         else:
-            raise BrokenPipeError #TODO möglicherweise nicht genau passender Error, selber ein Error dafür schreiben     
+            raise BrokenPipeError #TODO möglicherweise nicht genau passender Error, selber ein Error dafür schreiben
+        
+    def get_booking_by_id(self, booking_id: int) -> Booking | None:
+        sql = """
+        SELECT 
+            booking_id, 
+            guest_id, 
+            room_id, 
+            check_in_date, 
+            check_out_date, 
+            is_cancelled, 
+            total_amount 
+        FROM Booking
+        WHERE booking_id = ?
+        """
+        result = self.fetchall(sql, (booking_id,))
+        if result:
+            row = result[0]
+            booking_id, guest_id, room_id, check_in_date, check_out_date, is_cancelled, total_amount = row
+
+            from model.guest import Guest
+            from model.room import Room
+            from data_access.hotel_data_access import HotelDataAccess
+            hotel = HotelDataAccess().get_hotel_by_room_id(room_id)
+            guest = Guest(guest_id=guest_id, first_name=None, last_name=None, email=None, address=None, bookings=None)
+            room = Room(room_id=room_id, room_number=None, price_per_night=None, room_type=None, hotel=hotel, price_per_night_ls=None)
+
+            return Booking(
+                booking_id=booking_id,
+                guest=guest,
+                room=room,
+                check_in_date=check_in_date,
+                check_out_date=check_out_date,
+                is_cancelled=is_cancelled,
+                total_amount=total_amount
+            )
+        return None
