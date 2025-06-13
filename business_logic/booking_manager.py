@@ -5,6 +5,8 @@ import data_access
 from model import Booking
 from model import Guest
 from model import Room
+from model import Invoice
+from datetime import datetime
 
 class BookingManager:
     def __init__(self) -> None:
@@ -30,3 +32,22 @@ class BookingManager:
     # Used in User Story DB 2.1
     def update_booking(self, booking:Booking) -> Booking: #Erwartet Booking objekt, gibt booking Objekt mit aktualisierten Werten zurück
         return self.__booking_da.update_booking(booking)
+    
+    # Used in User Story DB 2 and 5
+    def cancel_booking(self, booking_id: int):
+        self.__booking_da.cancel_booking(booking_id)
+
+        invoice_da = data_access.InvoiceDataAccess()
+        invoice = invoice_da.get_invoice_by_booking_id(booking_id)
+
+        if not invoice:
+            booking = self.__booking_da.get_booking_by_id(booking_id)
+            if booking:
+                storno_invoice = Invoice(
+                    invoice_id=None,  # Wird von DB vergeben
+                    booking=booking,
+                    issue_date=datetime.now(),
+                    total_amount=booking.total_amount,
+                    invoice_status="Storniert"
+                )
+                invoice_da.create_invoice(storno_invoice)
