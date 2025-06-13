@@ -196,3 +196,12 @@ class BookingDataAccess(BaseDataAccess):
                 total_amount=total_amount
             )
         return None
+    
+    def cancel_booking(self, booking_id: int) -> None:
+        sql = """
+        UPDATE Booking
+        SET is_cancelled = 1
+        WHERE booking_id = ?
+        """
+        self.execute(sql, (booking_id,))
+
