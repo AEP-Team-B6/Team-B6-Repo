@@ -208,7 +208,7 @@ class HotelDataAccess(BaseDataAccess):
         return hotels
     
     
-    #Used in User Story 3.1
+    # Used in User Story 3.1
     def add_hotel(self, name:str, address_id:int, stars:int) -> int:
         sql = """
         INSERT INTO Hotel (name, address_id, stars)
@@ -228,12 +228,12 @@ class HotelDataAccess(BaseDataAccess):
         return hotel_id
 
    
-    #Used in User Story 3.2
+    # Used in User Story 3.2
     def delete_hotel(self, hotel_id: int) -> bool:
         sql = "DELETE FROM Hotel WHERE hotel_id = ?"
         params = (hotel_id,)
-        result = self.execute(sql, params)
-        return result[0] > 0  
+        _, result = self.execute(sql, params)
+        return result > 0  
     
     
     # Used in User Story 10 und 3.3

@@ -49,8 +49,8 @@ class AddressDataAccess(BaseDataAccess):
     def delete_address(self, address_id: int) -> bool:
         sql = "DELETE FROM Address WHERE address_id = ?"
         params = (address_id,)
-        result = self.execute(sql, params)
-        return result[0] > 0
+        _, result = self.execute(sql, params)
+        return result > 0
 
 
 # Used in User Story 10 und 3.3
