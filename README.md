@@ -38,8 +38,8 @@ https://deepnote.com/workspace/DBUA-Team-C-c18e3c8f-25c5-4be0-bb77-bb8f6a66300d/
 * 
 
 ### Noah Rolli
-* 
-* 
+* Impelmentierung US 3.1, 3.2, 3.3 zu 10 hinzugefügt  
+* Dokumentation Deepnote
 * 
 
 
@@ -93,12 +93,20 @@ Was bereitete uns mühe und wie hätten wir es besser überwinden können oder s
 ### Team-Arbeit
 Wie funktionierten wir als Team? Was war gut, was nicht?
 
+Als Team haben wir schon im ersten Semester für das Projekt im Modul Datenbasierte Unternehmensanwendungen zusammengearbeitet. Dies hat so gut funktioniert, dass wir uns dazu entschlossen haben, so fortzufahren. 
+Aufgefallen ist, dass wir es dieses Mal anfangs lockerer angegangen sind, wa zu Vor- und Nachteilen führte.
+Unser Anfang war dieses Mal unstrukturierter. Uns war nicht von Anfang an klar, wie wir das Projekt umsetzen sollten - das Wissen über Python war noch nich so stark. Somit entschieden wir uns zu Coden, zu lernen, jeder für sich selbst. Mit unterrichtsmaterialien und der Website "Codefinity".
+Als wir im Unterricht zu den Klassen Atributen kamen, sahen wir unseren Startpunkt. 
+
 ### Abschluss
 Abschliessendes Fazit
 
 
 ## Quellen
 Welche Quellen hatten wir, und welche tools.
+ChatGPT (zur Fehleranalyse, Unklarheiten)
+Moodle "Anwendungsentwicklung mit Python"
+
 
 
 ## Markdown format ✨
