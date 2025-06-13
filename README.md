@@ -40,7 +40,6 @@ https://deepnote.com/workspace/DBUA-Team-C-c18e3c8f-25c5-4be0-bb77-bb8f6a66300d/
 ### Noah Rolli
 * Impelmentierung US 3.1, 3.2, 3.3 zu 10 hinzugefügt  
 * Dokumentation Deepnote
-* 
 
 
 ## Projekt Struktur
@@ -73,7 +72,9 @@ was ist DRY? wie wurde es angewendet? und wo könnten wir es noch anwenden?
 
 
 ## Klassendiagram
-hier: Aktuelles Bild des Klassendiagramms
+
+![alt text](image.png) 
+
 
 und dann: 
 
@@ -82,6 +83,12 @@ Die Klassen bitte kurz beschreiben und sehr wichtig die getter & setter und die 
 
 ## Projektmanagement und Planung
 Bitte beschreiben was unser plan war, welche Planungstools wir verwendet haben, wie wir das Agile Projektmanagement verwendet haben ( und dass wir viele Abgleichsmeetings hatten, jedoch die Sprints aufgrund des Zeitdrucks nicht mit einem schriftlichen Retroperspective abschliessen konnten)
+
+Agile Methodik: SCRUM
+Aufgabenverteilung über GitHub Project Board
+Regelmäßige Commits nach vollendeten Codeblöcken
+Qualitätssicherung durch Code Reviews und Tests
+
 
 ## Fazit
 ### Was haben wir gelernt?
