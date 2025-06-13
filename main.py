@@ -922,4 +922,108 @@ if True:
     print(df)
     #---------------------------------------------------------------
 
+      #---------------------------------------------------------------
+    
+        #User Story 5 
+        # Als Gast möchte ich nach meinem Aufenthalt eine Rechnung
+        #erhalten, damit ich einen Zahlungsnachweis habe.
+        #Hint: Fügt einen Eintrag in der «Invoice» Tabelle hinzu.
+
+        
+    guest_id = input_helper.input_valid_int("Bitte geben Sie Ihre Kundennummer ein: ", min_value=1)
+
+    guest_bookings = booking_manager.get_booking_by_guest_id(guest_id)
+
+        ###Nur abgeschlossene Buchungen werden akzeptiert
+    past_bookings = [booking for booking in guest_bookings if booking.check_out_date < date.today()]
+
+    if not past_bookings:
+        print("Keine vergangenen Aufenthalte gefunden.")
+    else:
+        print("Vergangene Buchungen:")
+        for booking in past_bookings:
+            hotel_name = booking.room.hotel.name if booking.room.hotel else "Unbekannt"
+        print(f"Buchung ID: {booking.booking_id}, Aufenthalt: {booking.check_in_date} bis {booking.check_out_date}, Hotel: {hotel_name}")
+
+        booking_id = input_helper.input_valid_int("Für welche Buchung möchten Sie eine Rechnung erstellen? (Buchungs-ID): ", min_value=1)
+        selected_booking = next((booking for booking in past_bookings if booking.booking_id == booking_id), None)
+
+        if not selected_booking:
+                print("Ungültige Buchungsnummer.")
+        else:
+            ###prüefe gitts scho e rechnig für die Buechig
+            existing_invoice = invoice_manager.get_invoice_by_booking_id(booking_id)
+            if existing_invoice:
+                print("Für diese Buchung existiert bereits eine Rechnung.")
+            else:
+                issue_date = date.today()
+                total_amount = selected_booking.total_amount
+                invoice_status = "Offen"
+
+                invoice = Invoice(
+                    invoice_id=None,
+                    booking=selected_booking,
+                    issue_date=issue_date,
+                    total_amount=total_amount,
+                    invoice_status=invoice_status
+                    )
+
+                invoice_id = invoice_manager.create_invoice(invoice)
+                print(f"Rechnung erfolgreich erstellt (Rechnungsnummer: {invoice_id}) für Buchung {booking_id}")
+                print(f"Betrag: {total_amount} CHF | Ausgestellt am: {issue_date.strftime('%d.%m.%Y')} | Status: {invoice_status}")
+        
+        # User Story 6
+        #Als Gast möchte ich meine Buchung stornieren, damit ich nicht belastet werde, wenn ich das Zimmer nicht mehr benötige.
+        #Hint: Sorgt für die entsprechende Invoice.
+    
+    guest_id = input_helper.input_valid_int("Bitte geben Sie Ihre Kundennummer ein: ", min_value=1)
+
+    bookings = booking_manager.get_booking_by_guest_id(guest_id)
+
+    ###Nur zukünftige und nicht stornierte Buchungen anzeigen
+    open_bookings = [
+        booking for booking in bookings
+        if booking.check_in_date > date.today() and not booking.is_cancelled
+    ]
+
+    if not open_bookings:
+        print("Sie haben keine stornierbaren Buchungen.")
+    else:
+        print("Stornierbare Buchungen:")
+        for booking in open_bookings:
+            hotel_name = booking.room.hotel.name if booking.room.hotel else "Unbekannt"
+            print(f"Buchung ID: {booking.booking_id}, Aufenthalt: {booking.check_in_date} bis {booking.check_out_date}, Hotel: {hotel_name}")
+
+        booking_id = input_helper.input_valid_int("Welche Buchung möchten Sie stornieren? (Buchungs-ID): ", min_value=1)
+        selected_booking = next((booking for booking in open_bookings if booking.booking_id == booking_id), None)
+
+        if not selected_booking:
+            print("Ungültige Buchungsnummer.")
+        else:
+            confirm = input_helper.input_y_n(f"Möchten Sie Buchung {booking_id} wirklich stornieren? (y/n): ")
+            if confirm:
+                booking_manager.cancel_booking(booking_id)
+                print("Buchung wurde storniert.")
+
+                ### Gibt es eine Rechnung? 
+                existing_invoice = invoice_manager.get_invoice_by_booking_id(booking_id)
+
+                if not existing_invoice:
+                    from model.invoice import Invoice
+                    invoice = Invoice(
+                        invoice_id=None,
+                        booking=selected_booking,
+                        issue_date=date.today(),
+                        total_amount=0.0,
+                        invoice_status="Storniert"
+                    )
+                    invoice_id = invoice_manager.create_invoice(invoice)
+                    print(f"Stornorechnung erstellt (ID: {invoice_id}), Betrag: 0.0 CHF, Status: Storniert")
+                else:
+                    # Optional: Rechnung nachträglich stornieren
+                    invoice_manager.cancel_invoice(existing_invoice.invoice_id)
+                    print("Bestehende Rechnung wurde storniert.")
+            else:
+                print("Stornierung abgebrochen.")
+
     
