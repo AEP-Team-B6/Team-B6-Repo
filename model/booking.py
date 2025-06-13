@@ -5,6 +5,7 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING: #WICHTIG: alle Imports in diesem IF schreiben, da so verhindert wird, dass wenn man in file A, file B importiert und in file B, file A importiert es eine Schlaufe gibt.
     from guest import Guest
     from room import Room
+    from review import Review
 
 
 #Creating class Booking
@@ -77,3 +78,8 @@ class Booking:
     @total_amount.setter
     def total_amount(self, new_total_amount):
         self.__total_amount = new_total_amount
+
+    def add_review(self, review: Review):
+        if not hasattr(self, '_reviews'):
+            self._reviews = []
+        self._reviews.append(review)

@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import model
 from data_access.base_data_access import BaseDataAccess
+from data_access.hotel_data_access import HotelDataAccess
 from model import Booking
 from model import Guest
 from model import Room
@@ -53,8 +54,9 @@ class BookingDataAccess(BaseDataAccess):
             ]
     
 
-    # Used in User Story 2.1 DB
+    # Used in User Story DB 2.1 DB 3
     def get_booking_by_guest_id(self, guest_id:int) -> list[Booking]:
+        hotel_da = HotelDataAccess()
 
         sql = """
         SELECT 
@@ -68,8 +70,9 @@ class BookingDataAccess(BaseDataAccess):
         FROM Booking 
         WHERE guest_id = ?
         """
-        params = ([guest_id])
+        params = (guest_id,)
         result = self.fetchall(sql, params)
+        
         if result:        
             l_rooms = []
             l_guests = []
@@ -77,7 +80,8 @@ class BookingDataAccess(BaseDataAccess):
             for row in result: #TODO Listcomprahension
                 booking_id, guest_id, room_id, check_in_date, check_out_date, is_cancelled, total_amount = row #tuple unpacking
                 #create Room Object with room_id in it
-                room = Room(room_id=room_id, room_number=None, price_per_night=None, room_type=None, hotel=None, price_per_night_ls=None)
+                hotel = hotel_da.get_hotel_by_room_id(room_id)
+                room = Room(room_id=room_id, room_number=None, price_per_night=None, room_type=None, hotel=hotel, price_per_night_ls=None)
                 #create Guest Object with guest_id in it
                 guest = Guest(guest_id=guest_id, first_name=None, last_name=None, email=None, address=None, bookings=None)
                 #create Booking Object with guest and room and append to Bookings list                

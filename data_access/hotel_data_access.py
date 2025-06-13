@@ -96,7 +96,7 @@ class HotelDataAccess(BaseDataAccess):
 
                 #ein Hotel-Objekt pro hotel_id erzeugen
                 if hotel_id not in hotel_dict: # Wenn Hotel bereits im Dict gespeichert ist, wird es nicht nochmals erstell.
-                    hotel = Hotel(hotel_id=hotel_id, name=name, stars=stars, address=address, rooms=[])
+                    hotel = Hotel(hotel_id=hotel_id, name=name, stars=stars, address=address, rooms=[], reviews=[])
                     l_hotels.append(hotel)
                     hotel_dict[hotel_id] = hotel # speichern des Hotels im Dictionary unter der Hotel_id
                 hotel = hotel_dict[hotel_id] # (wieder) abholen des der hotel_id entsprechenden Objekts
@@ -204,7 +204,7 @@ class HotelDataAccess(BaseDataAccess):
         hotels = []
         for hotel_id, name, stars, address_id in rows: #TODO Listcomprahension
             address = address_da.read_address_by_id(address_id)
-            hotels.append(Hotel(hotel_id, name, stars, address, rooms=[]))  #TODO rooms später befüllen wird in US 1.6 nicht benötigt
+            hotels.append(Hotel(hotel_id, name, stars, address, rooms=[], reviews=[]))  #TODO rooms später befüllen wird in US 1.6 nicht benötigt
         return hotels
     
     
@@ -276,7 +276,7 @@ class HotelDataAccess(BaseDataAccess):
             l_room_types = []
             for row in result: #TODO Listcomprahension
                 hotel_id, name, stars, room_id, room_number, type_id, description, max_guests = row #tuple unpacking
-                hotel = Hotel(hotel_id=hotel_id, name=name, stars=stars, address=None, rooms=None)
+                hotel = Hotel(hotel_id=hotel_id, name=name, stars=stars, address=None, rooms=None, reviews=None)
                 l_hotels.append(hotel)
                 room_type = Room_Type(type_id=type_id, description=description, max_guests=max_guests)
                 l_room_types.append(room_type)
@@ -300,5 +300,22 @@ class HotelDataAccess(BaseDataAccess):
         if result:
             hotel_id, name, stars, address_id, street, zip_code, city = result
             address = Address(address_id=address_id, street=street, zip_code=zip_code, city=city)
-            return Hotel(hotel_id=hotel_id, name=name, stars=stars, address=address, rooms=[])
+            return Hotel(hotel_id=hotel_id, name=name, stars=stars, address=address, rooms=[], reviews=[])
+        return None
+    
+
+    #Used in User Story DB 3
+    def get_hotel_by_room_id(self, room_id: int) -> Hotel:
+        sql = """
+        SELECT h.hotel_id, h.name, h.stars, a.address_id, a.street, a.zip_code, a.city
+        FROM Hotel h
+        JOIN Address a ON h.address_id = a.address_id
+        JOIN Room r ON r.hotel_id = h.hotel_id
+        WHERE r.room_id = ?
+        """
+        row = self.fetchone(sql, (room_id,))
+        if row:
+            hotel_id, name, stars, address_id, street, zip_code, city = row
+            address = Address(address_id, street, zip_code, city)
+            return Hotel(hotel_id, name, stars, address, rooms=[], reviews=[])
         return None

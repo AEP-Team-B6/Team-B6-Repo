@@ -19,7 +19,7 @@ class BookingManager:
     def read_all_bookings(self):
         return self.__booking_da.get_all_bookings()
     
-    # Used in User Story DB 2.1
+    # Used in User Story DB 2.1 and DB 3
     def get_booking_by_guest_id(self, guest_id:int) -> list[Booking]:
         return self.__booking_da.get_booking_by_guest_id(guest_id)
     

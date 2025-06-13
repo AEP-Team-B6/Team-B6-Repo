@@ -1,19 +1,18 @@
 from __future__ import annotations
 from datetime import date, datetime
-from model import review
+from model import Review
 from data_access.base_data_access import BaseDataAccess
 import sqlite3 
 
-#bim str fehlt es None, ha de fehler nonig entdeckt
 class ReviewDataAccess(BaseDataAccess):
-    def __init__(self, db_path: str = ""):
+    def __init__(self, db_path: str = None):
         super().__init__(db_path)
     
     # Used in User Story DB 3
     def write_review(self, review: Review):
         sql = """
 
-            INSERT INTO reviews
+            INSERT INTO Review
             (review_id,
             rating,
             booking_id,
@@ -36,18 +35,9 @@ class ReviewDataAccess(BaseDataAccess):
 
         self.execute(sql, params)
 
-        
-    #def write_review(self, review_id: int, rating: int, booking_id: int, hotel_id: int, comment: str, review_date: date):
-    #    sql= """
-    #        INSERT INTO reviews (review_id, rating, booking_id, hotel_id, comment, date)
-    #        VALUES (?, ?, ?, ?, ?, ?)
-    #   """
-    #   params=(
-    #      review_id,
-    #       rating,
-    #       booking_id,
-    #       hotel_id,
-    #       comment,
-    #       review_date
-    #   )
-    #   self.execute(sql, params)
+    
+    # Used in User Story DB 3
+    def get_new_review_id(self) -> int:
+        sql = "SELECT MAX(review_id) FROM Review"
+        result = self.fetchone(sql)
+        return (result[0] + 1) if result and result[0] is not None else 1

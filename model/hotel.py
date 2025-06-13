@@ -5,14 +5,16 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING: #WICHTIG: alle Imports in diesem IF schreiben, da so verhindert wird, dass wenn man in file A, file B importiert und in file B, file A importiert es eine Schlaufe gibt.
     from address import Address
     from room import Room
+    from review import Review
 
 class Hotel:
-    def __init__(self, hotel_id:int, name:str, stars:int, address:Address, rooms:Room):
+    def __init__(self, hotel_id:int, name:str, stars:int, address:Address, rooms:Room, reviews:Review):
         self.__hotel_id = hotel_id
         self.__name = name
         self.__stars = stars
         self.__address = address
-        self.__rooms = rooms #TODO: Das sollte eine Liste sein denke ich
+        self.__rooms = rooms if rooms else []
+        self.__reviews = reviews if reviews else []
 
     #def __str__(self): #TODO möglicherweise muss hier noch etwas gemacht werden 
     #    return f"{self.name} ({self.stars} Sterne)"
@@ -63,3 +65,10 @@ class Hotel:
         if not isinstance(new_rooms, Room):
             raise TypeError("room must be an instance of Room")
         self.__rooms = new_rooms
+
+    def add_review(self, review: Review):
+        self.__reviews.append(review)
+
+    @property
+    def reviews(self) -> list[Review]:
+        return self.__reviews

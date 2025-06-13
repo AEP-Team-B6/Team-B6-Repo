@@ -57,6 +57,8 @@ if False:
     # Testbereich (auf True sezten zum Testen)
 
 
+
+
 # Funktionierender Code------------------------
 
 if True:
@@ -313,7 +315,7 @@ if True:
             if stars is None:
                 break
 
-            hotel = Hotel(hotel_id=None, name=hotel_name, stars=stars, address=address, rooms=None)
+            hotel = Hotel(hotel_id=None, name=hotel_name, stars=stars, address=address, rooms=None, reviews=None)
             hotel_id = hotel_manager.add_hotel(hotel)
 
             print(f"Hotel erfolgreich hinzugefügt (ID: {hotel_id})")
@@ -355,7 +357,7 @@ if True:
             else:
                 print(f"Adresse mit ID {address_id} konnte nicht gefunden oder gelöscht werden.")
             # Break for the loop, if the admin chooses "y" he can change another attribute value
-            again = input_helper.input_y_n("Weiteres Hotel hinzufügen? (y/n): ")
+            again = input_helper.input_y_n("Weiteres Hotel löschen? (y/n): ")
             if not again:
                 print("Vorgang beendet.")
                 break
@@ -718,7 +720,7 @@ if True:
             booking_id = None
 
         case 2: 
-            print("\nBuchung aktualisiern (nur die zu ändernden Werte eingeben)")
+            print("\nBuchung aktualisieren (nur die zu ändernden Werte eingeben)")
             print("-" * 50)
 
         case 3:
@@ -809,7 +811,7 @@ if True:
             print(f"Neue Buchung erstellt mit der Buchungsnummer {new_booking_id}")
         case 2:
             updated_booking = booking_manager.update_booking(booking)
-            print(f"Buchung mit der Buchungsnummer {booking_id} aktuallisiert")
+            print(f"Buchung mit der Buchungsnummer {booking_id} aktualisiert")
             print(f"Buchungsnummer: {updated_booking.booking_id} | Guest-ID: {updated_booking.guest.guest_id} | Room-ID: {updated_booking.room.room_id} | Startdatum: {updated_booking.check_in_date} | Enddatum: {updated_booking.check_out_date} | Storniert: {updated_booking.is_cancelled} | Gesamtbetrag: {updated_booking.total_amount}")
         case 3:
             print("\nBuchung stornieren")
@@ -821,38 +823,88 @@ if True:
 
     # User Story DB 3 
     # Als Gast möchte ich nach meinem Aufenthalt eine Bewertung für ein Hotel abgeben, damit ich meine Erfahrungen teilen kann.
-    
-    guest_id = input_helper.input_valid_int("Bitte geben Sie Ihre Kundennummer ein: ", min_value=1)
- 
-    guest_bookings = booking_manager.get_booking_by_guest_id(guest_id)
- 
-    if not guest_bookings:
-        print("Keine vergangenen Aufenthalte gefunden.")
-    else:
-        for b in guest_bookings:
-            if b.check_out_date < date.today():
-                print(f"Buchung ID: {b.booking_id}, Aufenthalt: {b.check_in_date} bis {b.check_out_date}, Hotel: {b.room.hotel.name}")
- 
- 
-    booking_id = input_helper.input_valid_int("Welche Buchung möchten Sie bewerten? (Buchungs-ID): ", min_value=1)
-    selected_booking = next((b for b in guest_bookings if b.booking_id == booking_id), None)
- 
-    if not selected_booking:
-        print("Ungültige Buchungsnummer.")
-    else:
-        rating = input_helper.input_valid_int("Wie gut war deine Erfahrung von 1-10?: ", min_value=1, max_value=10)
-        comment = input_helper.input_valid_string("Kommentar zur Bewertung: ")
- 
-        review = Review(
-                review_id = None,
-                rating = rating,
-                comment = comment,
-                booking = selected_booking,
-                hotel = selected_booking.hotel
+    print("-" * 50)
+    print("Als Gast möchte ich nach meinem Aufenthalt eine Bewertung für ein Hotel abgeben, damit ich meine Erfahrungen teilen kann.")
+    print("Vielen Dank, dass Sie sich für eine Bewertung Zeit nehmen.")
+
+    cancel = False
+    while not cancel:
+        try:
+            guest_id = input_helper.input_valid_int("Bitte geben Sie Ihre Kundennummer ein: ", min_value=1)
+            if guest_id is None:
+                print("Vorgang abgebrochen.")
+                break
+
+            guest_bookings = booking_manager.get_booking_by_guest_id(guest_id)
+
+            valid_bookings = []
+            if not guest_bookings:
+                print("Keine vergangenen Aufenthalte gefunden.")
+                break
+
+            for b in guest_bookings:
+                if b.check_out_date < date.today():
+                    print(f"Buchung ID: {b.booking_id}, Aufenthalt: {b.check_in_date} bis {b.check_out_date}, Hotel: {b.room.hotel.name}")
+                    valid_bookings.append(b)
+
+            if not valid_bookings:
+                print("Es sind keine abgeschlossenen Buchungen vorhanden, die bewertet werden können.")
+                break
+
+            selected_booking = None
+
+            while selected_booking is None:
+                try:
+                    booking_id = input_helper.input_valid_int("Welche Buchung möchten Sie bewerten? (Buchungs-ID): ", min_value=1, allow_empty=True)
+                    
+                    if booking_id is None:
+                        print("Vorgang abgebrochen.")
+                        break
+
+                    for booking in valid_bookings:
+                        if booking.booking_id == booking_id:
+                            selected_booking = booking
+                            break
+
+                    if selected_booking is None:
+                        print("Keine passende Buchung gefunden. Bitte geben Sie eine gültige Buchungsnummer ein.")
+
+                except input_helper.EmptyInputError:
+                    print("Vorgang abgebrochen.")
+                    break
+                except ValueError as e:
+                    print(f"Ungültige Eingabe: {e}")
+
+            rating = input_helper.input_valid_int("Wie gut war deine Erfahrung von 1-10?: ", min_value=1, max_value=10)
+            if rating is None:
+                print("Vorgang abgebrochen.")
+                break
+
+            comment = input_helper.input_valid_string("Kommentar zur Bewertung: ")
+            if comment is None:
+                print("Vorgang abgebrochen.")
+                break
+
+            review = Review(
+                review_id=None,
+                rating=rating,
+                comment=comment,
+                booking=selected_booking,
+                hotel=selected_booking.room.hotel
             )
- 
-        review_manager.submit_review(review)
-        print("Vielen Dank für deine Bewertung!")
+
+            review_manager.submit_review(review)
+            print("Vielen Dank für deine Bewertung!")
+            break  # Nach erfolgreicher Bewertung beenden
+
+        except input_helper.EmptyInputError:
+            print("Vorgang abgebrochen.")
+            break
+        except ValueError as e:
+            print(f"Ungültige Eingabe: {e}")
+        except Exception as e:
+            print(f"Ein unerwarteter Fehler ist aufgetreten: {e}")
+            break
     #---------------------------------------------------------------
 
     # User Story Vis 1

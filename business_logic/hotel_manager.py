@@ -41,3 +41,8 @@ class HotelManager:
     # Used in User Story 10 und 3.3
     def update_hotel(self, id, attribute, new_value):
         return self.__hotel_da.update_hotel(id, attribute, new_value)
+    
+    #Used in User Story DB 3
+    def read_hotel_by_room_id(self, room_id:int):
+        return self.__hotel_da.get_hotel_by_room_id(room_id)
+    
