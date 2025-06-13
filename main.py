@@ -17,6 +17,7 @@ from model import Address
 from model import Booking
 from model import Guest
 from model import Room
+from model import Review
 
 hotel_reservation_sample = "./database/hotel_reservation_sample.db"
 current_db = "./database/current_db.db"
@@ -43,6 +44,7 @@ invoice_manager = business_logic.InvoiceManager()
 room_facility_manager = business_logic.RoomFacilityManager()
 room_manager = business_logic.RoomManager()
 room_type_manager = business_logic.RoomTypeManager()
+review_manager = business_logic.ReviewManager()
 
 
 #TODO: Add more stuff
@@ -53,8 +55,7 @@ room_type_manager = business_logic.RoomTypeManager()
 if False:
     print("test")
     # Testbereich (auf True sezten zum Testen)
-    
-
+       
 # Funktionierender Code------------------------
 
 if True:
@@ -215,53 +216,144 @@ if True:
             print("-" * 50)
     #---------------------------------------------------------------
 
-    # User Story 3.1 
-    # (Als Admin) Ich möchte neue Hotels zum System hinzufügen
-    print("\nUser Story 3.1: (Als Admin) Ich möchte neue Hotels zum System hinzufügen\n")
-    print("1. Adresse erfassen:")
+    # User Story 3.1 (Als Admin) Ich möchte neue Hotels zum System hinzufügen
 
-    street = input_helper.input_valid_string("Bitte gebe Strasse an: ")
-    zip_code = input_helper.input_valid_int("Bitte gebe Postleitzahl an: ", min_value=1000, max_value=9999)
-    city = input_helper.input_valid_string("Bitte gebe Stadt an: ")
+    while True:
+        print("\nNeues Hotel hinzufügen. (Durch leere Eingabe Vorgang abbrechen)")
+        
+        try:
+            # 1. Adresse erfassen
+            print("1. Adresse erfassen:")
+            street = None
+            zip_code = None
+            city = None
 
-    address = Address(address_id= None, street=street, zip_code=zip_code, city=city)
-    address_id = address_manager.create_address(address)
-    address.address_id = address_id
+            while True:
+                try:
+                    street = input_helper.input_valid_string("Bitte gib die Strasse an: ", min_length=3)
+                    break
+                except input_helper.EmptyInputError:
+                    print("Vorgang abgebrochen.")
+                    break
+                except input_helper.StringLengthError as e:
+                    print(f"Fehler: {e}")
+            if not street:
+                break
 
-    print(f"Adresse wurde erfolgreich hinzugefügt (ID: {address_id})")
+            while True:
+                try:
+                    zip_code = input_helper.input_valid_int("Bitte gib die Postleitzahl an: ", min_value=1000, max_value=9999)
+                    break
+                except input_helper.EmptyInputError:
+                    print("Vorgang abgebrochen.")
+                    break
+                except input_helper.OutOfRangeError as e:
+                    print(f"Fehler: {e}")
+                except ValueError as e:
+                    print(f"Fehler: {e}")
+            if zip_code is None:
+                break
 
-    print("2. Hotel erfassen")
+            while True:
+                try:
+                    city = input_helper.input_valid_string("Bitte gib die Stadt an: ", min_length=2)
+                    break
+                except input_helper.EmptyInputError:
+                    print("Vorgang abgebrochen.")
+                    break
+                except input_helper.StringLengthError as e:
+                    print(f"Fehler: {e}")
+            if not city:
+                break
 
-    hotel_name = input_helper.input_valid_string("Hotelname: ")
-    stars = input_helper.input_valid_int("Anzahl Sterne: ")
+            address = Address(address_id= None, street=street, zip_code=zip_code, city=city)
+            address_id = address_manager.create_address(address)
+            address.address_id = address_id
 
-    hotel = Hotel(hotel_id=None, name=hotel_name, stars=stars, address=address, rooms=None)
-    hotel_id = hotel_manager.add_hotel(hotel)
+            print(f"Adresse wurde erfolgreich hinzugefügt (ID: {address_id})")
 
-    print(f"Hotel erfolgreich hinzugefügt (ID: {hotel_id})")
+            print("2. Hotel erfassen")
+            hotel_name = None
+            stars = None
+            
+            while True:
+                try:
+                    hotel_name = input_helper.input_valid_string("Hotelname: ", min_length=2)
+                    break
+                except input_helper.EmptyInputError:
+                    print("Vorgang abgebrochen.")
+                    break
+                except input_helper.StringLengthError as e:
+                    print(f"Fehler: {e}")
+            if not hotel_name:
+                break
+
+            while True:
+                try:
+                    stars = input_helper.input_valid_int("Anzahl Sterne: ", min_value=1, max_value=5)
+                    break
+                except input_helper.EmptyInputError:
+                    print("Vorgang abgebrochen.")
+                    break
+                except input_helper.OutOfRangeError as e:
+                    print(f"Fehler: {e}")
+                except ValueError as e:
+                    print(f"Fehler: {e}")
+            if stars is None:
+                break
+
+            hotel = Hotel(hotel_id=None, name=hotel_name, stars=stars, address=address, rooms=None)
+            hotel_id = hotel_manager.add_hotel(hotel)
+
+            print(f"Hotel erfolgreich hinzugefügt (ID: {hotel_id})")
+
+            # Break for the loop, if the admin chooses "y" he can change another attribute value
+            again = input_helper.input_y_n("Weiteres Hotel hinzufügen? (y/n): ")
+            if not again:
+                print("Vorgang beendet.")
+                break
+
+        except input_helper.EmptyInputError:
+            print("Vorgang abgebrochen.")
+            break
+        except ValueError as err:
+            print(f"Fehler: {err}\n")
     #--------------------------------------------------------------- 
 
-    # User Story 3.2 
-    # (Als Admin) Ich möchte Hotels aus dem System entfernen        #TODO kompletter Code double check 
-    print("\nUser Story 3.2: (Als Admin) Ich möchte Hotels aus dem System entfernen\n")
+    # User Story 3.2 (Als Admin) Ich möchte Hotels aus dem System entfernen
+        
+    while True:
+        try:
+            print("Hotel entfernen")
 
-    # Eingabe der Hotel-ID und Adress-ID
-    hotel_id = input_helper.input_valid_int("Bitte gib die Hotel-ID ein: ")
-    address_id = input_helper.input_valid_int("Bitte gib die Adress-ID ein: ")
+            # Eingabe der Hotel-ID und Adress-ID
+            hotel_id = input_helper.input_valid_int("Bitte gib die Hotel-ID ein: ")
+            address_id = input_helper.input_valid_int("Bitte gib die Adress-ID ein: ")
 
-    # Hotel löschen
-    success_hotel = hotel_manager.delete_hotel(hotel_id)
-    if success_hotel:
-        print(f"Hotel mit ID {hotel_id} wurde erfolgreich gelöscht.")
-    else:
-        print(f"Hotel mit ID {hotel_id} konnte nicht gefunden oder gelöscht werden.")
+            # Hotel löschen
+            success_hotel = hotel_manager.delete_hotel(hotel_id)
+            if success_hotel:
+                print(f"Hotel mit ID {hotel_id} wurde erfolgreich gelöscht.")
+            else:
+                print(f"Hotel mit ID {hotel_id} konnte nicht gefunden oder gelöscht werden.")
 
-    # Adresse löschen
-    success_address = address_manager.delete_address(address_id)
-    if success_address:
-        print(f"Adresse mit ID {address_id} wurde erfolgreich gelöscht.")
-    else:
-        print(f"Adresse mit ID {address_id} konnte nicht gefunden oder gelöscht werden.")
+            # Adresse löschen
+            success_address = address_manager.delete_address(address_id)
+            if success_address:
+                print(f"Adresse mit ID {address_id} wurde erfolgreich gelöscht.")
+            else:
+                print(f"Adresse mit ID {address_id} konnte nicht gefunden oder gelöscht werden.")
+            # Break for the loop, if the admin chooses "y" he can change another attribute value
+            again = input_helper.input_y_n("Weiteres Hotel hinzufügen? (y/n): ")
+            if not again:
+                print("Vorgang beendet.")
+                break
+
+        except input_helper.EmptyInputError:
+            print("Vorgang abgebrochen.")
+            break
+        except ValueError as err:
+            print(f"Fehler: {err}\n")
     #--------------------------------------------------------------- 
 
     # User Story 4
@@ -453,7 +545,7 @@ if True:
         print(f"Buchung storniert? {is_cancelled_str} / Totaler Preis: {booking.total_amount}")
         print("-" * 50)
     #---------------------------------------------------------------  
-if False:
+
     # User Story 9
     # Als Admin möchte ich eine Liste der Zimmer mit ihrer Ausstattung sehen, damit ich sie besser bewerben kann.
     print("\nUser Story 9: Als Admin möchte ich eine Liste der Zimmer mit ihrer Ausstattung sehen, damit ich sie besser bewerben kann.\n")
@@ -476,7 +568,7 @@ if False:
 
         print("-" * 50)
     #---------------------------------------------------------------  
-if True:
+
     # User Story 10 und 3.3
     # TODO: error handling einbauen wenn ID nicht vorhanden
     # User Stroy 10:
@@ -546,90 +638,6 @@ if True:
 
             # Break for the loop, if the admin chooses "y" he can change another attribute value
             again = input_helper.input_y_n("Weitere Änderung durchführen? (y/n): ")
-            if not again:
-                print("Vorgang beendet.")
-                break
-
-        except input_helper.EmptyInputError:
-            print("Vorgang abgebrochen.")
-            break
-        except ValueError as err:
-            print(f"Fehler: {err}\n")
-
-    #---------------------------------------------------------------  
-
-    # User Story DB 3 Als Gast möchte ich nach meinem Aufenthalt eine Bewertung für ein Hotel abgeben, damit ich meine Erfahrungen teilen kann.
-    #TODO Working Code eingeben
-
-    #---------------------------------------------------------------  
-    
-    # Uster Story 3.1 (Als Admin) Ich möchte neue Hotels zum System hinzufügen
-
-    while True:
-        try:
-            print("Neues Hotel hinzufügen")
-            print("1. Adresse erfassen:")
-
-            street = input_helper.input_valid_string("Bitte gebe Strasse an:")
-            zip_code = input_helper.input_valid_int("Bitte gebe Postleitzahl an:", min_value=1000, max_value=9999)
-            city = input_helper.input_valid_string("Bitte gebe Stadt an:")
-
-            address = Address(address_id= None, street=street, zip_code=zip_code, city=city)
-            address_id = address_manager.create_address(address)
-            address.address_id = address_id
-
-            print(f"Adresse wurde erfolgreich hinzugefügt (ID: {address_id})")
-
-            print("2. Hotel erfassen")
-
-            hotel_name = input_helper.input_valid_string("Hotelname: ")
-            stars = input_helper.input_valid_int("Anzahl Sterne: ")
-
-            hotel = Hotel(hotel_id=None, name=hotel_name, stars=stars, address=address, rooms=None)
-            hotel_id = hotel_manager.add_hotel(hotel)
-
-            print(f"Hotel erfolgreich hinzugefügt (ID: {hotel_id})")
-
-            # Break for the loop, if the admin chooses "y" he can change another attribute value
-            again = input_helper.input_y_n("Weiteres Hotel hinzufügen? (y/n): ")
-            if not again:
-                print("Vorgang beendet.")
-                break
-
-        except input_helper.EmptyInputError:
-            print("Vorgang abgebrochen.")
-            break
-        except ValueError as err:
-            print(f"Fehler: {err}\n")
-
-
-        #--------------------------------------------------------------- 
-
-        # User Story 3.2 (Als Admin) Ich möchte Hotels aus dem System entfernen
-        
-    while True:
-        try:
-            print("Hotel entfernen")
-
-            # Eingabe der Hotel-ID und Adress-ID
-            hotel_id = input_helper.input_valid_int("Bitte gib die Hotel-ID ein: ")
-            address_id = input_helper.input_valid_int("Bitte gib die Adress-ID ein: ")
-
-            # Hotel löschen
-            success_hotel = hotel_manager.delete_hotel(hotel_id)
-            if success_hotel:
-                print(f"Hotel mit ID {hotel_id} wurde erfolgreich gelöscht.")
-            else:
-                print(f"Hotel mit ID {hotel_id} konnte nicht gefunden oder gelöscht werden.")
-
-            # Adresse löschen
-            success_address = address_manager.delete_address(address_id)
-            if success_address:
-                print(f"Adresse mit ID {address_id} wurde erfolgreich gelöscht.")
-            else:
-                print(f"Adresse mit ID {address_id} konnte nicht gefunden oder gelöscht werden.")
-            # Break for the loop, if the admin chooses "y" he can change another attribute value
-            again = input_helper.input_y_n("Weiteres Hotel hinzufügen? (y/n): ")
             if not again:
                 print("Vorgang beendet.")
                 break
@@ -798,6 +806,42 @@ if True:
             updated_booking = booking_manager.update_booking(booking)
             print(f"Buchung mit der Buchungsnummer {booking_id} storniert")
             print(f"Buchungsnummer: {updated_booking.booking_id} | Guest-ID: {updated_booking.guest.guest_id} | Room-ID: {updated_booking.room.room_id} | Startdatum: {updated_booking.check_in_date} | Enddatum: {updated_booking.check_out_date} | Storniert: {updated_booking.is_cancelled} | Gesamtbetrag: {updated_booking.total_amount}")
+    #---------------------------------------------------------------  
+
+    # User Story DB 3 
+    # Als Gast möchte ich nach meinem Aufenthalt eine Bewertung für ein Hotel abgeben, damit ich meine Erfahrungen teilen kann.
+    
+    guest_id = input_helper.input_valid_int("Bitte geben Sie Ihre Kundennummer ein: ", min_value=1)
+ 
+    guest_bookings = booking_manager.get_booking_by_guest_id(guest_id)
+ 
+    if not guest_bookings:
+        print("Keine vergangenen Aufenthalte gefunden.")
+    else:
+        for b in guest_bookings:
+            if b.check_out_date < date.today():
+                print(f"Buchung ID: {b.booking_id}, Aufenthalt: {b.check_in_date} bis {b.check_out_date}, Hotel: {b.room.hotel.name}")
+ 
+ 
+    booking_id = input_helper.input_valid_int("Welche Buchung möchten Sie bewerten? (Buchungs-ID): ", min_value=1)
+    selected_booking = next((b for b in guest_bookings if b.booking_id == booking_id), None)
+ 
+    if not selected_booking:
+        print("Ungültige Buchungsnummer.")
+    else:
+        rating = input_helper.input_valid_int("Wie gut war deine Erfahrung von 1-10?: ", min_value=1, max_value=10)
+        comment = input_helper.input_valid_string("Kommentar zur Bewertung: ")
+ 
+        review = Review(
+                review_id = None,
+                rating = rating,
+                comment = comment,
+                booking = selected_booking,
+                hotel = selected_booking.hotel
+            )
+ 
+        review_manager.submit_review(review)
+        print("Vielen Dank für deine Bewertung!")
     #---------------------------------------------------------------
 
     # User Story Vis 1
