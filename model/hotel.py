@@ -60,10 +60,16 @@ class Hotel:
             raise TypeError("rooms muss eine Liste von Room-Objekten sein")
         self.__rooms = new_rooms
 
-    def add_review(self, review: Review):
-        """Fügt dem Hotel eine neue Bewertung hinzu."""
-        self.__reviews.append(review)
-
     @property
     def reviews(self) -> list[Review]:
         return self.__reviews
+    
+    @reviews.setter
+    def reviews(self, new_reviews: list[Review]):
+        if not isinstance(new_reviews, list) or not all(isinstance(r, Review) for r in new_reviews):
+            raise TypeError("reviews muss eine Liste von Review-Objekten sein")
+        self.__reviews = new_reviews
+
+    def add_review(self, review: Review):
+        """Fügt dem Hotel eine neue Bewertung hinzu."""
+        self.__reviews.append(review)
