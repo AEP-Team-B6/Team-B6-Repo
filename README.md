@@ -87,7 +87,7 @@ was ist DRY? wie wurde es angewendet? und wo könnten wir es noch anwenden?
 
 ## Klassendiagram
 
-![alt text](image.png) 
+![Logo](/images/Class Diagram_v3.png) 
 
 
 Address
@@ -100,36 +100,36 @@ Guest
 Funktion: Enthält persönliche Daten eines Gasts und referenzierte Buchungen.
 Wichtige Attribute: first_name, last_name, email, address
 Getter/Setter: vorhanden für alle Attribute.
-Besonderheit: Enthält eine Liste von Buchungen (bookings).
+Besonderheit: Enthält eine Liste von Buchungen (bookings), sowie Methoden um Buchungen hinzuzufügen und zu entfernen.
 
 Booking
 Funktion: Beschreibt eine einzelne Buchung zwischen Gast und Zimmer.
 Wichtige Attribute: check_in_date, check_out_date, is_cancelled
 Getter/Setter: vorhanden.
-Besonderheit: Enthält zusätzlich das Attribut is_cancelled zur Stornierungskennzeichnung.
+Besonderheit: Enthält zusätzlich das Attribut is_cancelled zur Stornierungskennzeichnung. Sowie eine Methode um Review zu verknüpfen.
 
 Invoice
 Funktion: Repräsentiert die Rechnung zu einer Buchung.
 Wichtige Attribute: issue_date, total_amount
 Getter/Setter: vorhanden, z. B. total_amount()
-Besonderheit: 1:1-Verknüpfung mit einer Buchung.
+Besonderheit: Composition und 1:1-Verknüpfung mit einer Buchung.
+Das Attribut "invoice_status" wurde der DB ergänzt, um einzusehen, ob die Rechnung "Offen", "Bezahlt" oder "Storniert" ist.
 
 Hotel
 Funktion: Repräsentiert ein Hotel mit Name, Adresse und Zimmern.
-Wichtige Attribute: name, stars, address, is_active
+Wichtige Attribute: name, stars, address, rooms, reviews
 Getter/Setter: vollständig vorhanden.
 Abweichung:
-    is_active: ermöglicht Deaktivierung ohne Löschen
     Referenziert Liste von Room-Objekten
-    Bereit für Erweiterung durch neue Klasse Review
+    Reviews als Liste zum Hotel zugehörig mit einer Methode diese zu referenzieren
 
 Room
 Funktion: Beschreibt ein konkretes Zimmer eines Hotels.
-Wichtige Attribute: room_number, price_per_night, price_per_night_ls, type, is_active
+Wichtige Attribute: room_number, price_per_night, price_per_night_ls, type
 Getter/Setter: vorhanden.
 Abweichung:
     price_per_night_ls wurde hinzugefügt (z. B. für Nebensaisonpreise)
-    is_active ermöglicht das Deaktivieren einzelner Zimmer
+    room_facility als Liste um direkt über die Facilities pro Room zu referenzieren
 
 Room_Facility
 Funktion: Verknüpfungstabelle zwischen Room und Facility (n:m-Beziehung).
@@ -151,11 +151,14 @@ Besonderheit: Wird als Fremdschlüssel in Room verwendet.
 
 Review (neu hinzugefügt)
 Funktion: Repräsentiert Bewertungen durch Gäste für Hotels oder Zimmer.
-Getter/Setter: analog zu anderen Klassen.
+Wichtige Attribute: rating, comment
+Getter/Setter: vorhanden.
+Besonderheit: Wird mit Hotel und Booking verknüpft, sodass das Review korrekt zugeordnet wird.
 
-Weitere Abweichungen & Ergänzungen
+Abweichungen & Ergänzungen zusammengefasst:
 price_per_night_ls in Room: Zweiter Preis für Nebensaison/Sondertarife
 Review-Klasse: Neue Entität zur Qualitätsbewertung
+Referenzierte Attribute aus anderen Klassen ergänzt um Zugriff zu erleichtern.
 Testinstanzen: Zusätzliche Datensätze zum manuellen oder automatisierten Test
 
 Hinweis zu Getter/Setter:
