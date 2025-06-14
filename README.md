@@ -156,10 +156,10 @@ Getter/Setter: vorhanden.
 Besonderheit: Wird mit Hotel und Booking verknüpft, sodass das Review korrekt zugeordnet wird.
 
 Abweichungen & Ergänzungen zusammengefasst:
-price_per_night_ls in Room: Zweiter Preis für Nebensaison/Sondertarife
-Review-Klasse: Neue Entität zur Qualitätsbewertung
-Referenzierte Attribute aus anderen Klassen ergänzt um Zugriff zu erleichtern.
-Testinstanzen: Zusätzliche Datensätze zum manuellen oder automatisierten Test
+- price_per_night_ls in Room: Zweiter Preis für Nebensaison/Sondertarife
+- Review-Klasse: Neue Entität zur Qualitätsbewertung
+- Referenzierte Attribute aus anderen Klassen ergänzt um Zugriff zu erleichtern.
+- Testinstanzen: Zusätzliche Datensätze zum manuellen oder automatisierten Test
 
 Hinweis zu Getter/Setter:
 Alle Klassen verwenden klassische Getter- und Setter-Methoden zur sicheren Kapselung von Attributen, z. B. get_name(), set_name(name: str), wie im OOP-Stil üblich.
