@@ -92,7 +92,7 @@ was ist DRY? wie wurde es angewendet? und wo könnten wir es noch anwenden?
 
 Address
 Funktion: Repräsentiert die Adresse eines Hotels oder Gastes.
-Attribute: Straße, PLZ, Stadt, ID.
+Attribute: Strasse, PLZ, Stadt, ID.
 Getter/Setter: vorhanden z. B. street(), zip_code(), city().
 Besonderheit: Wird als eigene Klasse eingebunden, um Redundanz zu vermeiden (1:n-Beziehung zu Hotel und Guest)
 
@@ -163,14 +163,14 @@ Alle Klassen verwenden klassische Getter- und Setter-Methoden zur sicheren Kapse
 
 
 ## Projektmanagement und Planung
-Unser Projekt wurde nach der agilen Methodik SCRUM organisiert. Ziel war es, das Hotelbuchungssystem schrittweise in funktionalen Inkrementen zu entwickeln, mit regelmäßiger Abstimmung im Team. Dabei haben wir bewusst auf iteratives Arbeiten und kurze Kommunikationswege gesetzt.
+Unser Projekt wurde nach der agilen Methodik SCRUM organisiert. Ziel war es, das Hotelbuchungssystem schrittweise in funktionalen Inkrementen zu entwickeln, mit regelmässiger Abstimmung im Team. Dabei haben wir bewusst auf iteratives Arbeiten und kurze Kommunikationswege gesetzt.
 
 Zur Aufgabenplanung und Fortschrittsverfolgung haben wir das GitHub Project Board genutzt. Alle Aufgaben wurden dort in Form von Issues und Cards gepflegt, priorisiert und einzelnen Teammitgliedern zugewiesen.
-Wir haben darauf geachtet, nach jedem abgeschlossenen Codeblock regelmäßig zu committen, um die Nachvollziehbarkeit und Versionskontrolle zu gewährleisten.
+Wir haben darauf geachtet, nach jedem abgeschlossenen Codeblock regelmässig zu committen, um die Nachvollziehbarkeit und Versionskontrolle zu gewährleisten.
 
-Die Codequalität wurde durch Code Reviews und manuelle sowie automatische Tests sichergestellt. Vor der Integration größerer Features wurde der Code von anderen Teammitgliedern geprüft, wodurch Fehler frühzeitig erkannt und beseitigt werden konnten.
+Die Codequalität wurde durch Code Reviews und manuelle sowie automatische Tests sichergestellt. Vor der Integration grösserer Features wurde der Code von anderen Teammitgliedern geprüft, wodurch Fehler frühzeitig erkannt und beseitigt werden konnten.
 
-Obwohl wir nach dem SCRUM-Vorgehen gearbeitet haben, konnten wir aufgrund des engen Zeitrahmens keine vollständigen Sprint-Zyklen mit schriftlichen Retrospektiven durchführen. Stattdessen fanden regelmäßige Abgleichsmeetings statt, in denen wir Aufgaben abgestimmt, Probleme diskutiert und Anpassungen vorgenommen haben.
+Obwohl wir nach dem SCRUM-Vorgehen gearbeitet haben, konnten wir aufgrund des engen Zeitrahmens keine vollständigen Sprint-Zyklen mit schriftlichen Retrospektiven durchführen. Stattdessen fanden regelmässige Abgleichsmeetings statt, in denen wir Aufgaben abgestimmt, Probleme diskutiert und Anpassungen vorgenommen haben.
 
 Diese agile, pragmatische Vorgehensweise hat es uns ermöglicht, das Projekt fokussiert, kollaborativ und flexibel umzusetzen.
 
