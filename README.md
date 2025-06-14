@@ -87,7 +87,7 @@ was ist DRY? wie wurde es angewendet? und wo könnten wir es noch anwenden?
 
 ## Klassendiagram
 
-![Logo](/images/Class Diagram_v3.png) 
+![Logo](/images/Class_Diagram_v3.png) 
 
 
 Address
