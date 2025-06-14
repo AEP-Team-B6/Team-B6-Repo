@@ -28,9 +28,21 @@ https://deepnote.com/workspace/DBUA-Team-C-c18e3c8f-25c5-4be0-bb77-bb8f6a66300d/
 * Aufsetzen der Dokumentationsstruktur
 
 ### Nils Strehle
-* 
-* 
-* 
+* Erstellen des Class Diagram
+* Aufsetzen der VS Code Struktur
+    * OOP-Struktur: Aufbau des gesamten Datenmodells (Model Klassen mit Getter und Setter
+    * Modularisierung: Trennung in model, data_access und business_logic für sauberes Layer-Modell
+* Unterstützen der Teammitglieder bei Fragen zu VS-Code, OOP und US
+* Implementierung der US 1.6, 4, 8, 9, 10
+* Erweitern der Datenbank mit weiteren Instanzen für besseres Testing
+* Fehleranalyse und Debugging: Laufende Fehlerbehebung im Livebetrieb
+* Finaler Code-Clean-Up mit folgenden Tätigkeiten über den gesamten Code
+    * Fehlerbehandlung: Konsistente Exception-Logik, u.a. in Eingabefeldern, Datumskontrollen und DB-Logik
+    * DB-Debugging: Analyse und Fix von Tabelleninkonsistenzen
+    * Validierung: Absicherung gegen doppelte Buchungen, falsche Eingaben, Vergangenheitstermine, ungültige IDs etc.
+    * Docstrings & Kommentare: Einheitliche deutschsprachige Dokumentation und Kommentare im Code
+    * Strukturierung & Übersicht: Umfassende Refactorings zur Einhaltung von Clean Code-Prinzipien
+* Präsentationsvorbereitung: Skriptarbeit und Struktur für Video-Demo, inkl. Fokus auf zentrale Stories
 
 ### Akishan Arichchandran 
 * 
