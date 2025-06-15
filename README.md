@@ -48,10 +48,10 @@ https://deepnote.com/workspace/DBUA-Team-C-c18e3c8f-25c5-4be0-bb77-bb8f6a66300d/
 
 
 ### Noah Rolli
+* Erstellen der Klassen
 * US 3.1, 3.2; 3.3 zu 10 hinzugefügt  
 * Dokumentation Deepnote
 * README
-
 
 ## Projekt Struktur
 Dieses Projekt folgt einer mehrschichtigen Architektur, bei der jede Schicht (Layer) eine klar abgegrenzte Aufgabe erfüllt. Dadurch wird das System übersichtlich, wartbar und leicht erweiterbar. Im Folgenden wird jede Schicht erläutert:
@@ -63,7 +63,8 @@ Der model-Layer enthält die zentralen Datenstrukturen (z. B. Hotel, Room, Add
 Dieser Layer ist für die technische Anbindung der Datenbank zuständig. Hier befinden sich Konfigurationsdateien und Methoden zur Initialisierung der Verbindung. Auch die Datenbankengine oder -pfade sind hier definiert. Diese Schicht liegt direkt an der Datenquelle und wird vom data_access-Layer genutzt. Die Datei __init__.py macht das Verzeichnis als Modul importierbar.
 
 ### .data_access
-Der data_access-Layer kümmert sich um den konkreten Zugriff auf Datenobjekte: Hotels lesen, Adressen erstellen, Buchungen löschen usw. Er nutzt die Modelle aus dem model-Layer und arbeitet mit dem database-Layer zusammen. Hier wird definiert, wie Daten gelesen, geschrieben oder gelöscht werden. Damit trennt er sauber technische Datenoperationen von fachlicher Logik.
+Der data_access-Layer kümmert sich um den konkreten Zugriff auf Datenobjekte: Hotels lesen, Adressen erstellen, Buchungen löschen usw. Er nutzt die Modelle aus dem model-Layer und arbeitet mit dem database-Layer zusammen. Hier wird definiert, wie Daten per SQL gelesen, geschrieben oder gelöscht werden. 
+Ein grosser Vorteil dieser Struktur: Möchte man auf einen anderen Datenbanktyp umstellen, muss nur der data_access-Layer angepasst werden – model, business_logic und ui können unverändert bleiben. Damit trennt dieser Layer technische Datenoperationen sauber von der fachlichen Logik.
 
 ### .business_logic
 Dieser Layer dient als Connektor "Proxy". Funktionen wie z. B. ob ein Hotel gelöscht werden darf oder wie Preise berechnet werden, haben wir aus praktischen Gründen direkt im main.py implementiert. Dies entspricht nicht vollständig objektorientierten Prinzipien, orientiert sich jedoch am Referenzprojekt und wurde bewusst so umgesetzt.
@@ -72,11 +73,7 @@ Dieser Layer dient als Connektor "Proxy". Funktionen wie z. B. ob ein Hotel ge
 Die ui-Schicht enthält mit input_helper.py Hilfsfunktionen zur Eingabevalidierung und Fehlerbehandlung. Die zentrale Benutzerlogik und alle User Stories sind direkt in main.py umgesetzt. Die UI dient somit als technische Unterstützung und nicht als eigenständige Interaktionsschicht. Die Benutzerinteraktion erfolgt direkt über das Deepnote.
 
 ### main.py
-Die Datei main.py enthält alle Benutzerinteraktionen und ruft die benötigten Funktionen zur ausfürung der User Stories auf. Eine Trennung in eine separate UI-Schicht erfolgt hier nicht, was hier jedoch beabsichtigt ist. Die zusammenarbeit im Team war für uns so am unkomplizierstesten.
-
-### Deepnote
-Für ein übersichtlicheres Testen der einzelnen User Stories wurde das main.py ins Deepnote implementiert. Die User Stories können so besser einzeln getestet werden. Die einzelnen Codeblöcke sind zur besseren nachvollziehbarkeit beschrieben. Bei komplexeren User Stories gehen unsere Überlegungen voran.  
-
+Die Datei main.py enthält alle Benutzerinteraktionen und ruft die benötigten Funktionen zur ausfürung der User Stories auf. Eine Trennung in eine separate UI-Schicht erfolgt hier nicht, was hier jedoch beabsichtigt ist. Die zusammenarbeit im Team war für uns so am unkomplizierstesten. 
 
 ## Anwendung von KISS
 
@@ -237,8 +234,3 @@ Das Projekt hat uns gezeigt, wie viel man durch eigenständiges Arbeiten, Teamko
 - GitHub (Versionierung & Kollaboration)
 - Visual Studio Code (lokale Entwicklung, Debugging, Git-Integration)
 - ChatGPT (Fehleranalyse, Optimierungsvorschläge)
-
-
-
-## Markdown format ✨
-![image](https://github.com/user-attachments/assets/7eb3af84-5c85-4b44-b3ef-2483faaf08df "Markdown Cheatsheet")
