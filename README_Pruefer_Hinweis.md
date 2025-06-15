@@ -22,6 +22,7 @@ Dort findet ihr:
 - SQL-Abfragen mit Resultaten
 - Visualisierungen (Charts)
 - Kommentierte Codeabschnitte zur Erklärung
+   - **ACHTUNG**: Erweiterte und detailliertere Code-Erklärung gegenüber Github
 
 ---
 
