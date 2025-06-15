@@ -977,7 +977,7 @@ if True:
                 print("Vorgang abgebrochen.")
                 break
 
-            comment = input_helper.input_valid_string("Kommentar zur Bewertung: ")
+            comment = input_helper.input_valid_string("Kommentar zur Bewertung (Pflichtfeld): ")
             if comment is None:
                 print("Vorgang abgebrochen.")
                 break
