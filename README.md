@@ -11,8 +11,11 @@ Business Artificial Intelligence
 ## SCRUM Project Management:  
 https://github.com/orgs/AEP-Team-B6/projects/1  
 
-## Link to Deepnote Documentation  
+## Link zu Deepnote Documentation  
 https://deepnote.com/workspace/DBUA-Team-C-c18e3c8f-25c5-4be0-bb77-bb8f6a66300d/project/AEP-B6-9cb1cc5b-60cb-4063-9234-00e840489c38/notebook/AEP-B6-a186cbbb02284c55b13524202bbe26ed?utm_content=9cb1cc5b-60cb-4063-9234-00e840489c38  
+
+## Link zu Präsentationsvideo
+https://youtu.be/G5V3D0TjJH4
 
 ## Rollen der Projektmitglieder
 ### Thiemo Frei:
