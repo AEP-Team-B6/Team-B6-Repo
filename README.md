@@ -78,11 +78,29 @@ Die Datei main.py dient als Startpunkt der Anwendung. Sie koordiniert den Progra
 
 
 ## Anwendung von KISS
-was ist KISS? wie wurde es angewendet? und wo könnten wir es noch anwenden?
+
+**KISS** steht für *Keep It Simple, Stupid* – ein Prinzip der Softwareentwicklung, das besagt, dass Systeme möglichst einfach, verständlich und wartbar gestaltet werden sollen. Komplexität soll nur dort entstehen, wo sie notwendig ist.
+
+**Angewendet bei uns:**
+- **Modularisierung:** Jede Klasse erfüllt eine klar definierte Aufgabe (z. B. `Address`, `Room`, `Booking`). Die Aufteilung in `model`, `data_access`, `business_logic` etc. reduziert Abhängigkeiten und hält jede Schicht fokussiert.
+- **Einfache UI:** Statt ein komplexes GUI zu bauen, setzen wir auf eine klar strukturierte **Konsolenanwendung** mit einem zentralen `main.py` und der Hilfsklasse `input_helper`, die Eingaben validiert.
+- **Wenige externe Libraries:** Wir haben bewusst auf Drittbibliotheken verzichtet (ausser SQLite), um Abhängigkeiten gering zu halten.
+
+**Verbesserungspotenzial:**
+- Einige Methoden (z. B. in `BookingManager`) könnten weiter aufgeteilt werden, um sie einfacher test- und wiederverwendbar zu machen.
+- In der `main.py` sind einige Logiken noch leicht verschachtelt – eine zusätzliche Aufteilung in logische Blöcke oder Funktionen würde die Lesbarkeit weiter verbessern.
 
 
 ## Anwendung von DRY
-was ist DRY? wie wurde es angewendet? und wo könnten wir es noch anwenden?
+**DRY** steht für *Don't Repeat Yourself* – also die Vermeidung von Redundanzen im Code.
+
+**Angewendet bei:**
+- Gemeinsame Eingabevalidierung durch `input_helper.py`
+- Getter-/Setter-Struktur zur Wiederverwendung von Logik
+- Gemeinsame Methoden für Datenbankzugriffe in `base_data_access.py`
+
+**Verbesserungspotenzial:**
+- Wiederholte SQL-Statements könnten in Hilfsmethoden ausgelagert werden
 
 
 ## Klassendiagram
@@ -180,25 +198,44 @@ Diese agile, pragmatische Vorgehensweise hat es uns ermöglicht, das Projekt fok
 
 ## Fazit
 ### Was haben wir gelernt?
-zusammenfassen was in den UE mitgeteilt wurde
 
-### Hürden
-Wir hatten Startschwierigkeiten die wir zuerst nicht wussten, wie zu überwinden. Danach wurde jedoch konsequent gearbeitet. 
+Im Verlauf des Moduls „Anwendungsentwicklung mit Python“ haben wir zentrale Konzepte der Softwareentwicklung kennengelernt und direkt im Projekt angewendet:
 
-### Team-Arbeit
-Als Team haben wir schon im ersten Semester für das Projekt im Modul Datenbasierte Unternehmensanwendungen zusammengearbeitet. Dies hat so gut funktioniert, dass wir uns dazu entschlossen haben, so fortzufahren. 
-Aufgefallen ist, dass wir es dieses Mal anfangs lockerer angegangen sind, was zu Vor- und Nachteilen führte.
-Uns war nicht von Anfang an klar, wie wir das Projekt umsetzen sollten - das Wissen über Python war noch nich so stark. Somit entschieden wir uns zu Coden, zu lernen, jeder für sich selbst. Mit unterrichtsmaterialien und der Website "Codefinity".
-Als wir im Unterricht zu den Klassen Atributen kamen, sahen wir unseren Startpunkt. Troz dem Wissen, dass wir bei der anwendung von Python stärkere und schwächere Mitglieder hatten war uns klar dass wir alle an den User Stories arbeiten.
-Als die Zeit gegen Ende knapper wurde wendeten wir wie letztes Semester unsere bewährte Strategie an zwei Mitglieder an der Fertigstellung des Python-Teil an und zwei an der Fertigstellung der Dokumentation.
+- **Grundlagen von Python:** Wir starteten mit Variablen, Datentypen, Benutzerinteraktion (Input), Bedingungen (if-else) und unveränderlichen Strukturen wie Tuples.
+- **Objektorientierte Programmierung (OOP):** Wir lernten Klassen, Objekte, Kapselung (Getter/Setter), Vererbung, sowie Beziehungen wie Assoziation, Aggregation und Komposition kennen – alles essentielle Bausteine für wartbaren Code.
+- **Mehrschichtige Architektur:** Durch die Layer `model`, `data_access`, `business_logic` und `ui` konnten wir klare Verantwortlichkeiten definieren und eine robuste Projektstruktur umsetzen.
+- **Datenbankintegration:** Wir haben SQLite über Python angebunden und gelernt, Datenbankoperationen sicher (mit `cursor`, `fetchall()` etc.) und gekapselt über DataAccess-Klassen umzusetzen.
+- **Clean Code Prinzipien:** Mit den Konzepten **DRY** und **KISS** sowie gezieltem Error Handling haben wir gelernt, unseren Code lesbar, wartbar und fehlertolerant zu gestalten.
+
+Diese Kompetenzen haben uns befähigt, ein reales Softwareprojekt zu planen, umzusetzen und in einem Team erfolgreich abzuschliessen.
+
+### Hürden und Lernprozess
+
+Wie bei jedem echten Projekt standen auch wir vor Herausforderungen – insbesondere in der Anfangsphase. Zu Beginn galt es, die neuen Konzepte aus dem Unterricht zu verarbeiten und eine geeignete technische Struktur für das Projekt zu finden. Statt mit einer festen Rollenverteilung zu starten, entschieden wir uns bewusst dafür, individuell zu lernen, zu experimentieren und erste Bausteine eigenständig zu entwickeln.
+
+Diese Phase war wichtig, um ein gemeinsames Grundverständnis für Python und OOP aufzubauen. Unterstützung fanden wir dabei sowohl im Unterricht als auch durch externe Plattformen wie Codefinity. Als die Klassenattribute und -beziehungen im Unterricht behandelt wurden, hatten wir unseren inhaltlichen Anker gefunden – ab da konnten wir strukturiert und zielgerichtet arbeiten.
+
+### Zusammenarbeit im Team
+
+Unser Team hatte sich bereits im ersten Semester bewährt – deshalb war schnell klar, dass wir die Zusammenarbeit fortsetzen wollten. Auch wenn wir diesmal anfangs mit einem etwas lockereren Setup starteten, gelang es uns, die Stärken jedes Einzelnen optimal zu nutzen.
+
+Besonders in der Schlussphase haben wir gezielt Aufgaben verteilt: Zwei Mitglieder konzentrierten sich auf die finalen Features und den Code-Feinschliff, während die anderen beiden die Dokumentation und Präsentation verantworteten. Diese pragmatische, rollenbasierte Arbeitsweise hat sich bewährt und unsere Effizienz deutlich gesteigert.
 
 ### Abschluss
-Schlussendlich haben wir uns erneut bewiesen, dass wir sehr gut als Team funktionieren auch wenn wir dieses Mal eine andere Vorgehensweise hatten. Wir konnten vieles aus dem ersten Semester mitnehmen - vor allem lösungsorientiertes Arbeiten und die Erfahrung, welche Teammitglieder wo ihre Stärken und Schwächen haben und dies gewinnbringend nutzen. 
 
-## Quellen
-Welche Quellen hatten wir, und welche tools.
-ChatGPT (zur Fehleranalyse, Unklarheiten)
-Moodle "Anwendungsentwicklung mit Python"
+Das Projekt hat uns gezeigt, wie viel man durch eigenständiges Arbeiten, Teamkommunikation und konsequente Strukturierung erreichen kann. Wir konnten viele Konzepte aus dem ersten Semester weiterentwickeln – insbesondere unser lösungsorientiertes Vorgehen und die Fähigkeit, unter Zeitdruck produktiv und fokussiert zusammenzuarbeiten. Dieses Projekt hat nicht nur unser technisches Verständnis, sondern auch unsere Teamkompetenz gestärkt.
+
+
+## Quellen & Tools
+
+- Moodle-Unterlagen (FHNW Modul Anwendungsentwicklung)
+- Codefinity (Python Tutorials)
+- Visual Paradigm (UML-Modellierung)
+- SQLiteOnline (SQL-Testing)
+- Deepnote (Cloud IDE & Visualisierung)
+- GitHub (Versionierung & Kollaboration)
+- Visual Studio Code (lokale Entwicklung, Debugging, Git-Integration)
+- ChatGPT (Fehleranalyse, Optimierungsvorschläge)
 
 
 
