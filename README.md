@@ -68,21 +68,38 @@ Dieser Layer ist für die technische Anbindung der Datenbank zuständig. Hier be
 Der data_access-Layer kümmert sich um den konkreten Zugriff auf Datenobjekte: Hotels lesen, Adressen erstellen, Buchungen löschen usw. Er nutzt die Modelle aus dem model-Layer und arbeitet mit dem database-Layer zusammen. Hier wird definiert, wie Daten gelesen, geschrieben oder gelöscht werden. Damit trennt er sauber technische Datenoperationen von fachlicher Logik.
 
 ### .business_logic
-Hier befindet sich die fachliche Logik des Systems. Der business_logic-Layer enthält Regeln und Prozesse – z. B. ob ein Hotel gelöscht werden darf oder wie Buchungspreise berechnet werden. Er nutzt den data_access-Layer, um mit den Daten zu arbeiten, und wird wiederum von der Benutzeroberfläche angesprochen. So ist gewährleistet, dass alle zentralen Regeln an einem Ort gebündelt sind.
+Dieser Layer dient als Connektor "Proxy". Funktionen wie z. B. ob ein Hotel gelöscht werden darf oder wie Preise berechnet werden, haben wir aus praktischen Gründen direkt im main.py implementiert. Dies entspricht nicht vollständig objektorientierten Prinzipien, orientiert sich jedoch am Referenzprojekt und wurde bewusst so umgesetzt.
 
 ### .ui
-Die ui-Schicht stellt die Benutzerschnittstelle dar – in diesem Fall über die Konsole. Hier werden Eingaben entgegengenommen und Ausgaben dargestellt. Mithilfe von input_helper.py wird eine saubere und sichere Eingabevalidierung ermöglicht. Die ui kommuniziert direkt mit der business_logic, um Aktionen auszuführen. Die Datei __init__.py macht das UI-Paket importierbar.
+Die ui-Schicht enthält mit input_helper.py Hilfsfunktionen zur Eingabevalidierung und Fehlerbehandlung. Die zentrale Benutzerlogik und alle User Stories sind direkt in main.py umgesetzt. Die UI dient somit als technische Unterstützung und nicht als eigenständige Interaktionsschicht. Die Benutzerinteraktion erfolgt direkt über das Deepnote.
 
 ### main.py
-Die Datei main.py dient als Startpunkt der Anwendung. Sie koordiniert den Programmablauf, ruft Funktionen aus der UI auf und sorgt dafür, dass das System korrekt gestartet wird. main.py gehört nicht zur UI, sondern fungiert als Controller und zentrale Steuerstelle. Somit ist die Platzierung ausserhalb des .ui
+Die Datei main.py enthält alle Benutzerinteraktionen und ruft die benötigten Funktionen zur ausfürung der User Stories auf. Eine Trennung in eine separate UI-Schicht erfolgt hier nicht, was hier jedoch beabsichtigt ist. Die zusammenarbeit im Team war für uns so am unkomplizierstesten.
+
+### Deepnote
+Für ein übersichtlicheres Testen der einzelnen User Stories wurde das main.py ins Deepnote implementiert. Die User Stories können so besser einzeln getestet werden. Die einzelnen Codeblöcke sind zur besseren nachvollziehbarkeit beschrieben. Bei komplexeren User Stories gehen unsere Überlegungen voran.  
 
 
 ## Anwendung von KISS
-was ist KISS? wie wurde es angewendet? und wo könnten wir es noch anwenden?
+"Keep It Simple, Stupid" Ein Desingprinzip das besagt: Lösungen sollten so einfach wie möglich sein. Komplexität sollte nur dort entstehen, wo sie unbedingt notwendig ist. Einfacher Code ist leichter zu lesen, zu testen und zu warten
+
+    Struktur des Projekts ist klar gegliedert in Layer wie model, data_access, business_logic, (ui) und main.py. Klare Verantwortlichkeiten, keine unnötig verschachtelten Strukturen.
+
+    input_helper.py im ui ist ein gutes Beispiel: einfache Validierungen und klare, selbsterklärende Funktionen
+
+    main.py koordiniert zentral den Ablauf, was übersichtlich ist
+    
+wo könnten wir es noch anwenden?
 
 
 ## Anwendung von DRY
-was ist DRY? wie wurde es angewendet? und wo könnten wir es noch anwenden?
+"Don't Repeat Yourself" Wiederholungen im Code sollen vermieden werden. Statt redundanten Code mehrfach zu schreiben, sollen wiederverwendbare Funktionen oder Klassen geschaffen werden.
+
+    Die Verwendung von input_helper.py zeigt DRY gut: wiederkehrende Validierungen (z. B. Stringlängen prüfen, Ja/Nein-Abfragen) werden zentral gelöst und nicht mehrfach in main.py dupliziert.
+
+    Das Nutzen von gemeinsamen Modellklassen (z. B. Hotel, Room, Guest) in model verhindert Redundanz bei Datenstrukturen.
+
+wo könnten wir es noch anwenden?
 
 
 ## Klassendiagram
