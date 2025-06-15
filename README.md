@@ -45,9 +45,11 @@ https://deepnote.com/workspace/DBUA-Team-C-c18e3c8f-25c5-4be0-bb77-bb8f6a66300d/
 * Präsentationsvorbereitung: Skriptarbeit und Struktur für Video-Demo, inkl. Fokus auf zentrale Stories
 
 ### Akishan Arichchandran 
-* 
-* 
-* 
+* Implementierung der US 5,6 und US DB 3
+   * Erweitern der Datenbankstruktur
+* Deepnote Code testing für finales Review
+* Code Interpretation und Beschreibungen der User Stories
+
 
 ### Noah Rolli
 * US 3.1, 3.2; 3.3 zu 10 hinzugefügt  
